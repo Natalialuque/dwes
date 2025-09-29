@@ -32,6 +32,52 @@ if(gettype($var)=="integer") {
 
 $num = 0x1485;
 
+$num= 123456789126345678989;
+$num= 123456789126345678989123456789;
+
+settype($num,"float");
+
+$num=intval("1234");
+//$num=intval("esto");
+//$num=$num/0;
+$cadena = "esta es la cadena 'nueva cadena'";
+//las comillas dobles hay que ponerlas con el \
+$cadena = "esta es la cadena \"nueva cadena\"";
+
+$cadena= "la variable \$num tiene como valor \$num";
+$cadena= "la variable \$num tiene como valor ".$num." entero";
+
+//conversion de tipo 
+$num=12;
+$num=(double)$num;
+$num=settype($num,"string");
+$num=intval($num);
+
+if($num){
+    $num=0;
+}
+
+if($num){
+    $num=12;
+}
+
+//da falso tambien
+$cadena=" ";
+if($cadena)
+$num=24;
+
+$resultado = $num+"12hola";
+//$resultado = $num +"hola12";
+//$resultado = $num +"hola";
+
+
+$var1=100;
+$var2=$var1;
+$var3=&$var1;
+$var3=125;
+$resultado=-14<=>-12;
+$resultado=-14<=>12;
+$resultado=14<=>12;
 
 
 
