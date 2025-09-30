@@ -63,6 +63,8 @@ function inicioCuerpo(string $cabecera)
                 <ul>
                     <li><a href="/index.php">Inicio</a></li>
                     <li><a href="/aplicacion/pruebas/index.php">Pruebas</a></li>
+                    <li><a href="/aplicacion/practica1/index.php">Practica 1</a></li>
+
                     
                 </ul>
             </div>

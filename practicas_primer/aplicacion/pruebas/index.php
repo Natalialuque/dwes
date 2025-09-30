@@ -13,7 +13,7 @@ inicioCuerpo("2DAW APLICACION");
 cuerpo();  //llamo a la vista
 finCuerpo();
 // **********************************************************
-
+ 
 //vista
 function cabecera() 
 {}

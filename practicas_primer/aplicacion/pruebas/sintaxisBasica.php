@@ -75,9 +75,25 @@ $var1=100;
 $var2=$var1;
 $var3=&$var1;
 $var3=125;
+
+//constantes
+//Menor que -1, igual que 0 y mayor que 1
 $resultado=-14<=>-12;
 $resultado=-14<=>12;
 $resultado=14<=>12;
+
+$resultado=$var3??$num??0;
+$var3=null;
+$resultado=$var3??$num??-5;
+
+
+
+if($num>1){
+    $resultado="es correcto";
+    $cadena="ok";
+}
+$num=10;
+
 
 
 
