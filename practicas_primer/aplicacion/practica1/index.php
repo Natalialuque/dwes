@@ -12,6 +12,7 @@ finCabecera();
 inicioCuerpo("Practica 1");
 cuerpo();  //llamo a la vista
 finCuerpo();
+//rururur
 // **********************************************************
 
 //vista
