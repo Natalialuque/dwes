@@ -12,7 +12,8 @@ include_once(dirname(__FILE__) . "/../../cabecera.php");
 
 //dibuja la plantilla de la vista
 inicioCabecera("Natalia Cabello Luque");
-
+cabecera();
+finCabecera();
 inicioCuerpo("Practica 1");
 cuerpo();  //llamo a la vista
 finCuerpo();
