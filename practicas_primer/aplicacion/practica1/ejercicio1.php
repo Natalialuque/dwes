@@ -19,49 +19,64 @@ cuerpo();  //llamo a la vista
 finCuerpo();
 
 
+//vista
+function cabecera() 
+{}
+
+
+
 //Aqui vamos añadir todo el codigo de las funciones matematicas
 //vista
 function cuerpo()
 {
 
-
+ echo "<h3> Funciones matematicas</h3>";
 
 //funciones matematicas
+echo "<ul>";
+
 $resultado_round = round(4.7);
-echo "El resultado de round(4.7) es: $resultado_round<br>";
+echo "<li>El resultado del redondeo (4.7) es: $resultado_round</li>";
 
 $resultado_floor = floor(5.2);
-echo "El resultado de floor(5.2) es: $resultado_floor<br>";
+echo "<li>El resultado de floor(5.2) es: $resultado_floor</li>";
 
 $resultado_pow = pow(2, 5);
-echo "El resultado de pow(2, 5) es: $resultado_pow<br>";
+echo "<li>El resultado de pow(2, 5) es: $resultado_pow</li>";
 
 $resultado_sqrt = sqrt(49);
-echo "El resultado de sqrt(49) es: $resultado_sqrt<br>";
+echo "<li>El resultado de sqrt(49) es: $resultado_sqrt</li>";
 
-$resultado_dechex = dechex(255);
-echo "El resultado de dechex(255) es: $resultado_dechex<br>";
+$resultado_dechex = dechex(25);
+echo "<li>El resultado de dechex(25) es: $resultado_dechex</li>";
 
 $base4_base8 = base_convert(123, 4, 8);
-echo "El resultado de convertir 123 de base 4 a base 8 es: $base4_base8<br>";
+echo "<li>El resultado de convertir 123 de base 4 a base 8 es: $base4_base8</li>";
 
-// Variables en distintas bases
-$binario = 0b1010;       // Binario (10 en decimal)
-$octal = 012;            // Octal (10 en decimal)
-$hexadecimal = 0xA;      // Hexadecimal (10 en decimal)
-
-// Resultados en decimal
-$binario_decimal = $binario;
-$octal_decimal = $octal;
-$hexadecimal_decimal = $hexadecimal;
-
-// Funciones matemáticas
-$base4 = "123";
-$base4_decimal = base_convert($base4, 4, 10);
-$base4_base8 = base_convert($base4, 4, 8);
 $resultado_abs = abs(-15);
+echo "<li>El resultado de abs(-15) es: $resultado_abs</li>";
+
 $resultado_max = max(3, 7, 2, 9);
+echo "<li>El resultado de max(3, 7, 2, 9) es: $resultado_max</li>";
+
+echo "</ul>";
 
 
+ echo "<h3> Binario, Octal y Hexadecimal</h3>";
+
+ // Variables en distintas bases
+ $binario = 0b1010;       // Binario (10 en decimal)
+ $octal = 013;            // Octal (10 en decimal)
+ $hexadecimal = 0xC;      // Hexadecimal (10 en decimal)
+
+ // Resultados en decimal
+ echo "<ul>";
+ $binario_decimal = $binario;
+    echo "<li>El valor en decimal de la variable binario (0b1010) es: $binario_decimal</li>";
+ $octal_decimal = $octal;
+    echo "<li>El valor en decimal de la variable octal (012) es: $octal_decimal</li>";
+ $hexadecimal_decimal = $hexadecimal;
+    echo "<li>El valor en decimal de la variable hexadecimal (0xA) es: $hexadecimal_decimal</li>";
+echo "</ul>";
 }
 ?>
