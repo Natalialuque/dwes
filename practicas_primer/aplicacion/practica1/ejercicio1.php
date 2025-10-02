@@ -23,6 +23,28 @@ finCuerpo();
 //vista
 function cuerpo()
 {
+
+
+
+//funciones matematicas
+$resultado_round = round(4.7);
+echo "El resultado de round(4.7) es: $resultado_round<br>";
+
+$resultado_floor = floor(5.2);
+echo "El resultado de floor(5.2) es: $resultado_floor<br>";
+
+$resultado_pow = pow(2, 5);
+echo "El resultado de pow(2, 5) es: $resultado_pow<br>";
+
+$resultado_sqrt = sqrt(49);
+echo "El resultado de sqrt(49) es: $resultado_sqrt<br>";
+
+$resultado_dechex = dechex(255);
+echo "El resultado de dechex(255) es: $resultado_dechex<br>";
+
+$base4_base8 = base_convert(123, 4, 8);
+echo "El resultado de convertir 123 de base 4 a base 8 es: $base4_base8<br>";
+
 // Variables en distintas bases
 $binario = 0b1010;       // Binario (10 en decimal)
 $octal = 012;            // Octal (10 en decimal)
@@ -34,42 +56,12 @@ $octal_decimal = $octal;
 $hexadecimal_decimal = $hexadecimal;
 
 // Funciones matemáticas
-$numero = 7.65;
-$resultado_round = round($numero);
-$resultado_floor = floor($numero);
-$resultado_pow = pow(2, 5);
-$resultado_sqrt = sqrt(49);
-$resultado_dechex = dechex(255);
 $base4 = "123";
 $base4_decimal = base_convert($base4, 4, 10);
 $base4_base8 = base_convert($base4, 4, 8);
 $resultado_abs = abs(-15);
 $resultado_max = max(3, 7, 2, 9);
 
-//AQUI CERRAMOS EL PHP PARA PONER HTML
-?>  
-   <h1>Funciones Matemáticas en PHP</h1>
 
-    <h2>Variables en distintas bases</h2>
-    <ul>
-        <li>Binario 0b1010 = <?= $binario_decimal ?> (decimal)</li>
-        <li>Octal 012 = <?= $octal_decimal ?> (decimal)</li>
-        <li>Hexadecimal 0xA = <?= $hexadecimal_decimal ?> (decimal)</li>
-    </ul>
-
-    <h2>Resultados de funciones matemáticas</h2>
-    <ul>
-        <li>round(<?= $numero ?>) = <?= $resultado_round ?></li>
-        <li>floor(<?= $numero ?>) = <?= $resultado_floor ?></li>
-        <li>pow(2, 5) = <?= $resultado_pow ?></li>
-        <li>sqrt(49) = <?= $resultado_sqrt ?></li>
-        <li>dechex(255) = <?= $resultado_dechex ?></li>
-        <li>Base 4 (<?= $base4 ?>) en decimal = <?= $base4_decimal ?></li>
-        <li>Base 4 (<?= $base4 ?>) en base 8 = <?= $base4_base8 ?></li>
-        <li>abs(-15) = <?= $resultado_abs ?></li>
-        <li>max(3, 7, 2, 9) = <?= $resultado_max ?></li>
-    </ul>
-<?php
-//AQUI VOLVEMOS A ABRIR EL PHP PARA LLAMAR AL CODIGO PHP GENERADO ARRIBA
 }
 ?>
