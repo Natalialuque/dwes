@@ -23,5 +23,6 @@ function cuerpo()
 {
 ?>
    <a href="sintaxisBasica.php">Pruebas sintaxis básica</a><br>
+   <a href="arrays.php">Pruebas arrays</a><br>
 <?php
 }
