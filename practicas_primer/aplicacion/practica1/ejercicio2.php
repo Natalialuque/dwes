@@ -19,8 +19,6 @@ function lanzaDado(){
 //constante 
 define('NUM_LANZAMIENTOS', 1000);
 
-
-
 function lanzaDadoN(){
  $conteo = array_fill(1, 6, 0);
 
@@ -46,7 +44,40 @@ function lanzaDadoN(){
     return $resultados;    
 
     
+
+    for($i=1; $i<=6; $i++){
+         $numero = rand(1, 6);
+         switch ($numero) {
+            case 1:
+                $texto = "1";
+                break;
+            case 2:
+                $texto = "2";
+                break;
+            case 3:
+                $texto = "3";
+                break;
+            case 4:
+                $texto = "4";
+                break;
+            case 5:
+                $texto = "5";
+                break;
+            case 6:
+                $texto = "6";
+                break;
+            default:
+                $texto = "Error";
+        }
+
+         $resultados[] = "lanzamiento $i del dado: $numero";
+    }
+
+    return $resultados;
+
 }
+
+
 ///////////////////////////////////////////////////////////////////////
 
 //dibuja la plantilla de la vista
@@ -83,6 +114,7 @@ function cuerpo(){
         echo "<li>$linea</li>";
     }
     echo "</ul>";
+
 
 
 }
