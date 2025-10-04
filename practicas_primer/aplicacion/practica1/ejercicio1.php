@@ -19,57 +19,64 @@ cuerpo();  //llamo a la vista
 finCuerpo();
 
 
+//vista
+function cabecera() 
+{}
+
+
+
 //Aqui vamos añadir todo el codigo de las funciones matematicas
 //vista
 function cuerpo()
 {
-// Variables en distintas bases
-$binario = 0b1010;       // Binario (10 en decimal)
-$octal = 012;            // Octal (10 en decimal)
-$hexadecimal = 0xA;      // Hexadecimal (10 en decimal)
 
-// Resultados en decimal
-$binario_decimal = $binario;
-$octal_decimal = $octal;
-$hexadecimal_decimal = $hexadecimal;
+ echo "<h3> Funciones matematicas</h3>";
 
-// Funciones matemáticas
-$numero = 7.65;
-$resultado_round = round($numero);
-$resultado_floor = floor($numero);
+//funciones matematicas
+echo "<ul>";
+
+$resultado_round = round(4.7);
+echo "<li>El resultado del redondeo (4.7) es: $resultado_round</li>";
+
+$resultado_floor = floor(5.2);
+echo "<li>El resultado de floor(5.2) es: $resultado_floor</li>";
+
 $resultado_pow = pow(2, 5);
+echo "<li>El resultado de pow(2, 5) es: $resultado_pow</li>";
+
 $resultado_sqrt = sqrt(49);
-$resultado_dechex = dechex(255);
-$base4 = "123";
-$base4_decimal = base_convert($base4, 4, 10);
-$base4_base8 = base_convert($base4, 4, 8);
+echo "<li>El resultado de sqrt(49) es: $resultado_sqrt</li>";
+
+$resultado_dechex = dechex(25);
+echo "<li>El resultado de dechex(25) es: $resultado_dechex</li>";
+
+$base4_base8 = base_convert(123, 4, 8);
+echo "<li>El resultado de convertir 123 de base 4 a base 8 es: $base4_base8</li>";
+
 $resultado_abs = abs(-15);
+echo "<li>El resultado de abs(-15) es: $resultado_abs</li>";
+
 $resultado_max = max(3, 7, 2, 9);
+echo "<li>El resultado de max(3, 7, 2, 9) es: $resultado_max</li>";
 
-//AQUI CERRAMOS EL PHP PARA PONER HTML
-?>  
-   <h1>Funciones Matemáticas en PHP</h1>
+echo "</ul>";
 
-    <h2>Variables en distintas bases</h2>
-    <ul>
-        <li>Binario 0b1010 = <?= $binario_decimal ?> (decimal)</li>
-        <li>Octal 012 = <?= $octal_decimal ?> (decimal)</li>
-        <li>Hexadecimal 0xA = <?= $hexadecimal_decimal ?> (decimal)</li>
-    </ul>
 
-    <h2>Resultados de funciones matemáticas</h2>
-    <ul>
-        <li>round(<?= $numero ?>) = <?= $resultado_round ?></li>
-        <li>floor(<?= $numero ?>) = <?= $resultado_floor ?></li>
-        <li>pow(2, 5) = <?= $resultado_pow ?></li>
-        <li>sqrt(49) = <?= $resultado_sqrt ?></li>
-        <li>dechex(255) = <?= $resultado_dechex ?></li>
-        <li>Base 4 (<?= $base4 ?>) en decimal = <?= $base4_decimal ?></li>
-        <li>Base 4 (<?= $base4 ?>) en base 8 = <?= $base4_base8 ?></li>
-        <li>abs(-15) = <?= $resultado_abs ?></li>
-        <li>max(3, 7, 2, 9) = <?= $resultado_max ?></li>
-    </ul>
-<?php
-//AQUI VOLVEMOS A ABRIR EL PHP PARA LLAMAR AL CODIGO PHP GENERADO ARRIBA
+ echo "<h3> Binario, Octal y Hexadecimal</h3>";
+
+ // Variables en distintas bases
+ $binario = 0b1010;       // Binario (10 en decimal)
+ $octal = 013;            // Octal (10 en decimal)
+ $hexadecimal = 0xC;      // Hexadecimal (10 en decimal)
+
+ // Resultados en decimal
+ echo "<ul>";
+ $binario_decimal = $binario;
+    echo "<li>El valor en decimal de la variable binario (0b1010) es: $binario_decimal</li>";
+ $octal_decimal = $octal;
+    echo "<li>El valor en decimal de la variable octal (012) es: $octal_decimal</li>";
+ $hexadecimal_decimal = $hexadecimal;
+    echo "<li>El valor en decimal de la variable hexadecimal (0xA) es: $hexadecimal_decimal</li>";
+echo "</ul>";
 }
 ?>

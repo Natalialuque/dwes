@@ -30,7 +30,7 @@ function cuerpo()
         <a href="ejercicio3.php">Ejercicio 3</a><br>
         <a href="ejercicio4.php">Ejercicio 4</a><br>
         <a href="ejercicio5.php">Ejercicio 5</a><br>
-        <a href="ejercicio5.php">Ejercicio 6</a><br>
+        <a href="ejercicio6.php">Ejercicio 6</a><br>
         <a href="ejercicio7.php">Ejercicio 7</a><br>
    </ul>
 
