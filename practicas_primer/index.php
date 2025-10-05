@@ -22,6 +22,10 @@ function cabecera()
 function cuerpo()
 {
 ?>
-    <a href="/aplicacion/pruebas/index.php">Acceso a pruebas</a>
+    <ul>
+        <li><a href="/aplicacion/pruebas/index.php">Pruebas</a></li>
+        <li><a href="/aplicacion/practica1/index.php">Práctica 1</a></li> 
+    </ul>   
+
 <?php
 }

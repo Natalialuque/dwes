@@ -2,6 +2,17 @@
 
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 
+//barra de ubicacion 
+ $ubicacion = [
+ "pagina principal"=> "../../index.php",
+ "relacion 1"=> "./index.php",
+ "Ejercicio 3"=>"ejercicio3.php"
+
+ ];
+
+ $GLOBALS["Ubicacion"]=$ubicacion;
+
+
 ///////////CONTROLADOR//////////
 //Hacer lo anterior creando y rellenando el array usando varias sentencias.  
 // Array 1: índice numérico

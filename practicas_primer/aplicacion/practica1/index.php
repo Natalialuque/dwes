@@ -3,7 +3,13 @@ include_once(dirname(__FILE__) . "/../../cabecera.php");
 //controlador
 
 
+$ubicacion = [
+ "area personal"=> "../../index.php",
+ "relacion 1"=> "./index.php",
 
+ ];
+
+ $GLOBALS["Ubicacion"]=$ubicacion;
 
 //dibuja la plantilla de la vista
 inicioCabecera("Natalia Cabello Luque");
@@ -17,7 +23,10 @@ finCuerpo();
 
 //vista
 function cabecera() 
-{}
+
+{
+    
+}
 
 //vista
 function cuerpo()

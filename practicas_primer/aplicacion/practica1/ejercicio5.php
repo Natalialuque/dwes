@@ -1,6 +1,18 @@
 <?php
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 
+
+//barra de ubicacion 
+ $ubicacion = [
+ "pagina principal"=> "../../index.php",
+ "relacion 1"=> "./index.php",
+ "Ejercicio 5"=>"ejercicio5.php"
+
+ ];
+
+ $GLOBALS["Ubicacion"]=$ubicacion;
+
+
 //controlador
 
 $vector = array();

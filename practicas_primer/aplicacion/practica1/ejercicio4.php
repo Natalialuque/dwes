@@ -1,6 +1,17 @@
 <?php
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 
+//barra de ubicacion 
+ $ubicacion = [
+ "pagina principal"=> "../../index.php",
+ "relacion 1"=> "./index.php",
+ "Ejercicio 4"=>"ejercicio4.php"
+
+ ];
+
+ $GLOBALS["Ubicacion"]=$ubicacion;
+
+
 //controlador
 
 function triangulo (){

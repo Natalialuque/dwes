@@ -1,6 +1,18 @@
 <?php
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 
+
+//barra de ubicacion 
+ $ubicacion = [
+ "pagina principal"=> "../../index.php",
+ "relacion 1"=> "./index.php",
+ "Ejercicio 2"=>"ejercicio2.php"
+
+ ];
+
+ $GLOBALS["Ubicacion"]=$ubicacion;
+
+
 //controlador
 
 function lanzaDado(){
@@ -84,7 +96,7 @@ function lanzaDadoN(){
 inicioCabecera("Natalia Cabello Luque");
 cabecera();
 finCabecera();
-inicioCuerpo("Practica 1");
+inicioCuerpo("2DAW APLICACION");
 cuerpo();  //llamo a la vista
 finCuerpo();
 

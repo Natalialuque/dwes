@@ -1,14 +1,19 @@
 <?php
 
-/**
-* 1.- Mostrar el funcionamiento de diversas funciones Matemáticas (round, floor, pow, sqrt, entero a 
-*   hexadecimal, de base 4 a base 8 y al menos dos funciones mas distintas de las anteriores) (buscar la 
-*   información sobre las funciones matemáticas en http://php.net/manual/es/book.math.php). Definir 
-*   variables inicializadas con valores en binario, octal y hexadecimal. Mostrar el valor de esas variables 
-*   tanto en decimal como en la base en la que se han definido. 
-*/
 
 include_once(dirname(__FILE__) . "/../../cabecera.php");
+
+
+//barra de ubicacion 
+ $ubicacion = [
+ "pagina principal"=> "../../index.php",
+ "relacion 1"=> "./index.php",
+ "Ejercicio 1"=>"ejercicio1.php"
+
+ ];
+
+ $GLOBALS["Ubicacion"]=$ubicacion;
+
 
 //dibuja la plantilla de la vista
 inicioCabecera("Natalia Cabello Luque");
@@ -18,11 +23,9 @@ inicioCuerpo("Practica 1");
 cuerpo();  //llamo a la vista
 finCuerpo();
 
-
-//vista
-function cabecera() 
-{}
-
+function cabecera(){
+   
+}
 
 
 //Aqui vamos añadir todo el codigo de las funciones matematicas
@@ -30,7 +33,7 @@ function cabecera()
 function cuerpo()
 {
 
- echo "<h3> Funciones matematicas</h3>";
+echo "<h3> Funciones matematicas</h3>";
 
 //funciones matematicas
 echo "<ul>";
@@ -78,5 +81,10 @@ echo "</ul>";
  $hexadecimal_decimal = $hexadecimal;
     echo "<li>El valor en decimal de la variable hexadecimal (0xA) es: $hexadecimal_decimal</li>";
 echo "</ul>";
+
+
+
+
+
 }
 ?>
