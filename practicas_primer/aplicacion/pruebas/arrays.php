@@ -9,8 +9,8 @@ $valor[5]=100;
 $valor["primera"]="hola buenos dias yo me siento bien";
 
 
-for($i=0; $i<count($valor); $i++){
 
+for($i=0; $i<count($valor); $i++){
     $aux=$valor[$i];
 }
 

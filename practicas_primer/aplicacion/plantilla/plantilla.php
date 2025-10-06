@@ -65,6 +65,7 @@ function inicioCuerpo(string $cabecera)
                     }
                     ?>
                 </ul>
+            </div>
             <?php
         }
         function finCuerpo()
@@ -72,7 +73,7 @@ function inicioCuerpo(string $cabecera)
             ?>
                 <br />
                 <br />
-            </div>
+            
             <footer>
                 <hr width="90%" />
                 <div>

@@ -3,17 +3,24 @@
 body {
     background-color: lightblue;
     font-size: 16px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
+#titulo{
+    text-align: center;
+}
+
+
 
 #documento {
     margin: 0 auto;
-    background-color: #e3e3f9;
+    background-color: #f3dc90;
     width: 700px;
 }
 
 #cabecera {
     background-color: #14e737;
-    padding: 5px;
+    padding:9px;
 }
 
 #cabecera #logo {
@@ -93,4 +100,49 @@ body {
     color: red;
     border: thin solid red;
     padding: 5px;
+}
+
+/* Barra estilo Moodle Centros */
+#barraMenu {
+    background-color: #e3f2fd;
+    padding: 12px 20px;
+    font-size: 0.95em;
+    border-bottom: 2px solid #bbdefb;
+}
+
+#barraMenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#barraMenu li {
+    margin-right: 10px;
+    color: #555;
+    position: relative;
+}
+
+#barraMenu li::after {
+    content: "›";
+    margin-left: 10px;
+    color: #999;
+}
+
+#barraMenu li:last-child::after {
+    content: "";
+}
+
+#barraMenu li a {
+    text-decoration: none;
+    color: #1976d2;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+#barraMenu li a:hover {
+    text-decoration: underline;
+    color: #0d47a1;
 }
