@@ -31,6 +31,8 @@ function cuerpo()
     <h1>EJERCICIOS</h1>
     <ul>
         <li><a href="/aplicacion/practica1/index.php">Práctica 1</a></li> 
+        <li><a href="/aplicacion/practica2/index.php">Práctica 2</a></li> 
+
     </ul>   
     <h1>PRUEBAS </h1>
     <ul>

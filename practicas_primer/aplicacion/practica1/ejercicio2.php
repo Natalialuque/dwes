@@ -55,8 +55,6 @@ function lanzaDadoN(){
 
     return $resultados;    
 
-    
-
     for($i=1; $i<=6; $i++){
          $numero = rand(1, 6);
          switch ($numero) {

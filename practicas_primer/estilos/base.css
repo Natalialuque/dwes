@@ -1,113 +1,141 @@
 @charset "UTF8";
 
+@charset "UTF8";
+
 body {
-    background-color: lightblue;
+    background: linear-gradient(to right, #a1c4fd, #c2e9fb);
     font-size: 16px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-#titulo{
+#titulo {
     text-align: center;
+    font-size: 2em;
+    color: #0d47a1;
+    margin-top: 20px;
+    text-shadow: 1px 1px 2px #ccc;
 }
-
-
 
 #documento {
-    margin: 0 auto;
-    background-color: #f3dc90;
-    width: 700px;
+    margin: 30px auto;
+    background-color: #fff8dc;
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 20px;
 }
 
 #cabecera {
-    background-color: #14e737;
-    padding:9px;
+    background: linear-gradient(to right, #43e97b, #38f9d7);
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 #cabecera #logo {
-    width: 75px;
-    height: 50px;
+    width: 80px;
+    height: auto;
 }
 
 #cabecera #titulo {
-    font-size: 1.3em;
+    font-size: 1.5em;
     font-style: italic;
+    color: #004d40;
 }
 
 .boton {
-    background-color: blue;
+    background-color: #1976d2;
     color: white;
-    border: thin black solid;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin: 10px 0;
 }
 
 .boton a {
     text-decoration: none;
     color: white;
+    font-weight: bold;
 }
 
-.boton a:visited {
-    text-decoration: none;
-    color: white;
-}
-
+.boton:hover,
 .boton a:hover {
-    background-color: cyan;
-    color: black;
-}
-
-.boton:hover {
-    background-color: cyan;
-    color: black;
+    background-color: #64b5f6;
+    color: #0d47a1;
 }
 
 .tabla {
     width: 100%;
     border-collapse: collapse;
-    border: none;
-    background-color: white;
+    margin-top: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .tabla th {
-    background-color: teal;
-    color: blue;
+    background-color: #009688;
+    color: white;
+    padding: 10px;
+    text-align: left;
 }
 
 .tabla tr.par {
-    background-color: black;
-    color: white;
+    background-color: #f5f5f5;
 }
 
 .tabla tr.impar {
-    color:black;
+    background-color: #ffffff;
+}
+
+.tabla td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
 }
 
 #pie {
-    background-color: #81e714;
-    color: blue;
-    font-size: 1.5 em;
-    padding: 5px;
+    background-color: #c5e1a5;
+    color: #2e7d32;
+    font-size: 1.2em;
+    padding: 10px;
+    text-align: center;
+    border-radius: 0 0 8px 8px;
 }
 
 .for_texto {
-    border: blue thin solid;
-    background-color: white;
-    padding: 2px;
-    margin: 2px;
-    border-radius: 4px;
+    border: 1px solid #1976d2;
+    background-color: #f0f8ff;
+    padding: 6px;
+    margin: 5px 0;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .error {
-    background-color: white;
-    color: red;
-    border: thin solid red;
-    padding: 5px;
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #c62828;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
 }
 
-/* Barra estilo Moodle Centros */
+/* Barra estilo Moodle Centros mejorada */
 #barraMenu {
     background-color: #e3f2fd;
-    padding: 12px 20px;
-    font-size: 0.95em;
-    border-bottom: 2px solid #bbdefb;
+    padding: 15px 25px;
+    font-size: 1em;
+    border-bottom: 2px solid #90caf9;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 #barraMenu ul {
@@ -116,17 +144,19 @@ body {
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    gap: 12px;
 }
 
 #barraMenu li {
+    position: relative;
     margin-right: 10px;
     color: #555;
-    position: relative;
+
 }
 
 #barraMenu li::after {
-    content: "›";
+    content: "";
+        content: "›";
     margin-left: 10px;
     color: #999;
 }
@@ -138,11 +168,19 @@ body {
 #barraMenu li a {
     text-decoration: none;
     color: #1976d2;
-    font-weight: 500;
-    transition: color 0.3s ease;
+    font-weight: 600;
+    background-color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #bbdefb;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    display: inline-block;
 }
 
 #barraMenu li a:hover {
-    text-decoration: underline;
-    color: #0d47a1;
+    background-color: #1976d2;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }

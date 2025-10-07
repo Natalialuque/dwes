@@ -1,5 +1,15 @@
 <?php
 include_once(dirname(__FILE__) . "/../../cabecera.php");
+
+
+$ubicacion = [
+ "area personal"=> "../../index.php",
+ "Pruebas"=> "./index.php",
+
+ ];
+
+ $GLOBALS["Ubicacion"]=$ubicacion;
+
 //controlador
 
 
