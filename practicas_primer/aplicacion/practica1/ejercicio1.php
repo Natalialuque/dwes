@@ -1,8 +1,5 @@
 <?php
-
-
 include_once(dirname(__FILE__) . "/../../cabecera.php");
-
 
 //barra de ubicacion 
  $ubicacion = [
@@ -26,6 +23,9 @@ finCuerpo();
 function cabecera(){
    
 }
+
+
+
 
 
 //Aqui vamos añadir todo el codigo de las funciones matematicas

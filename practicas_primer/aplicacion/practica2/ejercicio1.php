@@ -25,9 +25,39 @@ function cabecera(){
    
 }
 
+//controlador
 
-//Aqui vamos añadir todo el codigo de las funciones matematicas
+
+
 //vista
-function cuerpo()
-{
+function cuerpo(){
+
+    echo "<h3>CADENA COMILLAS DOBLES</h3>";
+    $cad="Comillas dobles y caracteres especiales á, é, ñ"; //definicion de cadena con "
+    echo $cad;
+
+    echo "<h3>CADENA COMILLAS SIMPLES</h3>";
+    $cad2='Comillas simes con etiquetas html <h4>JoJoJo</h4>'; //definicion de cadena con '
+    echo $cad2;
+
+
+    echo "<h3>CADENA HEREDOC</h3>";
+    $nombre="Jorge";
+    $texto=<<<fin
+            Mi querida amiga <br />
+            escribo estas líneas esperando que me leas. <br />
+            Firmado: $nombre<br />
+            fin;
+    echo$texto;
+
+    echo "<h3> Cadenas NOWDOC </h3>";
+    
+    $usuario = "Natalia";
+    $contenido = <<<'fin'
+
+    <p>Bienvenida: $usuario</p>
+    <p>Este texto contiene etiquetas como <strong> y <em>, además de caracteres especiales: á, é, ñ, ‘, “.</p>
+    fin;
+    echo$contenido;
+
 }
