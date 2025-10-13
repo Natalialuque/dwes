@@ -25,23 +25,21 @@ function cabecera(){
    
 }
 
-//controlador
-
-
-
 //vista
 function cuerpo(){
 
-    
+    //comillas dobles y mostramos
     echo "<h3>CADENA COMILLAS DOBLES</h3>";
     $cad="Comillas dobles y caracteres especiales á, é, ñ"; //definicion de cadena con "
     echo $cad;
 
+    //comillas simples y mostramos
     echo "<h3>CADENA COMILLAS SIMPLES</h3>";
     $cad2='Comillas simes con etiquetas html <h4>JoJoJo</h4>'; //definicion de cadena con '
     echo $cad2;
 
 
+    //cadena de heredoc y mostramos
     echo "<h3>CADENA HEREDOC</h3>";
     $nombre="Jorge";
     $texto=<<<fin
@@ -53,6 +51,7 @@ function cuerpo(){
     echo$texto;
 
 
+    //cadena NowDoc
     //No el usuario porque es texto plano y las cadenas NOWDOC no las reconoce
     echo "<h3> Cadenas NOWDOC </h3>";
     $usuario = "Natalia";

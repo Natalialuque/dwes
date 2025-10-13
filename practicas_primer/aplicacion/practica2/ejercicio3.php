@@ -13,7 +13,7 @@ include_once(dirname(__FILE__) . "/../../cabecera.php");
  $GLOBALS["Ubicacion"]=$ubicacion;
 
 //controlador 
-// Función A: usando array de caracteres válidos
+// Función 1: usando array de caracteres válidos
 function generarCadenaArray($longitud = 20) {
     $caracteres = [];
 
@@ -42,14 +42,16 @@ function generarCadenaArray($longitud = 20) {
 
 
 
-// Función B: usando código ASCII y filtrando con ctype_alnum
+// Función 2: usando código ASCII y filtrando con ctype_alnum
 function generarCadenaASCII($longitud = 20) {
     $validos = [];
 
     for ($i = 48; $i <= 122; $i++) {
-        $char = chr($i);
-        if (ctype_alnum($char)) {
-            $validos[] = $char;
+        // Números (0–9): ASCII 48–57
+        // Mayúsculas (A–Z): ASCII 65–90
+        // Minúsculas (a–z): ASCII 97–122
+        if (($i >= 48 && $i <= 57) || ($i >= 65 && $i <= 90) || ($i >= 97 && $i <= 122)) {
+            $validos[] = chr($i);
         }
     }
 
