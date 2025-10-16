@@ -22,8 +22,8 @@ Visitas: 12345
 HTML;
 
 // Expresiones regulares
-$regexEtiqueta = '/<[^>]+>/';                      // etiqueta HTML
-$regexNumero = '/\b\d+\b/';                        // números 
+$regexEtiqueta = '/<.+>/';                      // etiqueta HTML
+$regexNumero = '/\d+\.?/';                        // números 
 $regexEmail = '/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/'; // correos electrónicos
 
 // Resultados para almacenar ca cosa 
