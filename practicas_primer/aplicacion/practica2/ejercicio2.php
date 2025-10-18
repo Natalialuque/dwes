@@ -29,12 +29,13 @@ function cabecera() {
 function cuerpo() {
     global $cadena; // accedemos a la variable definida fuera de la función
     $longitud = mb_strlen($cadena);
-    ?>
+    //cerramos php para escribir en  html
+     ?> 
     
     <h2>Recorrido normal con espacios según posición:</h2>
     <pre>
     <?php
-    for ($i = 0; $i < $longitud; $i++) {
+    for ($i = 0; $i < $longitud; $i++) { 
         $char = mb_substr($cadena, $i, 1);
         echo str_repeat(" ", $i) . $char . "\n";
     }

@@ -2,7 +2,7 @@
 // libreria.php
 
 /**
- * 1. cuentaVeces
+ * Ejercicio 1 cuentaVeces
  * Añade un valor al array en la clave indicada y actualiza el contador de llamadas.
  * @param array &$array
  * @param string $clave
@@ -29,79 +29,105 @@ function cuentaVeces(array &$array, string $clave, int $valor1, int &$valor2): b
 
 
 /**
- * 2. generarCadena
+ * Ejercicio2 generarCadena
  * Genera una cadena aleatoria de longitud dada.
  * @param int $longitud
  * @return string|false
  */
-function generarCadena(int $longitud = 10): string|false {
-    // Implementación aquí
-        return 0;
+function generarCadena(int $numero = 10): string|false {
+    
+    ///Devolverá false si se ha indicado un número negativo o igual a 0.
+    if($numero<=0){
+        return false;
+    }
+
+    $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $cadena = '';
+
+        for ($i = 0; $i < $numero; $i++) {
+           $indiceAleatorio = rand(0, strlen($caracteres) - 1);
+           $cadena .= $caracteres[$indiceAleatorio];
+        }
+
+        return $cadena;
 
 }
 
 
 /**
- * 3. operaciones
+ * Ejercicio3 operaciones
  * Realiza operaciones según el tipo indicado.
  * @param int $tipo
  * @param float ...$numeros
  * @return float|false
  */
+//el float ...$numeros permite que la funcion reciba una cantidad idefinida de datos
 function operaciones(int $tipo, float ...$numeros): float|false {
-    // Implementación aquí
-        return 0;
+
+    switch ($tipo){
+        case 1 : //suma 
+            return array_sum($numeros);
+        case 2: 
+            $resultado = array_shift($numeros); // toma el primer número
+            foreach ($numeros as $num) {//va sacando el los numeros del array
+                $resultado -= $num;
+            }
+            return $resultado;
+        case 3: 
+            return array_product($numeros);
+        default: // suma de pares, resta de impares (posición 1 es impar)
+            $resultado = 0;
+            foreach ($numeros as $i => $num) {
+                $posicion = $i + 1; // porque el primer operando es posición 1
+                if ($posicion % 2 === 0) {
+                    $resultado += $num; // posición par → sumar
+                } else {
+                    $resultado -= $num; // posición impar → restar
+                }
+            }
+            return $resultado;
+
+        
+    }
+
+    return 0;
 
 }
 
 
 /**
- * 4. devuelve
+ * Ejercicio 4 devuelve
  * Devuelve el producto de tres números y actualiza el primero con la suma.
  * @param int &$a
  * @param int $b
  * @param int $c
  * @return int
  */
-function devuelve(int &$a, int $b = 4, int $c = 10): int {
-    // Implementación aquí
-        return 0;
+//los dos segundos valores son fijos y el valor a es el que modificamos
+function devuelve(int &$a, int $b, int $c = 10): int {
+        $resultado=$a*$b*$c;
+        $a = $a + $b +$c;
+        return $resultado;
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+/**EJERCICIO 5 */
 
-/**
- * 5. suma
- * @param int $a
- * @param int $b
- * @return int
- */
 function suma(int $a, int $b): int {
     return $a + $b;
 }
 
-/**
- * 5. resta
- * @param int $a
- * @param int $b
- * @return int
- */
 function resta(int $a, int $b): int {
     return $a - $b;
 }
 
-/**
- * 5. multiplicacion
- * @param int $a
- * @param int $b
- * @return int
- */
 function multiplicacion(int $a, int $b): int {
     return $a * $b;
 }
 
 /**
- * 5. hacerOperacion
+ * 5--> hacerOperacion
  * Ejecuta una operación usando una variable función.
  * @param string $operacion
  * @param int $a
@@ -109,35 +135,52 @@ function multiplicacion(int $a, int $b): int {
  * @return int|false
  */
 function hacerOperacion(string $operacion, int $a, int $b): int|false {
-    // Implementación aquí
-        return 0;
+// Variables que almacenan funciones
+    $fSuma = 'suma';
+    $fResta = 'resta';
+    $fMulti = 'multiplicacion';
+
+    switch ($operacion) {
+        case 'suma':
+            return $fSuma($a, $b); // llama a la función suma() usando la variable
+        case 'resta':
+            return $fResta($a, $b); // llama a la función resta() usando la variable
+        case 'multi':
+            return $fMulti($a, $b); // llama a la función multiplicacion() usando la variable
+        default:
+            return false; // operación no reconocida
+    }
 
 }
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * 6. llamadaAFuncion
+ * Ejercicio 6: llamadaAFuncion
  * Llama a una función callback con dos operandos.
  * @param int $a
  * @param int $b
  * @param callable $callback
  * @return int
  */
+// Aquí, aplicarOperacion no sabe qué operación va a hacer. Solo sabe que recibirá una función ($operacion) que puede ejecutar con $a y $b.
 function llamadaAFuncion(int $a, int $b, callable $callback): int {
-    // Implementación aquí
-        return 0;
-
+    return $callback($a, $b);
 }
 
 
 /**
- * 7. ordenar
+ * Ejercicio 7: ordenar
  * Ordena un array en orden descendente por longitud de elementos.
  * @param array &$array
  * @return void
  */
 function ordenar(array &$array): void {
-    // Implementación aquí
+
+    //usort para ordenar cadenas personalizadas
+    usort($array, function($a, $b) {
+        return strlen($b) - strlen($a); // orden descendente por longitud
+    });
+
 }
 
 
