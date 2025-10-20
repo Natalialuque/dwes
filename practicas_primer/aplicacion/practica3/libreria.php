@@ -10,18 +10,22 @@
  * @param int &$contador
  * @return bool
  */
-function cuentaVeces(array &$array, string $clave, int $valor1, int &$valor2): bool {
-    if ($clave === "2daw" || $clave === "primera") {
+function cuentaVeces(array &$array, string $cadena, int $valor1, int &$valor2): bool {
+   
+    static $cont=0;
+    $cont++;
+    $valor2=$cont;
+   
+    if ($cadena === "2daw" || $cadena === "primera") {
         return false;
     }
-    $valor2++;
 
     // Añadir el valor al array en la clave indicada
     //isset se encarga de coprobar si el array tiene otro valor antes de introducir uno nuevo
-    if (isset($array[$clave])) {
-        $array[$clave] += $valor1;
+    if (isset($array[$cadena])) {
+        $array[$cadena] += $valor1;
     } else {
-        $array[$clave] = $valor1;
+        $array[$cadena] = $valor1;
     }
 
     return true;
@@ -40,16 +44,14 @@ function generarCadena(int $numero = 10): string|false {
     if($numero<=0){
         return false;
     }
+    $cadena = '';
 
-    $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $cadena = '';
-
-        for ($i = 0; $i < $numero; $i++) {
-           $indiceAleatorio = rand(0, strlen($caracteres) - 1);
-           $cadena .= $caracteres[$indiceAleatorio];
+      for ($i = 0; $i < $numero; $i++) {
+            // coge un caracter aleatorio del codigo ascii desde el numero 48 hasta el 112
+            $cadena .= chr(mt_rand(48, 112));
         }
+            return $cadena;
 
-        return $cadena;
 
 }
 

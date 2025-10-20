@@ -39,7 +39,7 @@ function cuerpo()
     echo "<h3>Ejercicio 1: cuentaVeces</h3>";
 
             $vector = [];
-            $numero = 2;
+            $numero = 4;
 
             // Primera llamada
            
@@ -71,8 +71,10 @@ function cuerpo()
     //EL . ES PARA CONCATENAR
     echo "<h3>Ejercicio 2: Generar cadena</h3>";
 
-        echo "Cadena aleatoria de 7 caracteres: " .generarCadena(7). "<br>";
-        echo "Cadena aleatoria de 0 caracteres: " .generarCadena(0);
+       echo "Cadena aleatoria de 7 caracteres: " . generarCadena(7) . PHP_EOL;  //sirve para salto de linea en php
+       echo "<br>";
+      echo "Cadena aleatoria de 0 caracteres: " . generarCadena(0) . PHP_EOL;
+
 
     /**ejercicio 3 */
     echo "<h3>Ejercicio 3: Operaciones</h3>";
