@@ -33,5 +33,17 @@ function cabecera()
 function cuerpo()
 {
 //InstrumentoBase
+
+// Para clase pública
+    $instrumentoBase = new InstrumentoBase("Flauta dulce");
+    $instrumentoBase2 = new InstrumentoBase("El viento", 12);
+
+    echo $instrumentoBase;
+    echo $instrumentoBase2;
+
+    echo $instrumentoBase->envejecer() . "<br>";
+    echo $instrumentoBase->afinar() . "<br>";
+    echo $instrumentoBase->sonido("aire") . "<br>"; 
+
 }
 ?>
