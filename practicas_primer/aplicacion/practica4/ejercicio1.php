@@ -33,17 +33,22 @@ function cabecera()
 function cuerpo()
 {
 //InstrumentoBase
+echo"<h4>Esta clase no funciona en si, es una clase padre de la que 
+        necesitamos cosas para el funcionamiento del resto de clase</h4>";
 
 // Para clase pública
-    $instrumentoBase = new InstrumentoBase("Flauta dulce");
-    $instrumentoBase2 = new InstrumentoBase("El viento", 12);
+    // $instrumentoBase = new InstrumentoBase("Flauta dulce");
+    // $instrumentoBase2 = new InstrumentoBase("El viento", 12);
 
-    echo $instrumentoBase;
-    echo $instrumentoBase2;
+    // echo $instrumentoBase;
+    // echo $instrumentoBase2;
 
-    echo $instrumentoBase->envejecer() . "<br>";
-    echo $instrumentoBase->afinar() . "<br>";
-    echo $instrumentoBase->sonido("aire") . "<br>"; 
+    // $instrumentoBase2->envejecer();
+    // echo "Edad después de envejecer: " . $instrumentoBase2->getEdad() . "<br>";    
+
+    // echo $instrumentoBase->afinar() . "<br>";
+
+    // echo $instrumentoBase->sonido("aire") . "<br>"; 
 
 }
 ?>

@@ -1,15 +1,15 @@
 <?php
 // Creamos una clase abstracta, pero para probarla la dejaremos normal
- class InstrumentoBase{
+abstract class InstrumentoBase{
 
 private string $_descripcion;
-private string $_edad;
+private int $_edad = 10; //accesible desde clases hijos
 private int $_tipoNum;
 
 //Veces que se ha creado la clase
-private static int $_numIntrumentos=0; 
+protected static int $_numIntrumentos=0; 
 
-//Constructor de la clase
+//Constructor de la clase fijamos el la cadena de descripcion
 public function __construct(string $_descripcion,int $_edad=10)
 {
     $this->_descripcion=$_descripcion;
@@ -19,43 +19,43 @@ public function __construct(string $_descripcion,int $_edad=10)
 }
 
 //Gets
-public function __getDescripcion(){
+public function getDescripcion():String{
     return $this->_descripcion;
 }
 
-public function __getEdad(){
+public function getEdad():int{
     return $this->_edad;
 }
 
-public function __getTipoNum(){
+public function getTipoNum():int{
     return $this->_tipoNum;
 }
 
-public static function __getNumInstrumentos(){
+public static function getNumInstrumentos():int{
 return self::$_numIntrumentos;
 }
 
 
 //Sets
-public function __setDescripcion($_descripcion) {
+public function setDescripcion($_descripcion):self {
     $this->_descripcion=$_descripcion;
     return $this;
 }
 
-public function __setEdad($_edad){
+public function setEdad($_edad):self{
     $this->_edad = $_edad;
     return $this;
 }
 
+/**estos metodos van abstractos */
 //Funcion que devuielve el sonido
- function sonido(string $sonido) : string{
-    return "sonido ".$sonido;
-}
+ abstract public function sonido(string $sonido) : string;
+
     
-//Funcion que devuekve como afinar un instrumento
- function afinar() : string{
-    return "afinar";
- }
+//Funcion que devuelve como afinar un instrumento
+ abstract public function afinar() : string;
+ 
+ /******************************************** */
 
 //Metodo que aumenta la edad en 1 año
 function envejecer() : void {
@@ -63,11 +63,14 @@ function envejecer() : void {
 }
 
 //Metodo que muestra todos los datos del instrumento
-function get_class() : void {
-    echo "Instrumento con descripción ".$this->_descripcion."<br>".
-         "Tiene ".$this->_edad." años"."<br>".
-         "Numero de instrumento ".$this->_tipoNum."<br>".
-         "Total de instrumentos ".self::$_numIntrumentos."<br>";
+public function __toString(): string {
+    return "Instrumento con descripción: {$this->_descripcion}<br>
+            Instancia {$this->_tipoNum} de un total de " .self::$_numIntrumentos . 
+            "<br> Tiene {$this->_edad} años,
+            <br> La clase es " . get_class($this).
+            "<br>";
 }
 
+
 }
+

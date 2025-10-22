@@ -33,5 +33,7 @@ function cabecera()
 function cuerpo()
 {
 //IFabricable
+
+echo"<h4>Dos metodos dentro de una interfaz que usamos en otras clases</h4>";
 }
 ?>

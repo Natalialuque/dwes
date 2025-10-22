@@ -2,6 +2,8 @@
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 //controlador
 
+require_once("../../../scripts/clases/InstrumentoViento.php");
+
 
 $ubicacion = [
  "area personal"=> "../../index.php",
@@ -11,6 +13,8 @@ $ubicacion = [
  ];
 
  $GLOBALS["Ubicacion"]=$ubicacion;
+
+
 
 //dibuja la plantilla de la vista
 inicioCabecera("Natalia Cabello Luque");
@@ -26,12 +30,22 @@ finCuerpo();
 function cabecera() 
 
 {
+
     
 }
+
 
 //vista
 function cuerpo()
 {
 //IntrumentoViento
+
+//$viento = new InstrumentoViento("metal",20);
+$viento2=new InstrumentoViento();
+
+//echo $viento;
+echo"<br>";
+echo $viento2;
+
 }
 ?>
