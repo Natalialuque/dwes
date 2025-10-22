@@ -1,0 +1,35 @@
+<?php
+
+    /**
+     * Clase sobrecargada que va a tener la propiedad sobrecargada 
+     * numero con siempre el valor 100 aunque le asignemos otro
+     * Con cualquier otra propiedad debe dar un error
+     */
+    class ClaseConsobrecarga
+    {
+        public function __set(string $name, mixed $value):void
+        {
+        if ($name=="numero")
+             ;
+           else 
+             throw new Exception("no existe la propiedad $name");
+        }
+
+        public function __get($name):mixed
+        {
+            if ($name=="numero")
+                   return 100;
+                else
+                    throw new Exception("no existe la propiedad $name");
+        }
+
+        public function __isset($name):bool
+        {
+            return ($name=="numero");
+        }
+
+        public function __unset($name):void
+        {
+           ;
+        }
+    }
