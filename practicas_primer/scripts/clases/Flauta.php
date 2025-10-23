@@ -8,7 +8,7 @@
  * @param string $material Material del que esta formado la flauta
  * @param integer $edad Edad de la flauta
  */
-private function __construct(string $material,int $edad)
+private function __construct(int $edad,string $material)
 {
     parent::__construct($edad,$material);
 }
@@ -19,9 +19,12 @@ private function __construct(string $material,int $edad)
  * @param array $arr Array con amterial y edad
  * @return Flauta devuelve el objeto flauta
  */
-static function CrearDesdeArray(array $arr) : Flauta{
-    return new Flauta($arr["material"],$arr["edad"]);
-}
+ public static function crearDesdeArray(array $datos): static //de la clase en la que esta
+    {
+        $edad = $datos['edad'] ?? 0;
+        $material = $datos['material'] ?? 'madera';
+        return new static($edad, $material);
+    }
 
 public function __toString()
 {
@@ -45,7 +48,9 @@ public function metodoReciclado(): string {
  */
 function __clone()
 {
-    return new Flauta($this->_getMaterial(),0);
+    $this->_edad = 0;
+    self::$_cont++;
+    $this->setOrdenCreacion(self::$_cont);
 }
 
 }

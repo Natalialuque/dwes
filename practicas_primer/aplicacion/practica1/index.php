@@ -6,7 +6,6 @@ include_once(dirname(__FILE__) . "/../../cabecera.php");
 $ubicacion = [
  "area personal"=> "../../index.php",
  "relacion 1"=> "./index.php",
-
  ];
 
  $GLOBALS["Ubicacion"]=$ubicacion;
@@ -31,7 +30,9 @@ function cabecera()
 //vista
 function cuerpo()
 {
+
 ?>
+
     <h1>Relacion 1: Arrays y fechas</h1>
     <ul>
         <li><a href="ejercicio1.php">Ejercicio 1</a><br></li> 

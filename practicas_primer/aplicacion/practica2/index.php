@@ -5,7 +5,7 @@ include_once(dirname(__FILE__) . "/../../cabecera.php");
 
 $ubicacion = [
  "area personal"=> "../../index.php",
- "relacion 4"=> "./index.php",
+ "relacion 2"=> "./index.php",
 
  ];
 
@@ -15,7 +15,7 @@ $ubicacion = [
 inicioCabecera("Natalia Cabello Luque");
 cabecera();
 finCabecera();
-inicioCuerpo("Practica 4");
+inicioCuerpo("Practica 2");
 cuerpo();  //llamo a la vista
 finCuerpo();
 //rururur

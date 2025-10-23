@@ -19,7 +19,6 @@ finCabecera();
 inicioCuerpo("Practica 4");
 cuerpo();  //llamo a la vista
 finCuerpo();
-//rururur
 // **********************************************************
 
 //vista
@@ -32,6 +31,16 @@ function cabecera()
 //vista
 function cuerpo()
 {
+    //SerieFibonacci
+    echo"<h4>Serie de fibonacci</h4>";
+    foreach (new SerieFibonacci(10) as $valor) {
+    echo "$valor&nbsp;";
+
+    // echo"<h4>Serie de fibonacci, llamada de la misma serieFibonacci</h4>";
+    // foreach (SerieFibonacci::fFibonacci(10) as $valor) {
+    //     echo "$valor&nbsp;";
+    // }
+}
 
 }
 ?>

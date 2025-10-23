@@ -33,14 +33,11 @@ function cabecera()
 function cuerpo()
 {
 //Flauta
-$fla = new Flauta(15,"madera");
-echo $fla;
+ $array = ["edad" => 12, "material" => "metal"];
+    $obj = Flauta::crearDesdeArray($array);
+    $obj2 = clone $obj;
 
-//$f1 = Flauta::CrearDesdeArray(["material" => "metal", "edad" => 20]);
-//$f2 = clone $f1;
-
-//echo $f1;
-echo "<br>";
-//echo $f2;
+    echo $obj . "<br>";
+    echo $obj2;
 }
 ?>

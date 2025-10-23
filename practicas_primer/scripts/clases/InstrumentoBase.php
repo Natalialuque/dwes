@@ -4,18 +4,18 @@ abstract class InstrumentoBase{
 
 private string $_descripcion;
 protected int $_edad = 10; //accesible desde clases hijos
-protected int $_tipoNum;
+protected int $_ordencreacion;
 
 //Veces que se ha creado la clase
-protected static int $_numIntrumentos=0; 
+protected static int $_cont=0; 
 
 //Constructor de la clase fijamos el la cadena de descripcion
 public function __construct(string $_descripcion,int $_edad=10)
 {
     $this->_descripcion=$_descripcion;
     $this->_edad=$_edad;
-    self::$_numIntrumentos++;
-    $this->_tipoNum=self::$_numIntrumentos;
+    self::$_cont++;
+    $this->_ordencreacion=self::$_cont;
 }
 
 //Gets
@@ -27,34 +27,26 @@ public function getEdad():int{
     return $this->_edad;
 }
 
-public function getTipoNum():int{
-    return $this->_tipoNum;
-}
 
-public static function getNumInstrumentos():int{
-return self::$_numIntrumentos;
+public function getOrdenCreacion():int{
+    return $this->_ordencreacion;
 }
-
 
 //Sets
-public function setDescripcion($_descripcion):self {
-    $this->_descripcion=$_descripcion;
-    return $this;
+public function setDescripcion(String $valor):void {
+    $this->_descripcion=$valor;
 }
 
-public function setEdad($_edad):self{
-    $this->_edad = $_edad;
-    return $this;
-}
+//no hay set de edad
 
-public function setTipoNum(int $num): void {
-    $this->_tipoNum = $num;
+public function setOrdenCreacion(int $num): void {
+    $this->_ordencreacion = $num;
 }
 
 
 /**estos metodos van abstractos */
 //Funcion que devuielve el sonido
- abstract public function sonido(string $sonido) : string;
+ abstract public function sonido() : string;
 
     
 //Funcion que devuelve como afinar un instrumento
@@ -70,12 +62,20 @@ function envejecer() : void {
 //Metodo que muestra todos los datos del instrumento
 public function __toString(): string {
     return "Instrumento con descripción: {$this->_descripcion}<br>
-            Instancia {$this->_tipoNum} de un total de " .self::$_numIntrumentos . 
+            Instancia {$this->_ordencreacion} de un total de " .self::$_cont . 
             "<br> Tiene {$this->_edad} años,
             <br> La clase es " . get_class($this).
             "<br>";
 }
 
+//Deshabilitar la sobre carga (ACTIVA POR DEFECTO)
+    public function __set(string $name, mixed $value):void{}
+
+    public function __get($name):mixed{return 0;}
+
+    public function __isset($name):bool{return true;}
+
+    public function __unset($name):void{}
 
 }
 

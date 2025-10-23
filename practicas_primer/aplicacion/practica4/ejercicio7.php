@@ -33,5 +33,18 @@ function cabecera()
 function cuerpo()
 {
 //ClaseMisPropiedades
+    $Objeto = new ClaseMisPropiedades();
+    $Objeto->propPublica = "publica";
+    $Objeto->_propPrivada = "privada"; // Solo muestra aviso, no lanza error
+    $Objeto->propiedad1 = 25;
+    $Objeto->propiedad2 = "cadena de texto";
+
+    echo "La propiedad 1 vale " . $Objeto->propiedad1 . "<br>";
+    echo $Objeto->propiedad3; // Muestra aviso, devuelve null
+
+        foreach ($Objeto as $clave => $valor) {
+            echo "$clave => $valor<br>";
+        }
+
 }
 ?>

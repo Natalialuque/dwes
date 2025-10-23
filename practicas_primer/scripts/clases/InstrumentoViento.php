@@ -12,7 +12,7 @@ class InstrumentoViento extends InstrumentoBase {
    }
 
    //llamamos a los metodos abstractos de la clase padre y los definimos correspondientes a esta clase 
-   public function sonido(string $sonido): string{
+   public function sonido(): string{
     return "aire aire aire aire";
    }
 
@@ -29,7 +29,6 @@ class InstrumentoViento extends InstrumentoBase {
     return parent::__toString()."<br> Material del instrumento: {$this->_material}";
    }
 
-   //Getter
-public function _getMaterial(){return $this->_material;}
+   
 
 }
