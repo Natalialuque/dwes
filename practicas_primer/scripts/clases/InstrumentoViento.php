@@ -1,12 +1,12 @@
 <?php
 
-class InstrumentoViento extends InstrumentoBase{
+class InstrumentoViento extends InstrumentoBase {
 
     //atributo protegido, solo accesible desde aqui y las hijas
    protected String $_material;
 
    //constructor: llama al padre y mete nuevos datos 
-   public function __construct(string $_material="madera",int $edad=15){
+   public function __construct(int $edad=15,string $_material="madera"){
     parent::__construct("instrumento de viento",$edad);
     $this->_material=$_material;
    }
@@ -28,5 +28,8 @@ class InstrumentoViento extends InstrumentoBase{
    public function __toString(): string{
     return parent::__toString()."<br> Material del instrumento: {$this->_material}";
    }
+
+   //Getter
+public function _getMaterial(){return $this->_material;}
 
 }

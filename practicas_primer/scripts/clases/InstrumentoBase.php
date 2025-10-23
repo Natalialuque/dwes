@@ -3,8 +3,8 @@
 abstract class InstrumentoBase{
 
 private string $_descripcion;
-private int $_edad = 10; //accesible desde clases hijos
-private int $_tipoNum;
+protected int $_edad = 10; //accesible desde clases hijos
+protected int $_tipoNum;
 
 //Veces que se ha creado la clase
 protected static int $_numIntrumentos=0; 
@@ -46,6 +46,11 @@ public function setEdad($_edad):self{
     $this->_edad = $_edad;
     return $this;
 }
+
+public function setTipoNum(int $num): void {
+    $this->_tipoNum = $num;
+}
+
 
 /**estos metodos van abstractos */
 //Funcion que devuielve el sonido

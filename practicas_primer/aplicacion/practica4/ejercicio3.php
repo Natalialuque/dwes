@@ -2,9 +2,6 @@
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 //controlador
 
-require_once("../../../scripts/clases/InstrumentoViento.php");
-
-
 $ubicacion = [
  "area personal"=> "../../index.php",
  "relacion 4"=> "./index.php",
@@ -40,12 +37,12 @@ function cuerpo()
 {
 //IntrumentoViento
 
-//$viento = new InstrumentoViento("metal",20);
+$viento = new InstrumentoViento("metal",20);
 $viento2=new InstrumentoViento();
 
 //echo $viento;
 echo"<br>";
-echo $viento2;
+echo $viento;
 
 }
 ?>
