@@ -33,7 +33,7 @@ function inicioCabecera(string $titulo)
         <link rel="shortcut icon" href="/favicon.ico">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-        <link rel="stylesheet" type="text/css" href="../../estilos/base.css">
+        <link rel="stylesheet" type="text/css" href="/../../estilos/base.css">
     <?php
 }
 function finCabecera()
@@ -52,6 +52,19 @@ function inicioCuerpo(string $cabecera)
 
             <header>
                 <h1 id="titulo"><?php echo $cabecera; ?></h1>
+
+                <div id="menuPrincipal">
+                    <ul>
+                        <li><a href="/index.php">Inicio</a></li>
+                        <li><a href="/aplicacion/practica1/index.php">Práctica 1</a></li>
+                        <li><a href="/aplicacion/practica2/index.php">Práctica 2</a></li>
+                        <li><a href="/aplicacion/practica3/index.php">Práctica 3</a></li>
+                        <li><a href="/aplicacion/practica4/index.php">Práctica 4</a></li>
+                        <li><a href="/aplicacion/practica5/index.php">Práctica 5</a></li>
+                        <li><a href="/aplicacion/pruebas/index.php">Pruebas</a></li>
+
+                    </ul>
+                </div>
             </header>
 
             <div id="barraLogin">
@@ -66,14 +79,14 @@ function inicioCuerpo(string $cabecera)
                     ?>
                 </ul>
             </div>
-            <?php
-        }
-        function finCuerpo()
-        {
-            ?>
-                <br />
-                <br />
-            
+        <?php
+    }
+    function finCuerpo()
+    {
+        ?>
+            <br />
+            <br />
+
             <footer>
                 <hr width="90%" />
                 <div>
@@ -85,21 +98,21 @@ function inicioCuerpo(string $cabecera)
 
     </html>
 <?php
-        }
-        function mostrarBarraUbicacion(array $ubicacion)
-        {
-            echo "<nav class='barraModdle'>";
-            $total = count($ubicacion);
-            $contador = 0;
+    }
+    function mostrarBarraUbicacion(array $ubicacion)
+    {
+        echo "<nav class='barraModdle'>";
+        $total = count($ubicacion);
+        $contador = 0;
 
-            foreach ($ubicacion as $nombre => $url) {
-                $contador++;
-                if ($contador < $total) {
-                    echo "<a href='{$url}'>{$nombre}</a> &raquo; ";
-                } else {
-                    echo "<span>{$nombre}</span>";
-                }
+        foreach ($ubicacion as $nombre => $url) {
+            $contador++;
+            if ($contador < $total) {
+                echo "<a href='{$url}'>{$nombre}</a> &raquo; ";
+            } else {
+                echo "<span>{$nombre}</span>";
             }
-
-            echo "</nav><br>";
         }
+
+        echo "</nav><br>";
+    }

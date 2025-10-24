@@ -7,6 +7,7 @@ $ubicacion = [
  "area personal"=> "../../index.php",
  "relacion 4"=> "./index.php",
  "Ejercicio 1"=>"ejercicio1.php"
+ 
 
  ];
 

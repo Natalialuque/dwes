@@ -1,6 +1,5 @@
 @charset "UTF8";
 
-@charset "UTF8";
 
 body {
     background: linear-gradient(to right, #a1c4fd, #c2e9fb);
@@ -183,4 +182,10 @@ body {
     color: #ffffff;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/****************************/
+/* Menú superior personalizado */
+#menuPrincipal {
+ background-color: #1976d2;  
 }
