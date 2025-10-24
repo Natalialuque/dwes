@@ -33,7 +33,7 @@ function inicioCabecera(string $titulo)
         <link rel="shortcut icon" href="/favicon.ico">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-        <link rel="stylesheet" type="text/css" href="/../../estilos/base.css">
+        <link rel="stylesheet" type="text/css" href="/estilos/base.css">
     <?php
 }
 function finCabecera()
