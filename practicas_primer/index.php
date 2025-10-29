@@ -41,6 +41,9 @@ function cuerpo()
     <h1>PRUEBAS </h1>
     <ul>
        <li><a href="/aplicacion/pruebas/index.php">Pruebas</a></li>
+        <li><a href="/aplicacion/pruebas/formulario.php">formularia</a></li>
+
+
     </ul>
 
 <?php

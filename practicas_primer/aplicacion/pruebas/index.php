@@ -34,5 +34,6 @@ function cuerpo()
 ?>
    <a href="sintaxisBasica.php">Pruebas sintaxis básica</a><br>
    <a href="arrays.php">Pruebas arrays</a><br>
+   <a href="formulario.php">Formulario</a><br>
 <?php
 }
