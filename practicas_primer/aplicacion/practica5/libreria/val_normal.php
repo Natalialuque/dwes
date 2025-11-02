@@ -210,10 +210,11 @@ function validaCadena(string &$var, int $longitud, string $defecto): bool{
 
 
 
-
-
 /**
- * Undocumented function
+ * function validaExpresion(string &$var, string $expresion, string $defecto):bool Esta función 
+*comprueba que $var cumple con la expresión regular $expresion. En caso de no cumplir las  
+*condiciones se asigna a $var el valor por $defecto. La función devuelve true si es correcto y 
+*false en caso contrario. 
  *
  * @param string $var
  * @param string $expresion
@@ -221,12 +222,23 @@ function validaCadena(string &$var, int $longitud, string $defecto): bool{
  * @return boolean
  */
 function validaExpresion(string &$var, string $expresion, string $defecto): bool{
-return true;
 
+    //La función preg_match en PHP se utiliza para realizar coincidencias de patrones en cadenas.
+    if (preg_match($expresion, $var)){
+        return true;
+    }
+
+    $var=$defecto;
+    return false;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 /**
- * Undocumented function
+ * function validaRango(mixed $var, array $posibles, int $tipo=1):bool Esta función comprueba 
+*que $var sea igual a uno de los elementos del array $posibles ($tipo=1) o a una de las claves 
+*del array $posibles ($tipo=2). La función devuelve true si es correcta y false en caso contrario. 
  *
  * @param mixed $var
  * @param array $posibles
@@ -234,7 +246,14 @@ return true;
  * @return boolean
  */
 function validaRango(mixed $var, array $posibles, int $tipo = 1): bool{
-return true;
+if ($tipo === 1) {
+        return in_array($var, $posibles, true);
+    }
 
+    if ($tipo === 2) {
+        return array_key_exists($var, $posibles);
+    }
+
+    return false;
 }
 ?>

@@ -19,7 +19,7 @@
 
 
     //comprobar si se ha dado a insertar
-    if ( isset($_POST("crear")) ) {
+    if (isset($_POST["crear"])) {
         $nombre = "";
         if (isset($_POST["nombre"])) {
             $nombre = $_POST["nombre"];
@@ -38,7 +38,7 @@
             $precio = intval($_POST["edad"]);
         }
 
-        if ($edade<15)
+        if ($edad<15)
             $errores["edad"][] = "Debe indicarse una edad menor de 15 años";
 
         $datos["edad"] = $edad;
@@ -90,9 +90,9 @@
     {
         if ($errores) { //mostrar los errores
             echo "<div class='error'>";
-            foreach ($errores as $clave => $valor) {
+            foreach ($errores as $contraseña => $valor) {
                 foreach ($valor as $error)
-                    echo "$clave => $error<br>" . PHP_EOL;
+                    echo "$contraseña=> $error<br>" . PHP_EOL;
             }
             echo "</div>";
         }
@@ -105,11 +105,12 @@
             maxlength="20"><br>
         <label for="precio">Precio: </label>
         <input type="text" name="edad" id="edad"
-            value="<?php echo $datos["nombre"]; ?>" size=3
+            value="<?php echo $datos["edad"]; ?>" size=3
             maxlength="3"><br>
         <input type="submit" class="boton" name="crear"value="Crear">
     </form>
 <?php
 
+      
     }
 ?>
