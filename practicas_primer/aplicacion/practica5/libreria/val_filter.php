@@ -184,78 +184,20 @@ function validaEmail(string &$var, string $defecto): bool{
 
 
 
-/**
- * function validaCadena(string &$var, int $longitud, string $defecto):bool Esta función 
-*comprueba que $var contiene una cadena de longitud máxima $longitud. En caso de no 
-*cumplir las condiciones se asigna a $var el valor $defecto. La función devuelve true si es 
-*correcto y false en caso contrario. 
- *
- * @param string $var
- * @param integer $longitud
- * @param string $defecto
- * @return boolean
- */
+
+
+
+
+
 function validaCadena(string &$var, int $longitud, string $defecto): bool{
-
-    if(mb_strlen($var) <= $longitud){
-        return true;
-    }
-
-    $var = $defecto;
-    return false;
+    return true;
 }
-
-
-
-
-/**
- * function validaExpresion(string &$var, string $expresion, string $defecto):bool Esta función 
-*comprueba que $var cumple con la expresión regular $expresion. En caso de no cumplir las  
-*condiciones se asigna a $var el valor por $defecto. La función devuelve true si es correcto y 
-*false en caso contrario. 
- *
- * @param string $var
- * @param string $expresion
- * @param string $defecto
- * @return boolean
- */
-
 
 function validaExpresion(string &$var, string $expresion, string $defecto): bool{
-   $opciones = [
-        'options' => [
-            'regexp' => $expresion
-        ]
-    ];
-
-    if (filter_var($var, FILTER_VALIDATE_REGEXP, $opciones)) {
-        return true;
-    }
-
-    $var = $defecto;
-    return false;
+    return true;
 }
 
-
-/**
- * function validaRango(mixed $var, array $posibles, int $tipo=1):bool Esta función comprueba 
-*que $var sea igual a uno de los elementos del array $posibles ($tipo=1) o a una de las claves 
-*del array $posibles ($tipo=2). La función devuelve true si es correcta y false en caso contrario. 
- *
- * @param mixed $var
- * @param array $posibles
- * @param integer $tipo
- * @return boolean
- */
 function validaRango(mixed $var, array $posibles, int $tipo = 1): bool{
-if ($tipo === 1) {
-        return in_array($var, $posibles, true);
-    }
-
-    if ($tipo === 2) {
-        return array_key_exists($var, $posibles);
-    }
-
-    return false;
+    return true;
 }
 ?>

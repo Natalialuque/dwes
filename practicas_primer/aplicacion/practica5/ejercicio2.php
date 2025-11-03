@@ -358,14 +358,23 @@ function formulario($datos, $errores)
 
 function resumen($datos)
 {
+    $nombre = $datos["nombre"];
+    $contraseña = $datos["contraseña"];
+    $fechaNacimiento = $datos["FechaNacimiento"];
+    $fechaCarnet = $datos["fechaCarnet"];
+    $hora = $datos["Hora"];
+    $estadoTexto = $datos["estadoTexto"] ?? "";
+    $hermanos = $datos["Hermanos"];
+    $sueldo = $datos["Sueldo"];
+
     echo "<h2>Resumen de datos introducidos</h2>";
     echo "<ul>";
-    echo "<li><strong>Nombre:</strong> " . htmlspecialchars($datos["nombre"]) . "</li>";
-    echo "<li><strong>Contraseña:</strong> " . htmlspecialchars($datos["contraseña"]) . "</li>";
-    echo "<li><strong>Fecha de nacimiento:</strong> " . htmlspecialchars($datos["FechaNacimiento"]) . "</li>";
-    echo "<li><strong>Fecha de carnet:</strong> " . htmlspecialchars($datos["fechaCarnet"]) . "</li>";
-    echo "<li><strong>Hora de despertarse:</strong> " . htmlspecialchars($datos["Hora"]) . "</li>";
-    echo "<li><strong>Estado:</strong> " . htmlspecialchars($datos["estadoTexto"] ?? "") . "</li>";
+    echo "<li><strong>Nombre:</strong> {$nombre}</li>";
+    echo "<li><strong>Contraseña:</strong> {$contraseña}</li>";
+    echo "<li><strong>Fecha de nacimiento:</strong> {$fechaNacimiento}</li>";
+    echo "<li><strong>Fecha de carnet:</strong> {$fechaCarnet}</li>";
+    echo "<li><strong>Hora de despertarse:</strong> {$hora}</li>";
+    echo "<li><strong>Estado:</strong> {$estadoTexto}</li>";
 
     echo "<li><strong>Estudios:</strong> ";
     if (!empty($datos["estado2"])) {
@@ -386,10 +395,12 @@ function resumen($datos)
     }
     echo "</li>";
 
-    echo "<li><strong>Número de hermanos:</strong> " . htmlspecialchars($datos["Hermanos"]) . "</li>";
-    echo "<li><strong>Sueldo:</strong> " . htmlspecialchars($datos["Sueldo"]) . " €</li>";
+    echo "<li><strong>Número de hermanos:</strong> {$hermanos}</li>";
+    echo "<li><strong>Sueldo:</strong> {$sueldo} €</li>";
     echo "</ul>";
 }
+
+
 
 
 
