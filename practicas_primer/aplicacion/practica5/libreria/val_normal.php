@@ -256,4 +256,3 @@ if ($tipo === 1) {
 
     return false;
 }
-?>

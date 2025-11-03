@@ -5,7 +5,7 @@ include_once("/web/sitios/dwes/practicas_primer/scripts/librerias/validacion.php
 //controlador
 $ubicacion = [
  "area personal"=> "../../index.php",
- "relacion 4"=> "./index.php",
+ "relacion 5"=> "./index.php",
  "ejercicio 1"=> "ejercicio1.php",
 
  ];
@@ -63,9 +63,9 @@ function cuerpo() {
                         // $result1 = validaFecha($fecha1, "1970-01-01");
                         // echo "Valor: $fecha1 | Resultado: " . ($result1 ? "válido" : "inválido") . "\n";
 
-                         $fecha2 = "15/10/2023";
-                         $result2 = validaFecha($fecha2, "1970-01-01");
-                         echo "Valor: $fecha2 | Resultado: " . ($result2 ? "válido" : "inválido") . "\n";
+                        //  $fecha2 = "15/10/2023";
+                        //  $result2 = validaFecha($fecha2, "1970-01-01");
+                        //  echo "Valor: $fecha2 | Resultado: " . ($result2 ? "válido" : "inválido") . "\n";
 
         //PRUEBA validaHora en VAL_NORMAL y VAL_FILTER
                     //  $hora1 = "14:30:00";

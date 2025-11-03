@@ -200,4 +200,4 @@ function validaExpresion(string &$var, string $expresion, string $defecto): bool
 function validaRango(mixed $var, array $posibles, int $tipo = 1): bool{
     return true;
 }
-?>
+

@@ -5,7 +5,7 @@ include_once("/web/sitios/dwes/practicas_primer/scripts/librerias/validacion.php
 //controlador
 $ubicacion = [
  "area personal"=> "../../index.php",
- "relacion 4"=> "./index.php",
+ "relacion 5"=> "./index.php",
 
  ];
 
