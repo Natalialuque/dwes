@@ -2,15 +2,6 @@
     include_once(dirname(__FILE__) . "/../../cabecera.php");
     include_once("/web/sitios/dwes/practicas_primer/scripts/librerias/validacion.php");
 
-    $ubicacion = [
-        "area personal"=> "../../index.php",
-        "relacion 5"=> "./index.php",
-        "ejercicio 2"=> "ejercicio1.php",
-
-    ];
-
-    $GLOBALS["Ubicacion"]=$ubicacion;
-
 
     //controlador
 
@@ -405,11 +396,4 @@ function resumen($datos)
     echo "</ul>";
 }
 
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> e04fbfff8492ba9aa219c04944e04ae834e31896
 ?>

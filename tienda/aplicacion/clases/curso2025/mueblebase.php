@@ -24,8 +24,8 @@ abstract class mueblebase{
         public string $fabricante;
         public string $pais;
         public string $anio;
-        public DateTime $fechaIniVenta;
-        public DateTime $fechaFinVenta;
+        public string $fechaIniVenta;
+        public string $fechaFinVenta;
         public string $materialPrincipal;
         public float $precio;
 
@@ -54,11 +54,11 @@ abstract class mueblebase{
         return $this->anio;
     }
 
-    public function getFechaIniVenta(): DateTime {
+    public function getFechaIniVenta(): string {
         return $this->fechaIniVenta;
     }
 
-    public function getFechaFinVenta(): DateTime {
+    public function getFechaFinVenta(): string {
         return $this->fechaFinVenta;
     }
 
@@ -116,35 +116,195 @@ abstract class mueblebase{
     }
 
     //(entero, año de inicio de fabricación, valor entre 2020 y el año actual, por defecto 2020
-    public function setAnio(string $anio): void {
+    public function setAnio(string $anio): bool {
+    $actual = (int)date('Y');
+    if (validaEntero($anio, 2020, $actual, $anio)) {
         $this->anio = $anio;
+        return true;
     }
+    return false;    }
 
     //(cadena-fecha, fecha en la que se empieza a vender el mueble, no 
     //puede ser anterior al uno de enero del Anio de inicio de fabricación, por defecto 
     //‘01/01/2020’
-    public function setFechaIniVenta(DateTime $fechaIniVenta): void {
-        $this->fechaIniVenta = $fechaIniVenta;
+    public function setFechaIniVenta(string $fecha): bool {
+    $limite = '01/01/' . $this->anio;
+    if (validaFecha($fecha, $fecha)) {
+        $fechaIni = strtotime($fecha);
+        $fechaMin = strtotime($limite);
+        if ($fechaIni >= $fechaMin) {
+            $this->fechaIniVenta = $fecha;
+            return true;
+        }
     }
+    return false;
+}
 
     //cadena-fecha, fecha en la que dejará de venderse, no 
     //puede ser anterior a la FechaIniVenta, por defecto 31/12/2040’
-    public function setFechaFinVenta(DateTime $fechaFinVenta): void {
-        $this->fechaFinVenta = $fechaFinVenta;
+    public function setFechaFinVenta(string $fecha): bool {
+    if (validaFecha($fecha, $fecha)) {
+        $fechaFin = strtotime($fecha);
+        $fechaIni = strtotime($this->fechaIniVenta);
+        if ($fechaFin >= $fechaIni) {
+            $this->fechaFinVenta = $fecha;
+            return true;
+        }
     }
+    return false;    }
 
     //entero, número que representa el material de entre los materiales definidos en la 
     //constante MATERIALES_POSIBLES
-    public function setMaterialPrincipal(string $materialPrincipal): void {
+    public function setMaterialPrincipal(string $materialPrincipal): bool {
+    if (validaRango($materialPrincipal, self::MATERIALES_POSIBLES, 2)) {
         $this->materialPrincipal = $materialPrincipal;
+        return true;
     }
+    return false;    }
 
     //real, por defecto 30, no puede ser menor de 30
-    public function setPrecio(float $precio): void {
+    public function setPrecio(float $precio): bool {
+    if (validaReal($precio, 30.0, 999999.99, $precio)) {
         $this->precio = $precio;
+        return true;
     }
-}
+    return false;    }
+
     
+/**CONSTRUCTOR */
+public function __construct(
+    string $nombre,
+    string $fabricante = 'FMu:',
+    string $pais = 'ESPAÑA',
+    int $anio = 2020,
+    string $fechaIniVenta = '01/01/2020',
+    string $fechaFinVenta = '31/12/2040',
+    int $materialPrincipal = 1,
+    float $precio = 30.0
+) {
+    // Verificar si se puede crear más muebles
+ 
+    // Validar y asignar el nombre (obligatorio)
+    if (!$this->setNombre($nombre)) {
+        throw new Exception("El nombre es obligatorio y debe tener como máximo 40 caracteres.");
+    }
+
+    // Validar y asignar el resto de propiedades
+    if (!$this->setFabricante($fabricante)) {
+        $this->fabricante = 'FMu:';
+    }
+
+    if (!$this->setPais($pais)) {
+        $this->pais = 'ESPAÑA';
+    }
+
+    if (!$this->setAnio($anio)) {
+        $this->anio = 2020;
+    }
+
+    // Validar fecha de inicio de venta
+    if (!$this->setFechaIniVenta($fechaIniVenta)) {
+        $this->fechaIniVenta = '01/01/' . $this->anio;
+    }
+
+    // Validar fecha de fin de venta
+    if (!$this->setFechaFinVenta($fechaFinVenta)) {
+        $this->fechaFinVenta = '31/12/2040';
+    }
+
+    if (!$this->setMaterialPrincipal($materialPrincipal)) {
+        $this->materialPrincipal = 1;
+    }
+
+    if (!$this->setPrecio($precio)) {
+        $this->precio = 30.0;
+    }
+
+    // Incrementar el contador de muebles creados
+    self::$mueblesCreados++;
+}
 
 
+/**
+ * Método dameListaPropiedades  TEN EN CUENTA LAS CLASES HIJAS
+ * 
+ *
+ * @return array
+ */
+public function dameListaPropiedades(): array {
+    return [
+        'Nombre',
+        'Fabricante',
+        'Pais',
+        'Anio',
+        'FechaIniVenta',
+        'FechaFinVenta',
+        'MaterialPrincipal',
+        'Precio'
+    ];
+}
+
+/**
+ * Método damePropiedad 
+ */
+
+public function damePropiedad(string $propiedad, int $modo, mixed &$res): bool {
+    // Lista de propiedades válidas
+    $lista = $this->dameListaPropiedades();
+
+    // Verificar si la propiedad existe
+    if (!in_array($propiedad, $lista)) {
+        return false;
+    }
+
+    // Modo 1: variable-función → llamar al método getPropiedad()
+    if ($modo === 1) {
+        $metodo = 'get' . $propiedad;
+        if (method_exists($this, $metodo)) {
+            $res = $this->$metodo();
+            return true;
+        }
+        return false;
+    }
+
+    // Modo 2: variable-variable → acceder directamente si es posible
+    if ($modo === 2) {
+        // Si la propiedad es privada en la clase base, no se puede acceder directamente
+        // Usamos el método get en su lugar
+        $metodo = 'get' . $propiedad;
+        if (method_exists($this, $metodo)) {
+            $res = $this->$metodo();
+            return true;
+        }
+        return false;
+    }
+
+    return false;
+}
+
+/**
+ * Método de clase puedeCrear
+ */
+
+public static function puedeCrear(int &$numero): bool {
+    $numero = self::MAXIMO_MUEBLES - self::$mueblesCreados;
+    return $numero > 0;
+}
+
+/**
+ * 
+ */
+public function __toString(): string {
+    return "MUEBLE de clase " . get_class($this) .
+           " con nombre " . $this->getNombre() .
+           ", fabricante " . $this->getFabricante() .
+           ", fabricado en " . $this->getPais() .
+           " a partir del año " . $this->getAnio() .
+           ", vendido desde " . $this->getFechaIniVenta() .
+           " hasta " . $this->getFechaFinVenta() .
+           ", precio " . $this->getPrecio() .
+           " de material " . $this->getMaterialDescripcion();
+}
+
+}
 ?>
