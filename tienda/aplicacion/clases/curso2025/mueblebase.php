@@ -20,14 +20,14 @@ abstract class mueblebase{
     private static int $mueblesCreados;
 
     // Propiedades privadas
-        public string $nombre;
-        public string $fabricante;
-        public string $pais;
-        public string $anio;
-        public string $fechaIniVenta;
-        public string $fechaFinVenta;
-        public string $materialPrincipal;
-        public float $precio;
+        private string $nombre;
+        private string $fabricante;
+        private string $pais;
+        private string $anio;
+        private string $fechaIniVenta;
+        private string $fechaFinVenta;
+        private string $materialPrincipal;
+        private float $precio;
 
     
     
@@ -171,58 +171,33 @@ abstract class mueblebase{
     return false;    }
 
     
-/**CONSTRUCTOR */
+/**CONSTRUCTOR */ /*ARREGLAR*/
 public function __construct(
     string $nombre,
-    string $fabricante = 'FMu:',
-    string $pais = 'ESPAÑA',
+    int|string $materialPrincipal,
+    string $fabricante = "FMu:",
+    string $pais = "ESPAÑA",
     int $anio = 2020,
-    string $fechaIniVenta = '01/01/2020',
-    string $fechaFinVenta = '31/12/2040',
-    int $materialPrincipal = 1,
-    float $precio = 30.0
+    string $fechaIniVenta = "01/01/2020",
+    string $fechaFinVenta = "31/12/2040",
+    float $precio = 30
 ) {
-    // Verificar si se puede crear más muebles
- 
-    // Validar y asignar el nombre (obligatorio)
-    if (!$this->setNombre($nombre)) {
-        throw new Exception("El nombre es obligatorio y debe tener como máximo 40 caracteres.");
+    if (self::$mueblesCreados >= self::MAXIMO_MUEBLES) {
+        throw new Exception("No se pueden crear más muebles, límite alcanzado");
     }
 
-    // Validar y asignar el resto de propiedades
-    if (!$this->setFabricante($fabricante)) {
-        $this->fabricante = 'FMu:';
-    }
+    $this->nombre = $nombre;
+    $this->fabricante = $fabricante;
+    $this->pais = $pais;
+    $this->anio = (string) $anio;
+    $this->fechaIniVenta = $fechaIniVenta;
+    $this->fechaFinVenta = $fechaFinVenta;
+    $this->precio = $precio;
 
-    if (!$this->setPais($pais)) {
-        $this->pais = 'ESPAÑA';
-    }
-
-    if (!$this->setAnio($anio)) {
-        $this->anio = 2020;
-    }
-
-    // Validar fecha de inicio de venta
-    if (!$this->setFechaIniVenta($fechaIniVenta)) {
-        $this->fechaIniVenta = '01/01/' . $this->anio;
-    }
-
-    // Validar fecha de fin de venta
-    if (!$this->setFechaFinVenta($fechaFinVenta)) {
-        $this->fechaFinVenta = '31/12/2040';
-    }
-
-    if (!$this->setMaterialPrincipal($materialPrincipal)) {
-        $this->materialPrincipal = 1;
-    }
-
-    if (!$this->setPrecio($precio)) {
-        $this->precio = 30.0;
-    }
-
-    // Incrementar el contador de muebles creados
+   
     self::$mueblesCreados++;
 }
+
 
 
 /**
