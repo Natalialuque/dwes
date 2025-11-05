@@ -29,7 +29,7 @@ function cuerpo()
 {
 ?>
     <h1>TIENDA MUEBLES</h1>
-    
+
 
 <?php
 }
