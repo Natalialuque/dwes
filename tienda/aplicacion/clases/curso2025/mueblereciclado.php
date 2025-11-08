@@ -3,7 +3,7 @@
 class mueblereciclado extends mueblebase{
 
     //nueva propiedad 
-    private int $PorcentajeReciclado;
+    private float $PorcentajeReciclado;
 
     /**
      * Constructor de la clase
@@ -16,31 +16,32 @@ class mueblereciclado extends mueblebase{
      * @param string $fechaFinVenta
      * @param integer $materialPrincipal
      * @param float $precio
-     * @param integer $porcentajeReciclado
+     * @param float $porcentajeReciclado
      */ 
     public function __construct( string $nombre,
+            Caracteristicas $caracteristicas,
+            int $materialPrincipal = 1,
             string $fabricante = 'FMu:',
             string $pais = 'ESPAÑA',
             int $anio = 2020,
             string $fechaIniVenta = '01/01/2020',
             string $fechaFinVenta = '31/12/2040',
-            int $materialPrincipal = 1,
             float $precio = 30.0,
-            int $porcentajeReciclado = 10)
+            float $porcentajeReciclado = 10)
         {
-            parent::__construct($nombre, $fabricante, $pais, $anio, $fechaIniVenta, $fechaFinVenta, $materialPrincipal, $precio);
+            parent::__construct($nombre,$caracteristicas,$materialPrincipal ,$fabricante, $pais, $anio, $fechaIniVenta, $fechaFinVenta, $precio);
             $this->setPorcentajeReciclado($porcentajeReciclado);
         }
 
     /**
      * Setter para PorcentajeReciclado
-     * Valida que el valor esté entre 0 y 100
+     * Valida que el valor esté entre 0 y 100 
      * Si no es válido, se asigna el valor por defecto (10) y se devuelve false
      *
      * @param integer $valor
      * @return boolean
      */
-    public function setPorcentajeReciclado(int $valor): bool {
+    public function setPorcentajeReciclado(float $valor): bool {
         if ($valor >= 0 && $valor <= 100) {
             $this->PorcentajeReciclado = $valor;
             return true;
@@ -54,7 +55,7 @@ class mueblereciclado extends mueblebase{
      * Devuelve el valor actual de la propiedad
      * @return integer
      */
-    public function getPorcentajeReciclado(): int {
+    public function getPorcentajeReciclado(): float {
         return $this->PorcentajeReciclado;
     }
 

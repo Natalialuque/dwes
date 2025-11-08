@@ -1,4 +1,5 @@
-<?php
+
+ <?php
 include_once(dirname(__FILE__) . "/cabecera.php");
 //controlador
 
@@ -29,7 +30,10 @@ function cuerpo()
 {
 ?>
     <h1>TIENDA MUEBLES</h1>
-
+    <ul>
+        <a href="/aplicacion/principal/index.php">prueba 1</a>
+    </ul>
+    
 
 <?php
-}
+} 

@@ -2,7 +2,7 @@
 class muebletradicional extends mueblebase{
 
     //nuevas propiedades
-    private int $peso;
+    private float $peso;
     private string $serie;
 
     /**
@@ -20,17 +20,18 @@ class muebletradicional extends mueblebase{
      * @param string $serie
      */ 
     public function __construct( string $nombre,
+            Caracteristicas $caracteristicas,
+            int $materialPrincipal = 1,
             string $fabricante = 'FMu:',
             string $pais = 'ESPAÑA',
             int $anio = 2020,
             string $fechaIniVenta = '01/01/2020',
             string $fechaFinVenta = '31/12/2040',
-            int $materialPrincipal = 1,
             float $precio = 30.0,
-            int $peso = '15',
+            float $peso = 15,
             string $serie ="S01")
         {
-            parent::__construct($nombre, $fabricante, $pais, $anio, $fechaIniVenta, $fechaFinVenta, $materialPrincipal, $precio);
+            parent::__construct($nombre,$caracteristicas, $materialPrincipal,$fabricante, $pais, $anio, $fechaIniVenta, $fechaFinVenta, $precio);
              $this->setPeso($peso);
              $this->setSerie($serie);
         }
@@ -40,11 +41,11 @@ class muebletradicional extends mueblebase{
      *
      * @return integer
      */
-    public function getPeso():int{
+    public function getPeso():float{
         return $this->peso;
     }
 
-    public function setPeso(int $valor):bool{
+    public function setPeso(float $valor):bool{
         if($valor>=15 && $valor<=300){
             $this->peso=$valor;
             return true;

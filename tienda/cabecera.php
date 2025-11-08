@@ -11,7 +11,7 @@ if (MODO_TRABAJO == "produccion")
 
 
 spl_autoload_register(function ($clase) {
-    $ruta = RUTABASE . "/aplicacion/clases/cursos2025";  //esto es la autocarga de clases
+    $ruta = RUTABASE . "/aplicacion/clases/curso2025/";  //esto es la autocarga de clases
     $fichero = $ruta . "$clase.php";
     if (file_exists($fichero)) 
         {
