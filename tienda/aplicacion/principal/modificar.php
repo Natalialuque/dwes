@@ -76,7 +76,7 @@ function cuerpo() {
 
     if ($exito) {
         echo "<h3>Mueble actualizado correctamente</h3>";
-        echo "<pre>$mueble</pre>"; // ✅ Visualización directa como pediste
+        echo "<pre>$mueble</pre>"; 
         return;
     }
 
