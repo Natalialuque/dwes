@@ -30,7 +30,7 @@ function cuerpo() {
     global $muebles;
 ?>
 
-<!-- 🔹 Tabla con todos los muebles -->
+<!-- Tabla con todos los muebles -->
 <h2>Listado de Muebles</h2>
 <table border="1" cellpadding="4">
     <tr>
@@ -55,7 +55,7 @@ function cuerpo() {
     <?php endforeach; ?>
 </table>
 
-<!-- 🔹 Formulario con dos botones -->
+<!-- Formulario con dos botones -->
 <h2>Acciones sobre Mueble</h2>
 <form method="post" action="">
     <label for="indice">Selecciona índice de mueble:</label>
@@ -69,7 +69,7 @@ function cuerpo() {
     <input type="submit" name="modificar" value="Modificar Mueble">
 </form>
 
-<!-- 🔹 Mostrar propiedades del mueble seleccionado -->
+<!-- Mostrar propiedades del mueble seleccionado -->
 <?php
 if (isset($_POST['mostrar']) && isset($_POST['indice'])) {
     $i = $_POST['indice'];
@@ -87,7 +87,7 @@ if (isset($_POST['mostrar']) && isset($_POST['indice'])) {
 }
 ?>
 
-<!-- 🔹 Redirección a formulario de modificación -->
+<!-- Redirección a formulario de modificación -->
 <?php
 if (isset($_POST['modificar']) && isset($_POST['indice'])) {
     $i = $_POST['indice'];
