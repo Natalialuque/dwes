@@ -31,7 +31,7 @@ function cuerpo()
 ?>
     <h1>TIENDA MUEBLES</h1>
     <ul>
-        <a href="/aplicacion/principal/index.php">prueba 1</a>
+        <a href="/aplicacion/principal/index.php">TIENDA</a>
     </ul>
     
 

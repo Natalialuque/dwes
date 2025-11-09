@@ -18,11 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $mueble) {
     $tipo = get_class($mueble);
     $aux = clone $mueble;
 
-    // Validación con métodos set
     if (!$aux->setNombre($_POST['nombre'])) $errores[] = "Nombre inválido";
     if (!$aux->setPrecio((float)$_POST['precio'])) $errores[] = "Precio inválido";
 
-    // Validación directa
     $material = $_POST['material'] ?? '';
     if (!in_array($material, mueblebase::MATERIALES_POSIBLES)) {
         $errores[] = "Material no válido";
@@ -43,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $mueble) {
     }
 
     if (empty($errores)) {
-        // Aplicar cambios reales
         $mueble->setNombre($_POST['nombre']);
         $mueble->setPrecio((float)$_POST['precio']);
         $mueble->setMaterialPrincipal(array_search($material, mueblebase::MATERIALES_POSIBLES));
@@ -58,17 +55,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $mueble) {
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-
-//dibuja la plantilla de la vista
+// vista
 inicioCabecera("Natalia Cabello Luque");
 cabecera();
 finCabecera();
 inicioCuerpo("");
-cuerpo();  //llamo a la vista
+cuerpo();
 finCuerpo();
-
-// **********************************************************
 
 function cabecera() {
 }
@@ -83,7 +76,7 @@ function cuerpo() {
 
     if ($exito) {
         echo "<h3>Mueble actualizado correctamente</h3>";
-        echo "<pre>$mueble</pre>";
+        echo "<pre>$mueble</pre>"; // ✅ Visualización directa como pediste
         return;
     }
 
@@ -122,3 +115,4 @@ function cuerpo() {
     <?php
 }
 ?>
+
