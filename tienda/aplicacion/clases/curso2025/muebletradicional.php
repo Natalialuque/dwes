@@ -1,7 +1,7 @@
 <?php
 class muebletradicional extends mueblebase{
 
-    //nuevas propiedades
+     //nuevas propiedades
     private float $peso;
     private string $serie;
 
