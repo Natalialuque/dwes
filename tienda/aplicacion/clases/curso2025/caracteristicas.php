@@ -58,7 +58,8 @@ class caracteristicas implements Iterator {
             }
             $this->Caracteristicas=$array;
         }
-
+        
+//FALTA CREAR __ISSET // __UNSET // __GET 
         public function __set($name, $value){
             // para que si existe ningunamas no se pueda añadir nada mas
             $array = $this->getCaracteristicas();
