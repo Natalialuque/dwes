@@ -1,6 +1,5 @@
 <?php
 include_once(dirname(__FILE__) . "/../../cabecera.php");
-include_once("/web/sitios/dwes/practicas_primer/scripts/clases/Punto.php");
 include_once("/web/sitios/dwes/practicas_primer/scripts/librerias/validacion.php");
 
 //controlador
@@ -13,19 +12,27 @@ $datos = [
 $errores = [];
 
 if (isset($_POST["guardar"])) {
-    // X
-    $x = $_POST["x"] ?? "";
-    if (!validaEntero($x, 0, 500, "X_INVALIDA")) {
-        $errores["x"][] = "La coordenada X debe estar entre 0 y 500.";
-    }
-    $datos["x"] = $x;
+   // X
+        if (isset($_POST["x"]) && $_POST["x"] !== "") {
+            $x = $_POST["x"];
+            if (!validaEntero((int)$x, 0, 500, "X_INVALIDA")) {
+                $errores["x"][] = "La coordenada X debe estar entre 0 y 500.";
+            }
+        } else {
+            $errores["x"][] = "La coordenada X es obligatoria.";
+        }
+        $datos["x"] = $_POST["x"] ?? "";
 
     // Y
-    $y = $_POST["y"] ?? "";
-    if (!validaEntero($y, 0, 500, "Y_INVALIDA")) {
-        $errores["y"][] = "La coordenada Y debe estar entre 0 y 500.";
-    }
-    $datos["y"] = $y;
+        if (isset($_POST["y"]) && $_POST["y"] !== "") {
+            $y = $_POST["y"];
+            if (!validaEntero((int)$y, 0, 500, "Y_INVALIDA")) {
+                $errores["y"][] = "La coordenada Y debe estar entre 0 y 500.";
+            }
+        } else {
+            $errores["y"][] = "La coordenada Y es obligatoria.";
+        }
+        $datos["y"] = $_POST["y"] ?? "";
 
     // Color
     $color = $_POST["color"] ?? "";
@@ -58,7 +65,7 @@ inicioCabecera("Natalia Cabello Luque");
 cabecera();
 finCabecera();
 inicioCuerpo("");
-cuerpo();  //llamo a la vista
+cuerpo($datos, $errores);  //llamo a la vista
 finCuerpo();
 
 // **********************************************************
@@ -73,18 +80,22 @@ function cabecera()
     echo "<br><br><br>";
 
         formulario($datos, $errores);
+
+
     
 }
 function formulario($datos, $errores) {
+$formularioEnviado = isset($_POST["guardar"]);
 
-      if ($errores) { //mostrar los errores
-            echo "<div class='error'>";
-            foreach ($errores as $clave => $valor) {
-                foreach ($valor as $error)
-                    echo "$clave => $error<br>" . PHP_EOL;
-            }
-            echo "</div>";
+    if ($formularioEnviado && $errores) {
+    echo "<div class='error'>";
+    foreach ($errores as $clave => $valor) {
+        foreach ($valor as $error)
+            echo "$clave => $error<br>" . PHP_EOL;
     }
+    echo "</div>";
+}
+
 
     ?>
     <form method="post" action="">
