@@ -1,4 +1,4 @@
-<<?php
+<?php
     include_once(dirname(__FILE__) . "/../../cabecera.php");
     include_once("/web/sitios/dwes/practicas_primer/scripts/librerias/validacion.php");
 
