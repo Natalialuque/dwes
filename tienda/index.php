@@ -22,8 +22,9 @@ finCuerpo();
 // **********************************************************
 
 //vista
-function cabecera() 
-{}
+function cabecera() {
+    
+}
 
 //vista
 function cuerpo()

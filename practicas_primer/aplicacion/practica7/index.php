@@ -10,52 +10,97 @@ $datos = [
     "grosor" => ""
 ];
 $errores = [];
+//para almacenar los puntos
+// Array inicial con 3 puntos
+$punto1 = new Punto(55, 88, "red", 1);
+$punto2 = new Punto(100, 180, "purple", 2);
+$punto3 = new Punto(450, 200, "orange", 3);
 
+$puntos = [$punto1,$punto2,$punto3];
+
+//imagenes 
+$rutaweb = "/imagenes/puntos/";
+$rutaphp = RUTABASE . $rutaweb;
+$imagenCliente = crearImagenCliente($rutaphp);
+
+
+/**
+ * 
+ * 
+ * EJERCICIO 1
+ * 
+ * 
+ */
 if (isset($_POST["guardar"])) {
-   // X
-        if (isset($_POST["x"]) && $_POST["x"] !== "") {
-            $x = $_POST["x"];
-            if (!validaEntero((int)$x, 0, 500, "X_INVALIDA")) {
-                $errores["x"][] = "La coordenada X debe estar entre 0 y 500.";
-            }
-        } else {
-            $errores["x"][] = "La coordenada X es obligatoria.";
-        }
-        $datos["x"] = $_POST["x"] ?? "";
+    // Coordenada X
+    $x = "";
 
-    // Y
-        if (isset($_POST["y"]) && $_POST["y"] !== "") {
-            $y = $_POST["y"];
-            if (!validaEntero((int)$y, 0, 500, "Y_INVALIDA")) {
-                $errores["y"][] = "La coordenada Y debe estar entre 0 y 500.";
-            }
-        } else {
-            $errores["y"][] = "La coordenada Y es obligatoria.";
+    if (isset($_POST["x"])) {
+        $x = trim($_POST["x"]);
+    }
+        $xInt = (int)$x;
+
+        if (!validaEntero($xInt, 0, 500, 0)) {
+            $errores["x"][] = "La coordenada X debe estar entre 0 y 500.";
+        } elseif ($x === "") {
+            $errores["x"][] = "La coordenada X no puede estar vacía.";
         }
-        $datos["y"] = $_POST["y"] ?? "";
+    
+    $datos["x"] = $x;
+
+    // Coordenada Y
+    $y = "";
+
+    if (isset($_POST["y"])) {
+        $y = trim($_POST["y"]);
+    }
+        $yInt = (int)$y;
+
+        if (!validaEntero($yInt, 0, 500, 0)) {
+            $errores["y"][] = "La coordenada Y debe estar entre 0 y 500.";
+        } elseif ($y === "") {
+            $errores["y"][] = "La coordenada Y no puede estar vacía.";
+        }
+    
+    $datos["y"] = $y;
 
     // Color
-    $color = $_POST["color"] ?? "";
-    if (!array_key_exists($color, Punto::COLORES)) {
-        $errores["color"][] = "Selecciona un color válido.";
+    $color = "";
+
+    if (isset($_POST["color"])) {
+        $color = $_POST["color"];
     }
+        if (!array_key_exists($color, Punto::COLORES)) {
+            $errores["color"][] = "Selecciona un color válido.";
+        }
+    
     $datos["color"] = $color;
 
     // Grosor
-    $grosor = $_POST["grosor"] ?? "";
-    if (!array_key_exists((int)$grosor, Punto::GROSORES)) {
-        $errores["grosor"][] = "Selecciona un grosor válido.";
+    $grosor = "";
+
+    if (isset($_POST["grosor"])) {
+        $grosor = $_POST["grosor"];
     }
+        $grosorInt = (int)$grosor;
+
+        if (!array_key_exists($grosorInt, Punto::GROSORES)) {
+            $errores["grosor"][] = "Selecciona un grosor válido.";
+        }
+    
     $datos["grosor"] = $grosor;
 
+
     // Si no hay errores, podrías instanciar el objeto Punto
-    if (empty($errores)) {
-        try {
-            $punto = new Punto((int)$x, (int)$y, $color, (int)$grosor);
-        } catch (Exception $e) {
-            echo "<p>Error al crear el punto: " . $e->getMessage() . "</p>";
-        }
+  if (empty($errores)) {
+    try {
+        $punto = new Punto((int)$x, (int)$y, $color, (int)$grosor);
+        $puntos[] = $punto; // Aquí guardas el objeto en el array
+    } catch (Exception $e) {
+        echo "<p>Error al crear el punto: " . $e->getMessage() . "</p>";
     }
+}
+
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -65,47 +110,36 @@ inicioCabecera("Natalia Cabello Luque");
 cabecera();
 finCabecera();
 inicioCuerpo("");
-cuerpo($datos, $errores);  //llamo a la vista
+cuerpo($rutaweb, $imagenCliente, $puntos, $datos, $errores);
 finCuerpo();
 
 // **********************************************************
 
 //vista cabecera donde podemos ver los otros enlaces
-function cabecera() 
-{}
+function cabecera() {}
 
 //vista
- function cuerpo($datos, $errores)
+function cuerpo($rutaweb, $nombreArchivo,$puntos,$datos, $errores)
 {
     echo "<br><br><br>";
 
-        formulario($datos, $errores);
-
-
-    
+    formulario($datos, $errores);
+    MuestraPuntos($puntos);
+    mostrarImagenCliente($rutaweb, $nombreArchivo);
 }
-function formulario($datos, $errores) {
-$formularioEnviado = isset($_POST["guardar"]);
+function formulario($datos, $errores)
+{
 
-    if ($formularioEnviado && $errores) {
-    echo "<div class='error'>";
-    foreach ($errores as $clave => $valor) {
-        foreach ($valor as $error)
-            echo "$clave => $error<br>" . PHP_EOL;
-    }
-    echo "</div>";
-}
-
-
-    ?>
+    //ejercicio1
+?>
     <form method="post" action="">
         <label for="x">Coordenada X:</label>
-        <input type="number" name="x" id="x" value="<?php echo $datos["x"]; ?>" min="0" max="500">
+        <input type="number" name="x" id="x" value="<?php echo $datos["x"]; ?>">
         <?php if (isset($errores["x"])) echo "<span style='color:red;'> " . implode(", ", $errores["x"]) . "</span>"; ?>
         <br>
 
         <label for="y">Coordenada Y:</label>
-        <input type="number" name="y" id="y" value="<?php echo $datos["y"]; ?>" min="0" max="500">
+        <input type="number" name="y" id="y" value="<?php echo $datos["y"]; ?>">
         <?php if (isset($errores["y"])) echo "<span style='color:red;'> " . implode(", ", $errores["y"]) . "</span>"; ?>
         <br>
 
@@ -131,6 +165,92 @@ $formularioEnviado = isset($_POST["guardar"]);
         <br>
 
         <input type="submit" name="guardar" value="Guardar">
+
+        
     </form>
-    <?php
+<?php
 }
+
+
+/**
+ * 
+ * 
+ * EJERCICIO 2
+ * 
+ * 
+ */
+
+function MuestraPuntos($puntos){
+
+   ?>
+
+        <h3>ALMACEN DE PUNTOS</h3>
+         <!-- Creamos el textArea donde vamos a meter los puntos -->
+         <textarea style="margin-left:20px ;width:80%; height:250px; text-align:left;font-size:0.8em"><?php
+             $contador = 1;
+                foreach ($puntos as $valor) {
+               $grosorTexto = Punto::GROSORES[$valor->getGrosor()];
+                  echo "Punto{ $contador}: valor X = " . $valor->getX() . ", valor Y = " . $valor->getY() . ", Color = " . $valor->getColor() .
+                    ", Grosor = " . $grosorTexto . "\n";
+                $contador++;
+            }
+            ?>
+            
+    </textarea>
+   
+   <?php
+
+}
+
+//Para crear la imagen en gd y las IP de los navegadores 
+function crearImagenCliente(string $rutaBase): string {
+    $ip = str_replace(".", "_", $_SERVER['REMOTE_ADDR']);
+
+    //Ips de los navegadores 
+    $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+    $navegador = "desconocido";
+    if (strpos($userAgent, "chrome") !== false) $navegador = "chrome";
+    elseif (strpos($userAgent, "firefox") !== false) $navegador = "firefox";
+    elseif (strpos($userAgent, "safari") !== false && strpos($userAgent, "chrome") === false) $navegador = "safari";
+    elseif (strpos($userAgent, "edge") !== false) $navegador = "edge";
+    elseif (strpos($userAgent, "msie") !== false || strpos($userAgent, "trident") !== false) $navegador = "ie";
+
+    $nombreArchivo = "imagen_{$ip}_{$navegador}.jpg";
+    $rutaImagen = $rutaBase . $nombreArchivo;
+
+
+    if (!file_exists($rutaImagen)) {
+        if (!is_dir($rutaBase)) {
+            mkdir($rutaBase, 0777, true);//si la carpeta o existe la crea directamente 
+        }
+
+        $gd = imagecreatetruecolor(200, 200);
+        if (!$gd) return "";
+
+        $fondo = imagecolorallocate($gd, 255, 255, 255);
+        imagefilledrectangle($gd, 0, 0, 200, 200, $fondo);
+
+        $borde = imagecolorallocate($gd, 0, 0, 0);
+        imagerectangle($gd, 0, 0, 200 - 1, 200 - 1, $borde);
+
+        imagejpeg($gd, $rutaImagen);
+        imagedestroy($gd);
+    }
+
+    return $nombreArchivo;
+}
+
+
+function mostrarImagenCliente(string $rutaweb, string $nombreArchivo) {
+    echo '<img src="' . $rutaweb . $nombreArchivo . '" alt="Imagen personalizada">';
+}
+
+
+/**
+ * 
+ * 
+ * EJERCICIO 3
+ * 
+ * 
+ */
+
