@@ -12,16 +12,13 @@ $datos = [
 $errores = [];
 //para almacenar los puntos
 // Array inicial con 3 puntos
-$punto1 = new Punto(55, 88, "red", 1);
-$punto2 = new Punto(100, 180, "purple", 2);
-$punto3 = new Punto(450, 200, "orange", 3);
+// $punto1 = new Punto(55, 88, "red", 1);
+// $punto2 = new Punto(100, 180, "purple", 2);
+// $punto3 = new Punto(450, 200, "orange", 3);
 
-$puntos = [$punto1,$punto2,$punto3];
+$puntos = [];
 
-//imagenes 
-$rutaweb = "/imagenes/puntos/";
-$rutaphp = RUTABASE . $rutaweb;
-$imagenCliente = crearImagenCliente($rutaphp);
+
 
 
 /**
@@ -102,6 +99,11 @@ if (isset($_POST["guardar"])) {
 }
 
 }
+//imagenes 
+$rutaweb = "/imagenes/puntos/";
+$rutaphp = RUTABASE . $rutaweb;
+$imagenCliente = crearImagenCliente($rutaphp, $puntos);
+
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -126,6 +128,7 @@ function cuerpo($rutaweb, $nombreArchivo,$puntos,$datos, $errores)
     formulario($datos, $errores);
     MuestraPuntos($puntos);
     mostrarImagenCliente($rutaweb, $nombreArchivo);
+    
 }
 function formulario($datos, $errores)
 {
@@ -203,10 +206,8 @@ function MuestraPuntos($puntos){
 }
 
 //Para crear la imagen en gd y las IP de los navegadores 
-function crearImagenCliente(string $rutaBase): string {
+function crearImagenCliente(string $rutaBase, array $puntos): string {
     $ip = str_replace(".", "_", $_SERVER['REMOTE_ADDR']);
-
-    //Ips de los navegadores 
     $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
     $navegador = "desconocido";
     if (strpos($userAgent, "chrome") !== false) $navegador = "chrome";
@@ -219,31 +220,48 @@ function crearImagenCliente(string $rutaBase): string {
     $rutaImagen = $rutaBase . $nombreArchivo;
 
 
-    if (!file_exists($rutaImagen)) {
-        if (!is_dir($rutaBase)) {
-            mkdir($rutaBase, 0777, true);//si la carpeta o existe la crea directamente 
-        }
-
-        $gd = imagecreatetruecolor(200, 200);
-        if (!$gd) return "";
-
-        $fondo = imagecolorallocate($gd, 255, 255, 255);
-        imagefilledrectangle($gd, 0, 0, 200, 200, $fondo);
-
-        $borde = imagecolorallocate($gd, 0, 0, 0);
-        imagerectangle($gd, 0, 0, 200 - 1, 200 - 1, $borde);
-
-        imagejpeg($gd, $rutaImagen);
-        imagedestroy($gd);
+    // Crear carpeta si no existe
+    if (!is_dir($rutaBase)) {
+        mkdir($rutaBase, 0777, true);
     }
+
+    // Crear imagen
+    $gd = imagecreatetruecolor(500, 500); // tamaño más grande para tus coordenadas
+    $fondo = imagecolorallocate($gd, 255, 255, 255);
+    imagefilledrectangle($gd, 0, 0, 500, 500, $fondo);
+
+    $borde = imagecolorallocate($gd, 0, 0, 0);
+    imagerectangle($gd, 0, 0, 499, 499, $borde);
+
+    // Dibujar puntos
+    dibujarPuntos($gd, $puntos);
+
+    // Guardar y liberar
+    imagejpeg($gd, $rutaImagen);
+    imagedestroy($gd);
 
     return $nombreArchivo;
 }
 
-
 function mostrarImagenCliente(string $rutaweb, string $nombreArchivo) {
     echo '<img src="' . $rutaweb . $nombreArchivo . '" alt="Imagen personalizada">';
 }
+
+
+   function dibujarPuntos($gd, array $puntos) {
+    foreach ($puntos as $punto) {
+        $colorInfo = Punto::COLORES[$punto->getColor()];
+        $rgb = $colorInfo["rgb"];
+        $color = imagecolorallocate($gd, $rgb[0], $rgb[1], $rgb[2]);
+
+        $grosor = $punto->getGrosor() * 3; // escala grosor a diámetro
+        imagefilledellipse($gd, $punto->getX(), $punto->getY(), $grosor, $grosor, $color);
+
+}
+   }
+
+
+
 
 
 /**
