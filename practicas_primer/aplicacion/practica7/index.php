@@ -2,6 +2,17 @@
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 include_once("/web/sitios/dwes/practicas_primer/scripts/librerias/validacion.php");
 
+
+//controlador
+$ubicacion = [
+ "area personal"=> "../../index.php",
+ "relacion 7"=> "./index.php",
+
+ ];
+
+ $GLOBALS["Ubicacion"]=$ubicacion;
+
+
 //controlador
 $datos = [
     "x" => "",
@@ -17,8 +28,37 @@ $errores = [];
 // $punto3 = new Punto(450, 200, "orange", 3);
 
 $puntos = [];
+$mostrar=false;
 
+// Determinar fichero del cliente
+$ip = str_replace(".", "_", $_SERVER['REMOTE_ADDR']);
+$userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+$navegador = "desconocido";
+if (strpos($userAgent, "chrome") !== false) $navegador = "chrome";
+elseif (strpos($userAgent, "firefox") !== false) $navegador = "firefox";
+elseif (strpos($userAgent, "safari") !== false && strpos($userAgent, "chrome") === false) $navegador = "safari";
+elseif (strpos($userAgent, "edge") !== false) $navegador = "edge";
+elseif (strpos($userAgent, "msie") !== false || strpos($userAgent, "trident") !== false) $navegador = "ie";
 
+$nombreFichero = "puntos_{$ip}_{$navegador}.dat";
+$rutaFichero = RUTABASE . "/practica7/datos" . $nombreFichero;
+
+// Cargar puntos desde fichero
+if (file_exists($rutaFichero)) {
+    $lineas = file($rutaFichero, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lineas as $linea) {
+        list($x, $y, $color, $grosor) = array_map("trim", explode(";", $linea));
+        try {
+            $puntos[] = new Punto((int)$x, (int)$y, $color, (int)$grosor);
+        } catch (Exception $e) {
+            // Ignorar líneas corruptas
+        }
+    }
+}
+
+//imagenes 
+$rutaweb = "/imagenes/puntos/";
+$rutaphp = RUTABASE . $rutaweb;
 
 
 /**
@@ -88,22 +128,135 @@ if (isset($_POST["guardar"])) {
     $datos["grosor"] = $grosor;
 
 
-    // Si no hay errores, podrías instanciar el objeto Punto
-  if (empty($errores)) {
-    try {
-        $punto = new Punto((int)$x, (int)$y, $color, (int)$grosor);
-        $puntos[] = $punto; // Aquí guardas el objeto en el array
-    } catch (Exception $e) {
-        echo "<p>Error al crear el punto: " . $e->getMessage() . "</p>";
+
+   // Si no hay errores, instanciar el objeto Punto y guardar
+    if (empty($errores)) {
+        try {
+            $punto = new Punto((int)$x, (int)$y, $color, (int)$grosor);
+            $puntos[] = $punto;
+
+            // Guardar también en fichero .dat
+            if (!is_dir(RUTABASE . "/practica7/datos")) {
+                mkdir(RUTABASE . "/practica7/datos", 0777, true);
+            }
+            $linea = $punto->getX() . " ; " . $punto->getY() . " ; " . $punto->getColor() . " ; " . $punto->getGrosor() . PHP_EOL;
+            file_put_contents($rutaFichero, $linea, FILE_APPEND);
+
+        } catch (Exception $e) {
+            echo "<p>Error al crear el punto: " . $e->getMessage() . "</p>";
+        }
+    }
+
+    
+            //para cuando le demos a guardar se cree
+            $imagenCliente = crearImagenCliente($rutaphp, $puntos);
+
+}
+
+/**
+ * 
+ * 
+ * EJERCICIO 4
+ * 
+ * 
+ */
+if (isset($_POST["borrar"]) && isset($_POST["puntoBorrar"])) {
+    $indice = (int)$_POST["puntoBorrar"];
+    if (isset($puntos[$indice])) {
+        // Eliminar del array
+        unset($puntos[$indice]);
+        $puntos = array_values($puntos); // reindexar
+
+        // Reescribir fichero .dat
+        $contenido = "";
+        foreach ($puntos as $p) {
+            $contenido .= $p->getX() . " ; " . $p->getY() . " ; " . $p->getColor() . " ; " . $p->getGrosor() . PHP_EOL;
+        }
+        file_put_contents($rutaFichero, $contenido);
+
+        // Regenerar imagen
+        $imagenCliente = crearImagenCliente($rutaphp, $puntos);
     }
 }
 
-}
-//imagenes 
-$rutaweb = "/imagenes/puntos/";
-$rutaphp = RUTABASE . $rutaweb;
-$imagenCliente = crearImagenCliente($rutaphp, $puntos);
 
+
+// Si no se ha pulsado guardar ni borrar, generar imagen con los puntos cargados
+if (!isset($_POST["guardar"]) && !isset($_POST["borrar"])) {
+    $imagenCliente = crearImagenCliente($rutaphp, $puntos);
+}
+
+
+/**
+ * 
+ * EJERCICIO 5 - Descargar imagen
+ * 
+ */
+if (isset($_POST["descargar"])) {
+    // Cabeceras para forzar descarga
+    header('Content-Type: image/jpeg');
+    header('Content-Disposition: attachment; filename="' . nombreArch() . '"');
+
+    // Generar y devolver la imagen al vuelo
+    devuelveImagen($puntos);
+    exit;
+}
+/**
+ * 
+ * EJERCICIO 6
+ * 
+ */
+// Procesar subida de fichero TXT
+if (isset($_POST["subida"])) {
+    $mostrar = true;
+    if (isset($_FILES["archivo"])) {
+        if ($_FILES["archivo"]["error"] !== 0) {
+            $errores[] = "Errores en la subida del archivo";
+        }
+        if ($_FILES["archivo"]["size"] == 0) {
+            $errores[] = "El fichero está vacío";
+        }
+        if ($_FILES["archivo"]["type"] !== "text/plain") {
+            $errores[] = "Solo se permiten ficheros TXT";
+        }
+
+        if (!$errores) {
+            $lineas = file($_FILES["archivo"]["tmp_name"], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($lineas as $linea) {
+                $partes = array_map("trim", explode(";", $linea));
+                if (count($partes) == 4) {
+                    list($x, $y, $color, $grosor) = $partes;
+                    $xInt = (int)$x;
+                    $yInt = (int)$y;
+                    $grosorInt = (int)$grosor;
+
+                    // Validaciones
+                    if (validaEntero($xInt, 0, 500, 0) && validaEntero($yInt, 0, 500, 0)
+                        && array_key_exists($color, Punto::COLORES)
+                        && array_key_exists($grosorInt, Punto::GROSORES)) {
+                        try {
+                            $punto = new Punto($xInt, $yInt, $color, $grosorInt);
+                            $puntos[] = $punto;
+                        } catch (Exception $e) {}
+                    }
+                }
+            }
+
+            // Reescribir fichero .dat
+            $contenido = "";
+            foreach ($puntos as $p) {
+                $contenido .= $p->getX() . " ; " . $p->getY() . " ; " . $p->getColor() . " ; " . $p->getGrosor() . PHP_EOL;
+            }
+            if (!is_dir(RUTABASE . "/practica7/datos")) {
+                mkdir(RUTABASE . "/practica7/datos", 0777, true);
+            }
+            file_put_contents($rutaFichero, $contenido);
+
+            // Regenerar imagen
+            $imagenCliente = crearImagenCliente(RUTABASE . "/imagenes/puntos/", $puntos);
+        }
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -128,6 +281,10 @@ function cuerpo($rutaweb, $nombreArchivo,$puntos,$datos, $errores)
     formulario($datos, $errores);
     MuestraPuntos($puntos);
     mostrarImagenCliente($rutaweb, $nombreArchivo);
+    formularioBorrado($puntos);
+    descarga();
+    subirArchivo($errores);
+
     
 }
 function formulario($datos, $errores)
@@ -257,18 +414,105 @@ function mostrarImagenCliente(string $rutaweb, string $nombreArchivo) {
         $grosor = $punto->getGrosor() * 3; // escala grosor a diámetro
         imagefilledellipse($gd, $punto->getX(), $punto->getY(), $grosor, $grosor, $color);
 
-}
+    }
    }
-
-
 
 
 
 /**
  * 
+ * EJERCICIO 4
  * 
- * EJERCICIO 3
+ *
+ */
+function formularioBorrado($puntos) {
+    if (count($puntos) === 0) {
+        echo "<p>No hay puntos para borrar.</p>";
+        return;
+    }
+    ?>
+    <form method="post" action="">
+        <label for="puntoBorrar">Selecciona un punto:</label>
+        <select name="puntoBorrar" id="puntoBorrar">
+            <?php foreach ($puntos as $indice => $punto): ?>
+                <option value="<?php echo $indice; ?>">
+                    <?php echo "X:" . $punto->getX() . ", Y:" . $punto->getY() . "Color: " . $punto->getColor() . ", Grosor:" . $punto->getGrosor(); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <input type="submit" name="borrar" value="Borrar">
+    </form>
+    <?php
+}
+
+
+/***
  * 
+ * EJERCICIO 5
  * 
  */
+function descarga(){
+?>
+    <form action="" method="post">
+        <input type="submit" value="Descargar" name="descargar">
+    </form>
+<?php
+}
 
+function nombreArch() {
+    $ip = str_replace(".", "_", $_SERVER['REMOTE_ADDR']);
+    $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+    $navegador = "desconocido";
+    if (strpos($userAgent, "chrome") !== false) $navegador = "chrome";
+    elseif (strpos($userAgent, "firefox") !== false) $navegador = "firefox";
+    elseif (strpos($userAgent, "safari") !== false && strpos($userAgent, "chrome") === false) $navegador = "safari";
+    elseif (strpos($userAgent, "edge") !== false) $navegador = "edge";
+    elseif (strpos($userAgent, "msie") !== false || strpos($userAgent, "trident") !== false) $navegador = "ie";
+
+    return "imagen_{$ip}_{$navegador}.jpg";
+}
+
+function devuelveImagen(array $puntos) {
+    $gd = imagecreatetruecolor(500, 500);
+    $fondo = imagecolorallocate($gd, 255, 255, 255);
+    imagefilledrectangle($gd, 0, 0, 500, 500, $fondo);
+
+    $borde = imagecolorallocate($gd, 0, 0, 0);
+    imagerectangle($gd, 0, 0, 499, 499, $borde);
+
+    foreach ($puntos as $punto) {
+        $colorInfo = Punto::COLORES[$punto->getColor()];
+        $rgb = $colorInfo["rgb"];
+        $color = imagecolorallocate($gd, $rgb[0], $rgb[1], $rgb[2]);
+        $grosor = $punto->getGrosor() * 3;
+        imagefilledellipse($gd, $punto->getX(), $punto->getY(), $grosor, $grosor, $color);
+    }
+
+    imagejpeg($gd); // enviar directamente al navegador
+    imagedestroy($gd);
+}
+
+
+
+/**
+ * 
+ * EJERCICI 6
+ * 
+ */
+function subirArchivo($errores) {
+    ?>
+    <h2>Subir archivo puntos</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+        <input type="file" name="archivo" id="archivo">
+        <input type="submit" value="Subir Archivo" name="subirArch">
+    </form>
+    <?php if (!empty($errores["subirArch"])) { ?>
+            <?php foreach ($errores["subirArch"] as $mensaje) { ?>
+                <p style="color: red;"><?= $mensaje ?></p>
+            <?php } ?>
+        <?php } ?>
+    <?php 
+}
+?>
+
+<?php
