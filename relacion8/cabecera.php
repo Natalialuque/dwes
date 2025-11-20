@@ -26,3 +26,9 @@ spl_autoload_register(function ($clase) {
 include(RUTABASE . "/aplicacion/plantilla/plantilla.php");
 //include(RUTABASE . "/aplicacion/config/acceso_bd.php");
 //creo todos los objetos que necesita mi aplicación
+
+// Colores de texto disponibles
+const COLORESTEXTO = ["black","blue", "white", "red"];
+
+// Colores de fondo disponibles
+const COLORESFONDO = [ "white", "red", "green", "blue","cyan"];

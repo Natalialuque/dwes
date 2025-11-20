@@ -2,7 +2,7 @@
 
 
 body {
-    background: linear-gradient(to right, #ebbe44, #c2e9fb);
+    background: linear-gradient(to right, #a1c4fd, #c2e9fb);
     font-size: 16px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -12,7 +12,7 @@ body {
 #titulo {
     text-align: center;
     font-size: 2em;
-    color: #ebbf46;
+    color: #0d47a1;
     margin-top: 20px;
     text-shadow: 1px 1px 2px #ccc;
 }
@@ -44,11 +44,11 @@ body {
 #cabecera #titulo {
     font-size: 1.5em;
     font-style: italic;
-    color: #4d4100;
+    color: #004d40;
 }
 
 .boton {
-    background-color: #b6d219;
+    background-color: #1976d2;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -67,8 +67,8 @@ body {
 
 .boton:hover,
 .boton a:hover {
-    background-color: #b6c02f;
-    color: #fae46a;
+    background-color: #64b5f6;
+    color: #0d47a1;
 }
 
 .tabla {
@@ -109,7 +109,7 @@ body {
 }
 
 .for_texto {
-    border: 1px solid #e7d958;
+    border: 1px solid #1976d2;
     background-color: #f0f8ff;
     padding: 6px;
     margin: 5px 0;
@@ -132,7 +132,7 @@ body {
     background-color: #e3f2fd;
     padding: 15px 25px;
     font-size: 1em;
-    border-bottom: 2px solid #dfcc7b;
+    border-bottom: 2px solid #90caf9;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
@@ -166,19 +166,19 @@ body {
 
 #barraMenu li a {
     text-decoration: none;
-    color: #fbfd6a;
+    color: #1976d2;
     font-weight: 600;
     background-color: #ffffff;
     padding: 8px 16px;
     border-radius: 20px;
-    border: 1px solid #e46600;
+    border: 1px solid #bbdefb;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
     display: inline-block;
 }
 
 #barraMenu li a:hover {
-    background-color: #ceb735;
+    background-color: #1976d2;
     color: #ffffff;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
@@ -206,7 +206,7 @@ body {
 
 #menuPrincipal li {
     background-color: #ffffff;
-    border: 2px solid #c0b51b;
+    border: 2px solid #64b5f6;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -221,7 +221,7 @@ body {
     display: block;
     padding: 12px 20px;
     text-decoration: none;
-    color: #f7ce4a;
+    color: #1976d2;
     font-weight: bold;
     font-size: 1em;
     text-align: center;
