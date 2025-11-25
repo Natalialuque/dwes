@@ -11,6 +11,8 @@ include_once(dirname(__FILE__) . "/cabecera.php");
 
  $GLOBALS["Ubicacion"]=$ubicacion;
 
+if(isset($_POST["cerrarSesion"])) $acceso->quitarUsuario();
+
 
 //COnTADOR DE cookies
 $contador = isset($_COOKIE["contador"]) ? $_COOKIE["contador"] : 0;
@@ -28,6 +30,13 @@ finCuerpo();
 
 //vista
 function cabecera() {
+     global $acceso;
+
+    if ($acceso->hayUsuario()) {
+        echo "<div class='usuario'>Bienvenida, <strong>" . $acceso->getNombre() . "</strong></div>";
+    } else {
+        echo "<div><a href='/aplicacion/acceso/login.php'>Iniciar sesión</a></div>";
+    }
     
 }
 
@@ -35,16 +44,8 @@ function cabecera() {
 function cuerpo($contador)
 {
 ?>
-    <h1>RELACION 8</h1>
-    <ul>
-        <a href="/aplicacion/personalizar/personalizar.php">personalizar</a>
-        <br>
-        <h8>Has entrado a esta página <?= $contador ?> veces</h8>
-    </ul>
-    <ul>
-         <a href="/aplicacion/texto/verTextos.php">Textos</a>
-    </ul>
-    
+       <h2>Has accedido a esta página <?= $contador ?> veces</h2>
+
 
 <?php
 

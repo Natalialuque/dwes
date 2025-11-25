@@ -12,9 +12,9 @@ class RegistroTexto{
     *
     * @param string $cadena
     */
-     function __construct(string $cadena)
+    public function __construct(string $cadena)
      {
-        $this->getCadena($cadena);
+        $this->cadena=$cadena;
         $this-> fechaHora = new DateTime(); //coge la fecha y hora actual 
 
      }
@@ -32,9 +32,10 @@ class RegistroTexto{
      *
      * @return string
      */
-     public function getFechaHora(): DateTime {
-        return $this->fechaHora;
-    }
+  public function getFechaHora(): string {
+    return $this->fechaHora->format('Y-m-d H:i:s');
+}
+
 
 
 }

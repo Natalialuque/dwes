@@ -1,6 +1,14 @@
 <?php
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 
+// si no hay sesion iniciada le manda a login
+if (!$acceso->hayUsuario()) {
+    $_SESSION["redirigir_a"] = $_SERVER["REQUEST_URI"];
+    header("Location: /aplicacion/acceso/login.php");
+    exit;
+}
+
+
 //barra de ubicacion 
  $ubicacion = [
  "pagina principal"=> "../../index.php",
@@ -10,8 +18,21 @@ include_once(dirname(__FILE__) . "/../../cabecera.php");
 
  $GLOBALS["Ubicacion"]=$ubicacion;
 
-//controlador
+if(isset($_POST["cambiarColores"])) {
+    setcookie("colorTexto",$_POST["letra"],time()+3600*24*30, "/");
+    setcookie("colorFondo",$_POST["fondo"],time()+3600*24*30, "/");
+    header('Location: ' . $_SERVER['REQUEST_URI']);
+    exit;
+}
 
+// si le da al boton de cerrar sesion quita el usuario
+if(isset($_POST["cerrarSesion"])) $acceso->quitarUsuario();
+
+// si no tiene el permiso uno no puede entrar a la pagina
+if(!$acceso->puedePermiso(1)){
+     paginaError("No tienes permiso para acceder a esta página");
+     exit;
+}
 
 ///////////////////////////////////////////////////////////////////////
 

@@ -1,4 +1,7 @@
 <?php
+include_once __DIR__ . "/aplicacion/clases/RegistroTexto.php";
+
+
 define("RUTABASE", dirname(__FILE__));
 //define("MODO_TRABAJO","produccion"); //en "produccion o en desarrollo
 define("MODO_TRABAJO", "desarrollo"); //en "produccion o en desarrollo
@@ -11,7 +14,7 @@ if (MODO_TRABAJO == "produccion")
 
 
 spl_autoload_register(function ($clase) {
-    $ruta = RUTABASE . "/aplicacion/clases/curso2025/";  //esto es la autocarga de clases
+    $ruta = RUTABASE . "/scripts/clases/";  //esto es la autocarga de clases
     $fichero = $ruta . "$clase.php";
     if (file_exists($fichero)) 
         {
@@ -32,3 +35,11 @@ const COLORESTEXTO = ["black","blue", "white", "red"];
 
 // Colores de fondo disponibles
 const COLORESFONDO = [ "white", "red", "green", "blue","cyan"];
+
+
+
+session_start(); // activa o continúa la sesión
+
+$aclArray = new ACLArray();
+$acceso = new Acceso();
+?>
