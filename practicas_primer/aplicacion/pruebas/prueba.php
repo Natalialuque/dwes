@@ -46,6 +46,7 @@ while($fila=$consulta -> fetch_assoc())
     $fila["descripcion"]=$fila["cadena"].": ".$fila["numero"];
     $filas[]=$fila;
 }
+//hola byuebas 
 
 
 //ejecuccion sentencias borrado , actualizacion e inserccion 
