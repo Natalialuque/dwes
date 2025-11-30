@@ -2,6 +2,11 @@
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 include_once __DIR__ . "/../clases/RegistroTexto.php";
 
+// si no hay sesion iniciada le manda a login
+if (!$acceso->hayUsuario()) {
+    header("Location: /aplicacion/acceso/login.php");
+    exit;
+}
 //controlador
 //barra de ubicacion 
  $ubicacion = [
@@ -10,7 +15,6 @@ include_once __DIR__ . "/../clases/RegistroTexto.php";
 
  ];
 
- $GLOBALS["Ubicacion"]=$ubicacion;
 
 //controlador
 
@@ -25,6 +29,17 @@ if(isset($_POST["limpiar"])) {
 }
 
 $_SESSION["textos"] = $textos;
+
+
+
+// si le da al boton de cerrar sesion quita el usuario
+if(isset($_POST["cerrarSesion"])) $acceso->quitarRegistroUsuario();
+
+// no tiene el permiso uno no puede entrar a la pagina
+if(!$acceso->puedePermiso(1)){
+     paginaError("No tienes permiso para acceder a esta página");
+     exit;
+}
 
 
 ///////////////////////////////////////////////////////////////////////

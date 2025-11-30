@@ -29,6 +29,7 @@ if(isset($_POST["registro"])) {
         $datos["permisos"]=$aclArray->getPermisos($aclArray->getCodUsuario($usuario));    
         
         $acceso->registrarUsuario($datos["usuario"], $datos["nombre"],$datos["permisos"]);
+        /*redirige a la pagina original*/
         header("Location: /index.php");
         exit;
     }
@@ -81,8 +82,6 @@ function cuerpo($datos, $errores)
     }
 ?>  
 
-
 <?php
-
 
 }

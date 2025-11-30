@@ -1,28 +1,29 @@
 <?php 
-
-class Acceso{
+class Acceso {
     
-    //variables
+    // Variables de instancia
     private $_validado;
     private $_nick;
     private $_nombre;
     private $_permisos;
-
-    /**
-     * constructor
-     */
-    public function __construct(){
-        $this-> _validado=false;
-        $this-> _nick="";
+    
+    
+    // Constructor
+    public function __construct() {
+        
+        $this->_validado=false;
+        $this->_nick="";
         $this->_nombre="";
-        $this-> _permisos=[];
+        $this->_permisos=[];
+        
+        $this->recogerDeSesion();
+        
     }
-
-
+    
     /**
-     * 
-     *Es una funcion donde recoges los datos de la sesion 
-     * @return boolean
+     * Funcion privada para guardar la información en la sesión
+     *
+     * @return boolean Devuelve true si se ha podido hacer. False en cualquier otro caso
      */
     private function escribirASesion():bool
     {
@@ -35,28 +36,54 @@ class Acceso{
          $_SESSION["acceso"]["nick"]=$this->_nick;
          $_SESSION["acceso"]["nombre"]=$this->_nombre;
          $_SESSION["acceso"]["permisos"]=$this->_permisos;
-         
+        return true;
      }
      else 
      {
          $_SESSION["acceso"]["validado"]=false;
      }
-
      return false;
     }
     
-  
     /**
-     * registrarUsuario(string $nick, string $nombre, array $permisos):bool. Sirve para 
-     *registrar un usuario en la aplicación. Almacena los valores en las propiedades apropiadas 
-     *y en la sesión para  guardar la información del usuario validado.
+     * Función privada que recoje la información de la sesión
      *
-     * @param string $nick
-     * @param string $nombre
-     * @param array $permisos
-     * @return boolean
+     * @return boolean Devuelve true si se ha podido recoger
      */
-    public function registrarUsuario(string $nick, string $nombre, array $permisos):bool{
+    private function recogerDeSesion():bool
+    {
+       if (!isset($_SESSION) ||
+           !isset($_SESSION["acceso"]) ||
+           !isset($_SESSION["acceso"]["validado"]) ||
+           $_SESSION["acceso"]["validado"]==false)
+       {
+           $this->_validado=false;
+       }
+       else 
+       {
+           $this->_validado=true;
+           $this->_nick=$_SESSION["acceso"]["nick"];
+           $this->_nombre=$_SESSION["acceso"]["nombre"];
+           $this->_permisos=$_SESSION["acceso"]["permisos"];
+           
+       }
+
+       return true;
+        
+    }
+
+    /**
+     * Sirve para registrar un usuario en la aplicación. Almacena
+     * los valores en las propiedades apropiadas y en la sesión 
+     * para guardar en la sesión la información del usuario validado.
+     *
+     * @param string $nick nick del usuario a registrar
+     * @param string $nombre nombre del usuario a registrar
+     * @param array $permisos permisos del usuario a registrar
+     * @return boolean Devuelve true si ha podido registrar el usuario
+     */
+    public function registrarUsuario(string $nick, string $nombre, array $permisos):bool
+     {
         if ($nick == "")
             $this->_validado = false;
         else
@@ -70,67 +97,72 @@ class Acceso{
 
         return true;
     }
-
+    
+    
     /**
-     * Borrar un usuario
+     * Elimina la información de registro de un usuario
      *
-     * @return boolean
+     * @return boolean Devuelve true si ha podido hacerlo
      */
-    public function quitarUsuario():bool{
-         $this->_validado = false;
+    public function quitarRegistroUsuario():bool {
+        $this->_validado = false;
         if (!$this->escribirASesion())
              return false;
 
         return true;
     }
-
+    
+    
     /**
-     * 
-     * Devuelve true si hay un usuario validado y false en caso contrario. 
+     * Función que devuelve si hay o no un usuario registrado
      *
-     * @return boolean
+     * @return boolean Devuelve true si hay usuario registrado. False en caso contrario
      */
-    public function hayUsuario():bool{
-        if($this->_validado)
-            return true;
-        else 
-            return false;
-    }
-
+    public function hayUsuario():bool {
+        if($this->_validado) return true;
+        else return false;
+     }
+    
+    
     /**
-     *  Devuelve true si tiene el permiso $numero. 
+     * Función que devuelve si el usuario registrado tiene o no el permiso indicado
      *
-     * @param [type] $numero
-     * @return boolean
+     * @param integer $numero Numero de permiso a comprobar
+     * @return bool Devuelve true si hay usuario registrado y tiene el permiso indicado
      */
-    public function puedePermiso($numero):bool{
-       if($numero>10) 
-            return false;
-
-        if($this->hayUsuario()) if($this->_permisos[$numero]==true) 
-            return true;
-        
+    public function puedePermiso(int $numero):bool { 
+        if($numero>10) return false;
+        if($this->hayUsuario()) if($this->_permisos[$numero]==true) return true;
         return false;
     }
+    
+    
+    /*
+     * Métodos get
+     */
 
+     /**
+      * Devuelve el nick del usuario indicado o false si no hay usuario
+      *
+      * @return string|false
+      */
+    public function getNick():string|false 
+    { 
+       if($this->hayUsuario()) return $this->_nick;
+       return false;
+    }
+  
     /**
-     * getNick():string,
-     * getNombre():string : 
-     * funciones que devuelven respectivamente el Nick y el nombre del usuario registrado.
-     */ 
-
-    public function getNick():string{
-        if($this->hayUsuario()) 
-            return $this->_nick;
-        else
+     * Devuelve el nombre del usuario registrado o false si no hay usuario
+     *
+     * @return string|false
+     */
+    public function getNombre():string|false 
+    { 
+        if (!$this->hayUsuario())
             return false;
-    }
-
-    public function getNombre():string{
-        if($this->hayUsuario()) 
-            return $this->_nick;
-        else
-            return false;
-    }
+        
+        return $this->_nombre; 
+    }    
+    
 }
-?> 

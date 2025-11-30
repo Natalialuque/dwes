@@ -9,9 +9,8 @@ include_once(dirname(__FILE__) . "/cabecera.php");
 
  ];
 
- $GLOBALS["Ubicacion"]=$ubicacion;
 
-if(isset($_POST["cerrarSesion"])) $acceso->quitarUsuario();
+if(isset($_POST["cerrarSesion"])) $acceso->quitarRegistroUsuario();
 
 
 //COnTADOR DE cookies
@@ -30,13 +29,6 @@ finCuerpo();
 
 //vista
 function cabecera() {
-     global $acceso;
-
-    if ($acceso->hayUsuario()) {
-        echo "<div class='usuario'>Bienvenida, <strong>" . $acceso->getNombre() . "</strong></div>";
-    } else {
-        echo "<div><a href='/aplicacion/acceso/login.php'>Iniciar sesión</a></div>";
-    }
     
 }
 

@@ -3,7 +3,6 @@ include_once(dirname(__FILE__) . "/../../cabecera.php");
 
 // si no hay sesion iniciada le manda a login
 if (!$acceso->hayUsuario()) {
-    $_SESSION["redirigir_a"] = $_SERVER["REQUEST_URI"];
     header("Location: /aplicacion/acceso/login.php");
     exit;
 }
@@ -14,21 +13,20 @@ if (!$acceso->hayUsuario()) {
  "pagina principal"=> "../../index.php",
  "Personalizar"
 
- ];
+];
 
- $GLOBALS["Ubicacion"]=$ubicacion;
-
+/**cuando caduca la cookie */
 if(isset($_POST["cambiarColores"])) {
-    setcookie("colorTexto",$_POST["letra"],time()+3600*24*30, "/");
+    setcookie("colorTexto",$_POST["letras"],time()+3600*24*30, "/");
     setcookie("colorFondo",$_POST["fondo"],time()+3600*24*30, "/");
     header('Location: ' . $_SERVER['REQUEST_URI']);
     exit;
 }
 
 // si le da al boton de cerrar sesion quita el usuario
-if(isset($_POST["cerrarSesion"])) $acceso->quitarUsuario();
+if(isset($_POST["cerrarSesion"])) $acceso->quitarRegistroUsuario();
 
-// si no tiene el permiso uno no puede entrar a la pagina
+// no tiene el permiso uno no puede entrar a la pagina
 if(!$acceso->puedePermiso(1)){
      paginaError("No tienes permiso para acceder a esta página");
      exit;
@@ -41,7 +39,7 @@ inicioCabecera("Natalia Cabello Luque");
 cabecera();
 finCabecera();
 inicioCuerpo("");
-cuerpo();  //llamo a la vista
+cuerpo($acceso);  //llamo a la vista
 finCuerpo();
 
 // **********************************************************
@@ -50,34 +48,46 @@ finCuerpo();
 function cabecera() 
 {}
 
-//vista
-function cuerpo() {
-
+function formulario ($acceso){
 ?>
-    <!-- CREAMOS EL FORMULARIO A ELEGIR -->
+    <!-- CREAMOS EL FORMULARIO A ELEGIR RECORREMOS LOS ARRAY DE COLORES PARA MOSTRARLOS-->
     <form method="post" action="">
         <label id="colorFondo">Color de fondo</label>
         <select name="fondo" id="fondo">
-            <option value="COLORESFONDO[0]"selected><?= (COLORESFONDO[0])?></option>
-            <option value="COLORESFONDO[1]"><?= (COLORESFONDO[1])?></option>
-            <option value="COLORESFONDO[2]"><?= (COLORESFONDO[2])?></option>
-            <option value="COLORESFONDO[3]"><?= (COLORESFONDO[3])?></option>
-            <option value="COLORESFONDO[4]"><?= (COLORESFONDO[4])?></option>
-
+           <?php
+               foreach(COLORESFONDO as $color){
+                echo"<option value=$color>$color</option>";
+               }
+                ?>
         </select>
         <br>
         <label id="colorLetras">Color de letras</label>
         <select name="letras" id="letras">
-            <option value="COLORESTEXTO[0]"selected><?= (COLORESTEXTO[0])?></option>
-            <option value="COLORESTEXTO[1]"><?= (COLORESFONDO[1])?></option>
-            <option value="COLORESTEXTO[2]"><?= (COLORESFONDO[2])?></option>
-            <option value="COLORESTEXTO[3]"><?= (COLORESFONDO[3])?></option>
+           <?php
+               foreach(COLORESTEXTO as $color){
+                echo"<option value=$color>$color</option>";
+               }
+                ?>
         </select>
         <br>
-       <button id="boton subir">Subirr</button>
+       <?php if($acceso->puedePermiso(2)) { ?>
+              <input type="submit" value="cambiar los colores" name="cambiarColores">
+        <?php 
+        } 
+        else {?>
+             <p style="color: red;">No tienes permisos para modificiar los colores</p>
+        <?php 
+        }
+        ?>  
     </form>
   
  <?php
+}
+
+//vista
+function cuerpo($acceso) {
+
+    formulario($acceso);
 }
 
 ?>

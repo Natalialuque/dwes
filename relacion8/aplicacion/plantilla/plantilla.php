@@ -69,7 +69,7 @@ function inicioCuerpo(string $cabecera)
     $colorTexto = $_COOKIE["colorTexto"] ?? "black";
 ?>  
     <style>
-        h3 {
+        h2 {
             color: <?= $colorTexto ?>;
             background-color: <?= $colorFondo ?>;
         }
@@ -94,6 +94,7 @@ function inicioCuerpo(string $cabecera)
                     <a href="/index.php">Inicio</a>
                     <a href="/aplicacion/personalizar/personalizar.php">Personalizar</a>
                     <a href="/aplicacion/texto/verTextos.php">Textos</a>
+                    <a href="/aplicacion/usuarios/index.php">Usuarios</a>
                 </div>
 
             </header>
