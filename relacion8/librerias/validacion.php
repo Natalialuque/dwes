@@ -70,26 +70,56 @@ function validaReal(float &$var, float $min, float $max, float $defecto): bool{
 
 function validaFecha(string &$var, string $defecto): bool{
 
-    //Divide la cadena $var en partes usando /
-     $fecha = mb_split("/", $var);
+    // //Divide la cadena $var en partes usando /
+    //  $fecha = mb_split("-", $var);
 
-    // Validar que hay tres partes
+    // // Validar que hay tres partes
+    // if (count($fecha) !== 3) {
+    //     $var = $defecto;
+    //     return false;
+    // }
+
+    // //Añade ceros a la izquierda si el día o el mes tienen solo una cifra.
+    // if (strlen($fecha[0]) == 1) {
+    //     $fecha[0] = "0" . $fecha[0];
+    // }
+    // if (strlen($fecha[1]) == 1) {
+    //     $fecha[1] = "0" . $fecha[1];
+    // }
+
+    // //checkdate() comprueba si la fecha es válida y lo de abajo lo construye con el formato aa/bb/aaaa
+    // if (checkdate($fecha[1], $fecha[0], $fecha[2])) {
+    //     $var = $fecha[2] . "-" . $fecha[1] . "-" . $fecha[0];
+    //     return true;
+    // } else {
+    //     $var = $defecto;
+    //     return false;
+    // }
+
+    // Detectar formato YYYY-MM-DD
+    if (preg_match("/^\d{4}-\d{2}-\d{2}$/", $var)) {
+        $fecha = explode("-", $var);
+        if (checkdate($fecha[1], $fecha[2], $fecha[0])) {
+            return true; // ya está en formato correcto
+        } else {
+            $var = $defecto;
+            return false;
+        }
+    }
+
+    // Detectar formato DD/MM/YYYY
+    $fecha = mb_split("/", $var);
     if (count($fecha) !== 3) {
         $var = $defecto;
         return false;
     }
 
-    //Añade ceros a la izquierda si el día o el mes tienen solo una cifra.
-    if (strlen($fecha[0]) == 1) {
-        $fecha[0] = "0" . $fecha[0];
-    }
-    if (strlen($fecha[1]) == 1) {
-        $fecha[1] = "0" . $fecha[1];
-    }
+    // Añadir ceros si faltan
+    if (strlen($fecha[0]) == 1) $fecha[0] = "0" . $fecha[0];
+    if (strlen($fecha[1]) == 1) $fecha[1] = "0" . $fecha[1];
 
-    //checkdate() comprueba si la fecha es válida y lo de abajo lo construye con el formato aa/bb/aaaa
     if (checkdate($fecha[1], $fecha[0], $fecha[2])) {
-        $var = $fecha[0] . "/" . $fecha[1] . "/" . $fecha[2];
+        $var = $fecha[2] . "-" . $fecha[1] . "-" . $fecha[0]; // convertir a formato MySQL
         return true;
     } else {
         $var = $defecto;
