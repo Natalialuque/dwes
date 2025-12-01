@@ -21,7 +21,6 @@ body {
     margin: 30px auto;
     background-color: #fff8dc;
     width: 80%;
-    max-width: 800px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     border-radius: 8px;
     padding: 20px;
@@ -226,4 +225,61 @@ body {
     font-size: 1em;
     text-align: center;
     border-radius: 12px;
+}
+
+/* estilosTablaUsuarios.css */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+th {
+    background-color: #dbe5f1; /* azul claro */
+    color: #333;
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+td {
+    background-color: #f9f9f9; /* gris muy claro */
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+tr:hover td {
+    background-color: #eef; /* azul suave al pasar el ratón */
+}
+
+td.acciones {
+    white-space: nowrap;
+}
+
+td.acciones a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #0066cc;
+    font-weight: bold;
+}
+
+td.acciones a:hover {
+    text-decoration: underline;
+    color: #004999;
+}
+
+.nuevo-usuario {
+    margin-top: 15px;
+    display: inline-block;
+    background-color: #0066cc;
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.nuevo-usuario:hover {
+    background-color: #004999;
 }
