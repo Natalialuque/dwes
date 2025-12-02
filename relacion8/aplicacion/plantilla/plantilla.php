@@ -78,17 +78,29 @@ function inicioCuerpo(string $cabecera)
     <body>
         <div id="documento">
 
-            <header>
+            <header class="cabecera">
                 <h1 id="titulo"><?php echo $cabecera; ?></h1>
                  <?php 
-                    if($acceso->hayUsuario()) {
-                        echo "<h4>Bienvenido ". $acceso->getNick() ."</h4>";
-                         ?>
+                   if ($acceso->hayUsuario()) {
+                          echo "<h4>Bienvenido " . $acceso->getNick() . "</h4>";
+                ?>
                         <form action="" method="post">
                             <button name="cerrarSesion">Cerrar sesión</button>
-                        </form>
-                    <?php 
+                         </form>
+                <?php 
+                 } else {
+                     // Mostrar botón de inicio de sesión si no hay usuario
+                ?>
+                     <form action="" method="post">
+                        <button name="iniciarSesion">Iniciar sesión</button>
+                    </form>
+                <?php
+                     // Redirigir si se pulsa el botón
+                     if (isset($_POST["iniciarSesion"])) {
+                        header("Location: /aplicacion/acceso/login.php");
+                        exit;
                     }
+                }
                 ?>
                 <div>
                     <a href="/index.php">Inicio</a>

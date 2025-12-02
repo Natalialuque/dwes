@@ -102,7 +102,7 @@ class ACLBD extends ACLBase{
               return false;
 
       $nombre = mb_substr(mb_strtolower($nombre), 0, 30);
-        $nombre = $this->_sqli->escape_string($nombre);
+        $nombre = $this->_sqli->real_escape_string($nombre);
 
         $consulta = "SELECT cod_acl_role FROM acl_roles WHERE nombre = '$nombre'";
         $resul = $this->_sqli->query($consulta)->fetch_assoc();

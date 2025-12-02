@@ -21,9 +21,9 @@ $bd = @new mysqli($servidor, $usuario, $contraseña, $baseDatos);
 if ($bd->connect_error) {
     paginaError("Fallo al conectar en mySql:" . $bd->connect_error);
     exit;
-} else {
-    echo "conecta adecuadamente";
-}
+ }// else {
+//     echo "conecta adecuadamente";
+// }
 
 // si le da al boton de cerrar sesion quita el usuario
 if(isset($_POST["cerrarSesion"])) $acceso->quitarRegistroUsuario();
@@ -149,27 +149,43 @@ if (isset($_POST["subir"])) {
     $datos["foto"] = ($foto === "") ? "defecto.png" : $foto;
 
     // ejecutar UPDATE si no hay errores
-    if (empty($errores)) {
-        $sentencia = "UPDATE usuarios SET 
-            nombre = '{$datos["nombre"]}', 
-            nif = '{$datos["nif"]}', 
-            direccion = '{$datos["direccion"]}', 
-            poblacion = '{$datos["poblacion"]}', 
-            provincia = '{$datos["provincia"]}', 
-            CP = '{$datos["cp"]}', 
-            fecha_nacimiento = '{$datos["fecha_nacimiento"]}', 
-            borrado = '{$datos["borrado"]}', 
-            foto = '{$datos["foto"]}' 
-            WHERE cod_usuario = {$cod_usuario}";
+    // ejecutar UPDATE si no hay errores
+if (empty($errores)) {
 
-        if ($bd->query($sentencia)) {
-            header("Location: verUsuario.php?id=" . $cod_usuario);
-            exit;
-        } else {
-            paginaError("Error al modificar usuario: " . $bd->error);
-            exit;
+    // Actualizar los datos principales del usuario
+    $sentencia = "UPDATE usuarios SET 
+        nombre = '{$datos["nombre"]}', 
+        nif = '{$datos["nif"]}', 
+        direccion = '{$datos["direccion"]}', 
+        poblacion = '{$datos["poblacion"]}', 
+        provincia = '{$datos["provincia"]}', 
+        CP = '{$datos["cp"]}', 
+        fecha_nacimiento = '{$datos["fecha_nacimiento"]}', 
+        borrado = '{$datos["borrado"]}', 
+        foto = '{$datos["foto"]}' 
+        WHERE cod_usuario = {$cod_usuario}";
+
+    if ($bd->query($sentencia)) {
+
+        // Actualizar contraseña si se ha enviado
+        if (!empty($_POST["contrasena"])) {
+            $aclbd->setContrasenia($cod_usuario, $_POST["contrasena"]);
         }
+
+        // Actualizar rol del usuario
+        $rol = $aclbd->getCodRole($_POST["rol"]);
+        $aclbd->setUsuarioRole($cod_usuario, $rol);
+
+        // Redirigir a la vista del usuario
+        header("Location: verUsuario.php?id=" . $cod_usuario);
+        exit;
+
+    } else {
+        paginaError("Error al modificar usuario: " . $bd->error);
+        exit;
     }
+}
+
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -179,7 +195,7 @@ inicioCabecera("Natalia Cabello Luque");
 cabecera();
 finCabecera();
 inicioCuerpo("");
-cuerpo($datos, $errores);  //llamo a la vista
+cuerpo($datos, $errores,$aclbd);  //llamo a la vista
 finCuerpo();
 
 // **********************************************************
@@ -189,13 +205,13 @@ function cabecera()
 {}
 
 //vista
-function cuerpo($datos, $errores) {
+function cuerpo($datos, $errores,$aclbd) {
 
-  formularioModificarUsuario($datos, $errores);
+  formularioModificarUsuario($datos, $errores,$aclbd);
  
 }
 
-function formularioModificarUsuario($datos, $errores) {
+function formularioModificarUsuario($datos, $errores,$aclbd) {
     // Mostrar errores si los hay
     if (!empty($errores)) {
         echo "<div style='color:red'><ul>";
@@ -208,8 +224,19 @@ function formularioModificarUsuario($datos, $errores) {
     <form action="" method="post">
         <label>Nick:</label>
         <!-- Nick solo lectura -->
-        <input type="text" name="nick" id="nick" value="<?= $datos["nick"] ?>" readonly> 
+        <input type="hidden" name="nick" id="nick" disabled  value="<?= $datos["nick"] ?>"> 
         <br>
+         <label for=""> Contraseña:</label>
+        <input type="password" name="contrasenaConfirm"> <br>
+        
+        <label for="">Rol:</label>
+        <select name="rol" id="">
+            <?php 
+            foreach($aclbd->dameRoles() as $rol) {
+                echo "<option value='$rol'>$rol</option>";
+            }
+            ?>
+        </select> <br><br>
 
         <label>Nombre:</label>
         <input type="text" name="nombre" id="nombre" value="<?= $datos["nombre"] ?>" >
@@ -256,4 +283,3 @@ function formularioModificarUsuario($datos, $errores) {
 }
 
 
-?>

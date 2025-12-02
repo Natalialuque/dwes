@@ -45,16 +45,16 @@ class ACLArray extends ACLBase
             $this->getCodRole("normales")
         );
         $this->anadirUsuario(
+            "Natalia cabello",
+            "natalia",
+            "nat",
+            $this->getCodRole("administradores")
+        );
+          $this->anadirUsuario(
             "Es usuario profesor",
             "profesor",
             "profe",
             $this->getCodRole("superadmin")
-        );
-        $this->anadirUsuario(
-            "Vicente Tejero",
-            "administrador",
-            "admin",
-            $this->getCodRole("administradores")
         );
     }
 

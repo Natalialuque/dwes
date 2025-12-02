@@ -30,9 +30,9 @@ $bd = @new mysqli($servidor, $usuario, $contraseña, $baseDatos);
 if ($bd->connect_error) {
     paginaError("Fallo al conectar en mySql:" . $bd->connect_error);
     exit;
-} else {
-    echo "conecta adecuadamente";
-}
+} //else {
+   // echo "conecta adecuadamente";
+//}
 
 //establece la pagina de codigos del cliente
 $bd->set_charset(("utf8"));
@@ -53,6 +53,40 @@ while ($fila = $consulta->fetch_assoc()) {
 
 
 //controlador
+
+$resultado = [];
+
+if (isset($_POST["filtrar"])) {
+    $sentencia = "SELECT * FROM usuarios";
+    $condiciones = [];
+
+    if (!empty($_POST["nick"])) {
+        $condiciones[] = "nick = '" . $_POST["nick"] . "'";
+    }
+
+    if (!empty($_POST["provincia"])) {
+        $condiciones[] = "provincia = '" . $_POST["provincia"] . "'";
+    }
+
+    if ($_POST["borrado"] !== "") {
+        $condiciones[] = "borrado = '" . $_POST["borrado"] . "'";
+    }
+
+    if (count($condiciones) > 0) {
+        $sentencia .= " WHERE " . implode(" AND ", $condiciones);
+    }
+
+    if (!empty($_POST["ordenar"])) {
+        $sentencia .= " ORDER BY " . $_POST["ordenar"];
+    }
+
+    $consulta = $bd->query($sentencia);
+    if ($consulta) {
+        while ($fila = $consulta->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+    }
+}
 
 
 ///////////////////////////////////////////////////////////////////////

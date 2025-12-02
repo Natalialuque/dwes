@@ -4,10 +4,10 @@ include_once(dirname(__FILE__) . "/cabecera.php");
 //controlador
 
 //barra de ubicacion 
- $ubicacion = [
- "pagina principal"=> "index.php",
+//  $ubicacion = [
+//  "pagina principal"=> "index.php",
 
- ];
+//  ];
 
 
 if(isset($_POST["cerrarSesion"])) $acceso->quitarRegistroUsuario();

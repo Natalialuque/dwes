@@ -10,7 +10,7 @@ if(!$acceso->puedePermiso(2)){
      paginaError("No tienes permiso");
      exit;
 }
-//controlador
+
 //conectar a la base de datos 
 $bd = @new mysqli($servidor, $usuario, $contraseña, $baseDatos);
 
@@ -18,9 +18,9 @@ $bd = @new mysqli($servidor, $usuario, $contraseña, $baseDatos);
 if ($bd->connect_error) {
     paginaError("Fallo al conectar en mySql:" . $bd->connect_error);
     exit;
-} else {
-    echo "conecta adecuadamente";
-}
+ } //else {
+//     echo "conecta adecuadamente";
+// }
 
 //recoger el id mandado 
 if (!isset($_GET["id"])) {

@@ -22,9 +22,9 @@ $bd = @new mysqli($servidor, $usuario, $contraseña, $baseDatos);
 if ($bd->connect_error) {
     paginaError("Fallo al conectar en mySql:" . $bd->connect_error);
     exit;
-} else {
-    echo "conecta adecuadamente";
-}
+} //else {
+   // echo "conecta adecuadamente";
+//}
 
 // si le da al boton de cerrar sesion quita el usuario
 if(isset($_POST["cerrarSesion"])) $acceso->quitarRegistroUsuario();

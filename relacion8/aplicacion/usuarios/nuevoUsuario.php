@@ -33,9 +33,9 @@ $bd = @new mysqli($servidor, $usuario, $contraseña, $baseDatos);
 if ($bd->connect_error) {
     paginaError("Fallo al conectar en mySql:" . $bd->connect_error);
     exit;
-} else {
-    echo "conecta adecuadamente";
-}
+} //else {
+ //   echo "conecta adecuadamente";
+//}
 
 $sentencia = "select * from usuarios";
 
@@ -83,6 +83,7 @@ if(isset($_POST["subir"])){
         }elseif($aclArray->existeUsuario($_POST["nick"])){
             $errores["nick"][]="EL nick ya existe";
         }
+
     }
      $datos["nick"] = $nick;
 
@@ -207,38 +208,64 @@ if(isset($_POST["subir"])){
         }
         $datos["foto"] = ($foto === "") ? "defecto.png" : $foto;
 
+    //comrponar contraseña 
+    $contrasena = "";
+    $contrasenaConfirm = "";
 
+        if (isset($_POST["contrasena"])) {
+            $contrasena = trim($_POST["contrasena"]);
+        }
+        if (isset($_POST["contrasenaConfirm"])) {
+            $contrasenaConfirm = trim($_POST["contrasenaConfirm"]);
+        }
+        if ($contrasena === "") {
+            $errores["contrasena"][] = "La contraseña no puede estar vacía";
+        } elseif ($contrasena !== $contrasenaConfirm) {
+            $errores["contrasena"][] = "Las contraseñas no coinciden";
+        }
+
+        $datos["contrasena"] = $contrasena;
 
    // Ejecutar el INSERT
     if (empty($errores)) {  // solo si no hay errores
-        $sentencia = "INSERT INTO usuarios 
-            (nick, nombre, nif, direccion, poblacion, provincia, CP, fecha_nacimiento, borrado, foto)
-            VALUES (
-                '{$datos["nick"]}', 
-                '{$datos["nombre"]}', 
-                '{$datos["nif"]}', 
-                '{$datos["direccion"]}', 
-                '{$datos["poblacion"]}', 
-                '{$datos["provincia"]}', 
-                '{$datos["cp"]}', 
-                '{$datos["fecha_nacimiento"]}', 
-                '{$datos["borrado"]}', 
-                '{$datos["foto"]}'
-            )";
+         // Insertar en la tabla usuarios si no hay errores
+    $sentencia = "INSERT INTO usuarios 
+        (nick, nombre, nif, direccion, poblacion, provincia, CP, fecha_nacimiento, borrado, foto)
+        VALUES (
+            '{$datos["nick"]}', 
+            '{$datos["nombre"]}', 
+            '{$datos["nif"]}', 
+            '{$datos["direccion"]}', 
+            '{$datos["poblacion"]}', 
+            '{$datos["provincia"]}', 
+            '{$datos["cp"]}', 
+            '{$datos["fecha_nacimiento"]}', 
+            '{$datos["borrado"]}', 
+            '{$datos["foto"]}'
+        )";
 
-        if ($bd->query($sentencia)) {
-            // obtener el id del nuevo usuario
-            $nuevoId = $bd->insert_id;
+    if ($bd->query($sentencia)) {
+        // obtener el id del nuevo usuario
+        $codUsuario = $bd->insert_id;
 
-            // redirigir a verUsuario.php
-            header("Location: verUsuario.php?id=" . $nuevoId);
-            exit;
-        } else {
-            paginaError("Error al insertar usuario: " . $bd->error);
-            exit;
-        }
+        // añadir contraseña y rol usando ACLBD
+        $rolCodificado = $aclbd->getCodRole($_POST["rol"]);
+        $aclbd->anadirUsuario(
+            $datos["nombre"],
+            $datos["nick"],
+            $datos["contrasena"],
+            $rolCodificado
+        );
+
+        // redirigir a verUsuario.php
+        header("Location: verUsuario.php?id=" . $codUsuario);
+        exit;
+    } else {
+        paginaError("Error al insertar usuario: " . $bd->error);
+        exit;
     }
 
+}
 
 }
 
@@ -295,7 +322,9 @@ function formulario($datos, $errores,$aclbd){
                 echo "<option value='$rol'>$rol</option>";
             }
             ?>
-        </select> <br><br>
+        </select> 
+        
+    <br><br>
     <label>Nombre:</label>
     <input type="text" name="nombre" id="nombre" value="<?= $datos["nombre"] ?>">
     <input type="submit" value="Genera Nombre" name="generar">
@@ -333,4 +362,3 @@ function formulario($datos, $errores,$aclbd){
 <?php
     
 }
-

@@ -1,0 +1,11 @@
+--NORMALES--
+USUARIO: alumno
+COTRASEÑA:alum
+
+--SUPERADMIN--
+USUARIO: profesor
+COTRASEÑA:profe
+
+--ADMIN--
+USUARIO:natalia
+CONTRASEÑA:nat

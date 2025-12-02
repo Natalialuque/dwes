@@ -1,5 +1,4 @@
-@charset "UTF8";
-
+@charset "UTF-8";
 
 body {
     background: linear-gradient(to right, #a1c4fd, #c2e9fb);
@@ -26,26 +25,92 @@ body {
     padding: 20px;
 }
 
-#cabecera {
-    background: linear-gradient(to right, #43e97b, #38f9d7);
-    padding: 15px;
-    border-radius: 8px 8px 0 0;
+/* CABECERA MEJORADA */
+header.cabecera {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    background: linear-gradient(to right,#a1c4fd, #c2e9fb);
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-#cabecera #logo {
-    width: 80px;
-    height: auto;
-}
-
-#cabecera #titulo {
-    font-size: 1.5em;
-    font-style: italic;
+header.cabecera h1 {
+    font-size: 8em;
     color: #004d40;
+    margin: 0;
+    text-shadow: 1px 1px 2px #ccc;
 }
 
+header.cabecera h4 {
+    margin-top: 8px;
+    font-weight: normal;
+    color: #00695c;
+}
+
+/* BOTÓN INICIAR SESIÓN */
+button[name="iniciarSesion"] {
+    background-color: #4fc3f7;
+    color: #0d47a1;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+button[name="iniciarSesion"]:hover {
+    background-color: #0288d1;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* BOTÓN CERRAR SESIÓN */
+button[name="cerrarSesion"] {
+    background-color: #ef5350;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+button[name="cerrarSesion"]:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+}
+
+/* ENLACES DE NAVEGACIÓN */
+header.cabecera div a {
+    text-decoration: none;
+    color: #1976d2;
+    font-weight: bold;
+    background-color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 2px solid #bbdefb;
+    margin: 5px;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+header.cabecera div a:hover {
+    background-color: #1976d2;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* BOTÓN GENÉRICO */
 .boton {
     background-color: #1976d2;
     color: white;
@@ -70,6 +135,7 @@ body {
     color: #0d47a1;
 }
 
+/* TABLA */
 .tabla {
     width: 100%;
     border-collapse: collapse;
@@ -98,6 +164,7 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
+/* PIE */
 #pie {
     background-color: #c5e1a5;
     color: #2e7d32;
@@ -107,6 +174,7 @@ body {
     border-radius: 0 0 8px 8px;
 }
 
+/* FORMULARIO TEXTO */
 .for_texto {
     border: 1px solid #1976d2;
     background-color: #f0f8ff;
@@ -117,6 +185,7 @@ body {
     box-sizing: border-box;
 }
 
+/* ERRORES */
 .error {
     background-color: #ffebee;
     color: #c62828;
@@ -126,7 +195,7 @@ body {
     margin-top: 10px;
 }
 
-/* Barra estilo Moodle Centros mejorada */
+/* BARRA MENU */
 #barraMenu {
     background-color: #e3f2fd;
     padding: 15px 25px;
@@ -149,12 +218,10 @@ body {
     position: relative;
     margin-right: 10px;
     color: #555;
-
 }
 
 #barraMenu li::after {
-    content: "";
-        content: "›";
+    content: "›";
     margin-left: 10px;
     color: #999;
 }
@@ -183,52 +250,7 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-/****************************/
-/* Menú superior personalizado */
-#menuPrincipal {
-    background-color: #e3f2fd;
-    padding: 15px 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-
-#menuPrincipal ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-}
-
-#menuPrincipal li {
-    background-color: #ffffff;
-    border: 2px solid #64b5f6;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-#menuPrincipal li:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-#menuPrincipal li a {
-    display: block;
-    padding: 12px 20px;
-    text-decoration: none;
-    color: #1976d2;
-    font-weight: bold;
-    font-size: 1em;
-    text-align: center;
-    border-radius: 12px;
-}
-
-/* estilosTablaUsuarios.css */
-
+/* TABLA USUARIOS */
 table {
     border-collapse: collapse;
     width: 100%;
@@ -236,7 +258,7 @@ table {
 }
 
 th {
-    background-color: #dbe5f1; /* azul claro */
+    background-color: #dbe5f1;
     color: #333;
     padding: 8px;
     border: 1px solid #ccc;
@@ -244,13 +266,13 @@ th {
 }
 
 td {
-    background-color: #f9f9f9; /* gris muy claro */
+    background-color: #f9f9f9;
     padding: 8px;
     border: 1px solid #ddd;
 }
 
 tr:hover td {
-    background-color: #eef; /* azul suave al pasar el ratón */
+    background-color: #eef;
 }
 
 td.acciones {
@@ -283,3 +305,4 @@ td.acciones a:hover {
 .nuevo-usuario:hover {
     background-color: #004999;
 }
+
