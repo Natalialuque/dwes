@@ -28,8 +28,6 @@ function cabecera()
 //vista
 function cuerpo() {
 
-  
- 
 }
 
 ?>
