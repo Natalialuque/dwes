@@ -250,7 +250,7 @@ inicioCabecera("Natalia Cabello Luque");
 cabecera();
 finCabecera();
 inicioCuerpo("");
-cuerpo($datos,$errores);  //llamo a la vista
+cuerpo($datos,$errores,$aclbd);  //llamo a la vista
 finCuerpo();
 
 // **********************************************************
@@ -260,12 +260,12 @@ function cabecera()
 {}
 
 //vista
-function cuerpo($datos,$errores) {
-    formulario($datos,$errores);
+function cuerpo($datos,$errores,$aclbd) {
+    formulario($datos,$errores,$aclbd);
 }
 
 
-function formulario($datos, $errores){
+function formulario($datos, $errores,$aclbd){
 
     
    if ($errores) { //mostrar los errores
@@ -282,6 +282,20 @@ function formulario($datos, $errores){
     <label>Nick:</label>
     <input type="text" name="nick" id="nick" value="<?= $datos["nick"] ?>"> 
     <br>
+     <label for="">Contraseña:</label>
+        <input type="password" name="contrasena"> <br>
+
+        <label for="">Confirma Contraseña:</label>
+        <input type="password" name="contrasenaConfirm"> <br>
+        
+        <label for="">Rol:</label>
+        <select name="rol" id="">
+            <?php 
+            foreach($aclbd->dameRoles() as $rol) {
+                echo "<option value='$rol'>$rol</option>";
+            }
+            ?>
+        </select> <br><br>
     <label>Nombre:</label>
     <input type="text" name="nombre" id="nombre" value="<?= $datos["nombre"] ?>">
     <input type="submit" value="Genera Nombre" name="generar">

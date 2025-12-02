@@ -51,9 +51,19 @@ $usuario = $consulta->fetch_assoc();
 
 // Procesar la decisión del usuario
 if (isset($_POST["si"])) {
-    $bd->query("UPDATE usuarios SET borrado = 1 WHERE nick = '{$nick}'");
-    header("Location: /aplicacion/usuarios/index.php");
-    exit;
+
+    $sql = "UPDATE usuarios SET borrado = 1 WHERE nick = '{$nick}'";
+    $resultado = $bd->query($sql);
+
+    if ($resultado === TRUE) {
+        echo "Usuario marcado como borrado correctamente.";
+        header("Location: /aplicacion/usuarios/index.php");
+        exit;
+    } else {
+        echo "Error al marcar como borrado: " . $bd->error;
+        echo "<br>Consulta ejecutada: $sql";
+        exit;
+    }
 }
 
 if (isset($_POST["no"])) {
@@ -80,9 +90,51 @@ function cabecera()
 {}
 
 //vista
-function cuerpo() {
+function cuerpo($usuario) {
+    formularioUsua($usuario);
+}
 
-  
+
+function formularioUsua ($usuario){
+?>    
+
+    <div class="tablaUsuario">
+        <table>
+            <tr>
+                <th>Nick</th>
+                <th>Nombre</th>
+                <th>NIF</th>
+                <th>Direccion</th>
+                <th>Poblacion</th>
+                <th>Provincia</th>
+                <th>CP</th>
+                <th>Fecha_nacimiento</th>
+                <th>Borrado</th>
+                <th>Foto</th>
+            </tr>
+            <tr>
+                <td><?= $usuario["nick"] ?></td>
+                <td><?= $usuario["nombre"] ?></td>
+                <td><?= $usuario["nif"] ?></td>
+                <td><?= $usuario["direccion"] ?></td>
+                <td><?= $usuario["poblacion"] ?></td>
+                <td><?= $usuario["provincia"] ?></td>
+                <td><?= $usuario["CP"] ?></td>
+                <td><?= $usuario["fecha_nacimiento"] ?></td>
+                <td><?= ($usuario["borrado"]==1 ? "no" : "si") ?></td>
+                <td><?= $usuario["foto"] ?></td>
+            </tr>
+        </table>
+    </div>
+      <a href="index.php">Volver a la tabla</a>
+
+    <form action="" method="post">
+        <label for="">Seguro de querer eliminar este usuario?</label>
+        <input type="submit" value="Si" name="si">
+        <input type="submit" value="No" name="no">
+    </form>
+
+<?php
  
 }
 

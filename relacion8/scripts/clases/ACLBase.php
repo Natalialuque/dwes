@@ -183,7 +183,7 @@
          *
          * @return array Array con todos los usuarios existentes
          */
-        abstract function dameUsuarios():array;
+        abstract function dameUsuarios():array|false;
 
         /**
          * Devuelve un array con todos los roles existentes. 

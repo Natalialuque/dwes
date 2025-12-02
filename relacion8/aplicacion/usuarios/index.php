@@ -153,7 +153,7 @@ function filtrar($filas){
             ?>
         </select>
         <br>
-        <button id="filtra">filtrar</button>
+        <input type="submit" value="filtrar" name="filtrar"></input>
 
     </form>
     <?php

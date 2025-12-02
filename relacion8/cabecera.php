@@ -42,4 +42,11 @@ session_start(); // activa o continúa la sesión
 
 $aclArray = new ACLArray();
 $acceso = new Acceso();
+$acl =new ACLBD($servidor,$usuario,$contraseña,$baseDatos);
+
+$acl->anadirRole("profesor", [1 => true, 2 => true, 3 => false]);
+$acl->anadirRole("alumno", [1 => true, 2 => false, 3 => false]);
+$acl->anadirRole("administrador", [1 => true, 2 => true, 3 => true, 4 => true]);
+
+
 ?>
