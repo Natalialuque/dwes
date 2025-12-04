@@ -219,7 +219,7 @@ class ACLBD extends ACLBase{
         $contrasena=mb_substr(sha1($contrasena),0,64);
         
         //usando blowfish
-        //$contrasena= password_hash($contrasena, PASSWORD_BCRYPT);
+        $contrasena= password_hash($contrasena, PASSWORD_BCRYPT);
 
         $consulta = "INSERT INTO  acl_usuarios (".
                     " nick,nombre,contrasenia,cod_acl_role,borrado".
