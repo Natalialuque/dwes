@@ -1,0 +1,187 @@
+@charset "UTF8";
+
+body {
+  background-color: #455e76;
+  font-size: 18px;
+}
+
+#documento {
+  margin: 0 auto;
+  background-color: #c0af96;
+  width: 80%;
+  border-radius: 10px;
+  padding: 5px;
+}
+#documento header {
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+  color: #7243a1;
+}
+#documento header h1 {
+  border-bottom: 1px dotted #7243a1;
+}
+
+#cabecera {
+  background-color: white;
+  padding: 5px;
+
+}
+
+#cabecera #logo {
+  width: 75px;
+  height: 50px;
+}
+
+#cabecera #titulo {
+  font-size: 1.3em;
+  font-style: italic;
+}
+#barraLogica{
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+}
+#barraLogica a{
+  color:#455e76;
+}
+
+
+
+#barraMenu{
+  background-color: #455e76;
+  padding: 10px;
+  border-radius: 2px;
+  font-family: "Courier New", Courier, monospace;
+}
+#barraLogin{
+  text-align: right;
+  font-family: "Courier New", Courier, monospace;
+  border: 1px dotted black;
+  margin: 1% 0;
+}
+
+#barraMenu ul {
+  list-style-type: none; /* Sin viñetas */
+  padding: 0; /* Sin relleno */
+  margin: 0; /* Sin margen */
+}
+
+#barraMenu ul li {
+  display: inline; /* Muestra los elementos en línea */
+  margin-right: 15px; /* Espacio entre los elementos */
+
+  padding-right: 15px; /* Espacio entre el texto y el borde */
+  border-right: 2px solid black; /* Borde derecho como separador */
+}
+
+#barraMenu ul li a {
+  color: black; /* Color de los enlaces */
+  text-decoration: none; /* Sin subrayado */
+}
+
+#barraMenu ul li a:hover {
+  text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
+#barraMenu ul li a,
+#volver {
+  color: black;
+  font-family: "Courier New", Courier, monospace;
+
+}
+
+#barraMenu ul li:last-child {
+  border-right: none; /* Elimina el borde derecho del último elemento */
+}
+#relaciones {
+  display: block;
+  width: 100%; /* Ajusta al ancho disponible */
+  margin-top: 10px;
+  overflow-x: auto; /* Habilita el desplazamiento horizontal si la tabla desborda */
+}
+#relaciones a {
+  display: block; /* Hace que cada enlace ocupe toda la línea */
+  margin: 5px 0; /* Espaciado entre enlaces */
+  font-family: "Courier New", Courier, monospace;
+  color: #455e76;
+}
+.boton {
+  background-color: blue;
+  color: white;
+  border: thin black solid;
+}
+
+.boton a {
+  text-decoration: none;
+  color: white;
+}
+
+.boton a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.boton a:hover {
+  background-color: cyan;
+  color: black;
+}
+
+.boton:hover {
+  background-color: cyan;
+  color: black;
+}
+
+.tabla {
+  width: 100%; /* Asegúrate de que la tabla no exceda el contenedor */
+
+  max-width: 100%; /* Evita que la tabla sea más grande que el contenedor */
+  border-collapse: collapse;
+  background-color: white;
+}
+
+.tabla th {
+  background-color: teal;
+  color: blue;
+}
+
+.tabla tr.par {
+  background-color: black;
+  color: white;
+}
+
+.tabla img {
+  max-width: 100px; /* Establece un tamaño máximo para las imágenes */
+  height: auto; /* Mantén las proporciones */
+}
+.tabla td {
+  text-align: center; /* Opcional, centra el contenido de las celdas */
+}
+#pie {
+  background-color: #81e714;
+  color: blue;
+  font-size: 1.5 em;
+  padding: 5px;
+}
+
+.for_texto {
+  border: blue thin solid;
+  background-color: white;
+  padding: 2px;
+  margin: 2px;
+  border-radius: 4px;
+}
+
+.error {
+  background-color: white;
+  color: red;
+  border: thin solid red;
+  padding: 5px;
+}
+footer{
+  font-family: "Courier New", Courier, monospace;
+}
+
+#imagenIndex {
+  margin-top: 5%;
+  display: flex;
+  justify-content: center;
+}

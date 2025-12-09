@@ -1,0 +1,4 @@
+PROYECTO=nombre:proyecto 1;empresa:ies pedrosa;fecha1:01/01/2024;fecha2:31/12/2024;tipo:10
+PROYECTO=fecha2:29/06/2024;nombre:proyecto clases;empresa:software SA;tipo:30
+PROYECTO=empresa:navidad sa;nombre:;fecha2:14/06/2024;fecha1:01/05/2023;tipo:99
+

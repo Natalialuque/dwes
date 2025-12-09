@@ -1,0 +1,127 @@
+@charset "UTF8";
+
+body {
+    background-color: rgb(189, 189, 189); /*ctrl + F5 para recargar pagina completamente*/
+    font-size: 16px;
+}
+
+#documento {
+    margin: 0 auto;
+    background-color: #aedab4;
+    width: 60%;
+    min-width: 400px;
+    padding: 2%;
+    border: 1px solid black;
+}
+
+#documento header{
+    padding-top: 1%;
+    text-align: center;
+}
+
+#cuerpoEjer p{
+    padding-left: 10%;
+    text-align: left;
+    font-weight: bold;
+}
+
+#cabecera {
+    background-color: #14e737;
+    padding: 5px;
+}
+
+#cabecera #logo {
+    width: 75px;
+    height: 50px;
+}
+
+#cabecera #titulo {
+    font-size: 1.3em;
+    font-style: italic;
+}
+
+.boton {
+    background-color: blue;
+    color: white;
+    border: thin black solid;
+}
+
+.boton a {
+    text-decoration: none;
+    color: white;
+}
+
+.boton a:visited {
+    text-decoration: none;
+    color: white;
+}
+
+.boton a:hover {
+    background-color: cyan;
+    color: black;
+}
+
+.boton:hover {
+    background-color: cyan;
+    color: black;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+    background-color: white;
+}
+
+.tabla th {
+    background-color: teal;
+    color: blue;
+}
+
+.tabla tr.par {
+    background-color: black;
+    color: white;
+
+}
+
+.tablaBorde, .tablaBorde tr, .tablaBorde td{
+    border: 1px solid black;
+    text-align: center;
+}
+
+.tablaBorde td{
+    padding: 1%;
+}
+
+.titulos{
+    background-color: rgb(210, 210, 210);
+}
+
+/* .tabla tr.impar{
+
+} */
+
+#pie {
+    background-color: #81e714;
+    color: blue;
+    font-size: 1.5 em;
+    padding: 5px;
+}
+
+.for_texto {
+    border: blue thin solid;
+    background-color: white;
+    padding: 2px;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+.error {
+    background-color: white;
+    color: red;
+    border: thin solid red;
+    padding: 5px;
+}
+
+/* Clases añadidas */
+

@@ -1,0 +1,145 @@
+<?php
+
+include_once(dirname(__FILE__) . "/../../cabecera.php");
+
+
+function paginaError(string $mensaje)
+{
+    header("HTTP/1.0 404 $mensaje");
+    inicioCabecera("PRACTICA");
+    finCabecera();
+    inicioCuerpo("ERROR");
+    echo "<br />\n";
+    echo $mensaje;
+    echo "<br />\n";
+    echo "<br />\n";
+    echo "<br />\n";
+    echo "<a href='/index.php'>Ir a la pagina principal</a>\n";
+
+    finCuerpo();
+}
+function inicioCabecera(string $titulo)
+{
+?>
+    <!DOCTYPE html>
+    <html lang="es">
+
+    <head>
+        <meta charset="utf-8">
+<!---->
+        <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame Remove this if you use the .htaccess -->
+        <meta http-equiv="X-UA-Compatible"
+            content="IE=edge,chrome=1">
+        <title><?php echo $titulo ?></title>
+        <meta name="description" content="">
+        <meta name="author" content="Administrador">
+        <meta name="viewport" content="width=device-width; initialscale=1.0">
+        <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+        <link rel="shortcut icon" href="/favicon.ico">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+        <link rel="stylesheet" type="text/css" href="/estilos/base.css">
+    <?php
+
+    // //cockie para el color de fondo
+    // if(!isset($_COOKIE["colorFondo"])) {
+    //     setcookie("colorFondo", "white");
+    // }
+
+    // //coockies para el color de texto
+    // if(!isset($_COOKIE["colorTexto"])) {
+    //     setcookie("colorTexto", "black");
+    // }
+}
+function finCabecera()
+{
+    ?>
+    </head>
+<?php
+}
+function inicioCuerpo(string $cabecera)
+{
+    global $acceso;
+
+    /**
+     * consultar los valores de los colores que tenemos en las cookies y 
+    *   se establecerán adecuadamente
+     */    
+//     $colorFondo = $_COOKIE["colorFondo"] ?? "white";
+//     $colorTexto = $_COOKIE["colorTexto"] ?? "black";
+//<?= $colorTexto ESTO HAY QUE AÑADIRLE EL CIERRE Y PONERLO DEBAJO
+ ?>  
+     <!-- <style>
+        h2 {
+             color: ; 
+            background-color: ;
+        }
+    </style>  -->
+
+    <body>
+        <div id="documento">
+
+            <header class="cabecera">
+                <h1 id="titulo"><?php echo $cabecera; ?></h1>
+                 <?php
+        if ($acceso->hayUsuario()) {
+        ?><div id="barraLogin"><?php
+                                        echo "Nombre de usuario: " . $acceso->getNombre();
+                                        ?></div><?php
+                }
+                    ?>
+                <div>
+                    
+                </div>
+
+            </header>
+
+            <div id="barraLogin">
+
+            </div>
+            <div id="barraMenu">
+                <ul>
+                    <?php
+                    if (isset($GLOBALS['ubicacion'])) {
+                        mostrarBarraUbicacion($GLOBALS['ubicacion']);
+                    }
+                    ?>
+                </ul>
+            </div>
+        <?php
+    }
+    function finCuerpo()
+    {
+        ?>
+            <br />
+            <br />
+
+            <footer>
+                <hr width="90%" />
+                <div>
+                    &copy; Copyright by natalia cabello luque
+                </div>
+            </footer>
+        </div>
+    </body>
+
+    </html>
+<?php
+    }
+    function mostrarBarraUbicacion(array $ubicacion)
+    {
+        echo "<nav class='barraModdle'>";
+        $total = count($ubicacion);
+        $contador = 0;
+
+        foreach ($ubicacion as $nombre => $url) {
+            $contador++;
+            if ($contador < $total) {
+                echo "<a href='{$url}'>{$nombre}</a> &raquo; ";
+            } else {
+                echo "<span>{$nombre}</span>";
+            }
+        }
+
+        echo "</nav><br>";
+    }
