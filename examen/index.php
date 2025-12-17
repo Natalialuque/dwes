@@ -2,19 +2,18 @@
 include_once(dirname(__FILE__) . "/cabecera.php");
 //controlador
 
-$PRO = $_SESSION["PRO"] ?? [];
-
-
+$COL = $_SESSION["COL"] ?? [];
 
 //barra de ubicacion 
  $ubicacion = [
  "pagina principal"=> "index.php",
+
  ];
 
-
-
-//INICIO SESION 
-if (isset($_POST["usuario"])) { //intento de inicio de sesión
+ /**
+  * inico sesiones
+  */
+ if (isset($_POST["usuario"])) { //intento de inicio de sesión
     $vecesInicio = 0;
     if (isset($_COOKIE["contador"])) {
         $vecesInicio = $_COOKIE["contador"];
@@ -26,52 +25,47 @@ if (isset($_POST["usuario"])) { //intento de inicio de sesión
 
     if ($vecesInicio % 3 == 0) {
         inicioSesion("MULTIPLO", "MULTIPLO", $acceso, $aclArray);
-    } else {
-        inicioSesion("NOMUL", "NOMUL", $acceso, $aclArray);
     }
-}
+ }
 
-
-
-//cargamos ficheros 
-if (isset($_POST["cargaFichero"])) {
-    $objetosCargados = [];
-    cargarProyectosDesdeFichero("pro.txt", $objetosCargados); //cargamos los objetos nuevos
+  if (isset($_POST["cargaFichero"])) {
+     $objetosCargados = [];
+    cargarProyectosDesdeFichero("coleccion.txt", $objetosCargados); //cargamos los objetos nuevos
 
     foreach ($objetosCargados as $objeto) { //los añadimos al array global
-        array_push($PRO, $objeto);
+        array_push($COL, $objeto);
     }
-    $_SESSION["PRO"] = $PRO;
-}
+     $_SESSION["COL"] = $COL;
+ }
 
-if (isset($_POST["modificar"])) {
-    $id = $_POST["proyectosDisponibles"];
-    $_SESSION["PRO"] = $PRO; // asegurar que está en sesión
 
-    if ($id === "noExiste" || !isset($PRO[$id])) {
-        paginaError("El proyecto seleccionado no existe");
-        exit;
-    }
-    // Redirigir a la clase modificar.php con el id del proyecto
-    header("Location: aplicacion/proyecto/modificar.php?id=" . $id);
-    exit;
-}
+
+ if (isset($_POST["modificar"])) {
+     $id = $_POST["ColecionesDisponibles"];
+     $_SESSION["COL"] = $COL; // asegurar que está en sesión
+
+     if ($id === "noExiste" || !isset($COL[$id])) {
+         paginaError("La coleccion seleccionada no existe");
+       exit;
+     }
+     // Redirigir a la clase modificar.php con el id de la coleciones
+     header("Location: aplicacion/colecciones/modificar.php?id=" . $id);
+     exit;
+ }
 
 
 
 if (isset($_POST["exportar"])) {
-    $id = $_POST["proyectosDisponibles"];
-    $_SESSION["PRO"] = $PRO;
+    $id = $_POST["ColecionesDisponibles"];
+    $_SESSION["COL"] = $COL;
 
-    if ($id === "noExiste" || !isset($PRO[$id])) {
-        paginaError("El proyecto seleccionado no existe");
+    if ($id === "noExiste" || !isset($COL[$id])) {
+        paginaError("La coleccion seleccionado no existe");
         exit;
     }
-    header("Location: aplicacion/proyecto/datospro.php?id=" . $id);
+    header("Location: aplicacion/colecciones/enviar.php?id=" . $id);
     exit;
 }
-
-
 
 
 //destruccion de sesion
@@ -86,39 +80,35 @@ inicioCabecera("APLICACION PRIMER TRIMESTRE");
 cabecera();
 finCabecera();
 inicioCuerpo("2DAW APLICACION");
-cuerpo($PRO, $acceso);  //llamo a la vista
+cuerpo($COL,$acceso);  //llamo a la vista
 finCuerpo();
 // **********************************************************
-
-
 
 //vista
 function cabecera() 
 {}
 
 //vista
-function cuerpo(array $PRO,object $acceso)
+function cuerpo(array $COL,object $acceso)
 {
+//inicio login 
+formularioLogin($acceso);
 
-    //formulario login 
-    formularioLogin( $acceso);
-
-    //mostrar proyectos 
-    mostrarProyectos($PRO);
+//mostrar colecciones 
+    mostrarColeciones($COL);
     if ($acceso->hayUsuario(1)) {
-        //Aquí habría que mostrar las propiedades también 
-        mostrarProyectosPropiedades($PRO);
+        //Aquí habría que mostrar las colleciones también 
+      //  mostrarColecionesPropiedades($COL);
     } else {
         echo "<h3>Sin permiso ver otros</h3>";
     }
 
-
-    // Botón de carga de fichero
+    //Boton de carga de fichero 
     cargaDesdeFichero();
-    //formulario Acciones 
-    formularioAcciones($PRO);
-}
+    //Formulario de Acciones
+    formularioAcciones($COL);
 
+}
 
 /**
  * Formulario para iniciar sesión
@@ -176,11 +166,11 @@ function formularioLogin(object $acceso)
         }
     }
 
-
-
-
-
-//boton de carga fichero 
+/**
+ * Boton carga fichero
+ *
+ * @return void
+ */
 function cargaDesdeFichero()
 {
     ?>
@@ -193,10 +183,10 @@ function cargaDesdeFichero()
 }
 
 /**
- * funcion que carga los proyectos desde ficheros 
+ * funcion que carga los coleciones desde ficheros 
  */
 
-function cargarProyectosDesdeFichero(string $nombreFichero, array &$datos): bool
+function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
 {
     $ruta = RUTABASE . "/ficheros/";
     if (!file_exists($ruta)) {
@@ -215,39 +205,37 @@ function cargarProyectosDesdeFichero(string $nombreFichero, array &$datos): bool
         $linea = str_replace(["\r", "\n"], "", $linea);
 
         if ($linea != "") {
-            // Separar datos del proyecto
-            $linea = mb_split("PROYECTO=", $linea);
+            // Separar datos del colecciones
+            $linea = mb_split("COLECCIONES=", $linea);
             $linea = preg_split("/;/", $linea[1]);
 
             $nombre = ""; 
-            $empresa = ""; 
-            $fecha1 = ""; 
-            $fecha2 = ""; 
-            $tipo = 10;
+            $fecha = ""; 
+            $tematica = 10;
+            $tematicaDescripcion="";
 
             foreach ($linea as $value) {
-                $prop = mb_split(":", $value);
-                if ($prop[0] == "nombre") $nombre = $prop[1];
-                if ($prop[0] == "empresa") $empresa = $prop[1];
-                if ($prop[0] == "fecha1") $fecha1 = $prop[1];
-                if ($prop[0] == "fecha2") $fecha2 = $prop[1];
-                if ($prop[0] == "tipo") $tipo = $prop[1];
+                $col = mb_split(":", $value);
+                if ($col[0] == "nombre") $nombre = $col[1];
+                if ($col[0] == "fecha") $fecha = $col[1];
+                if ($col[0] == "tematica") $tematica = $col[1];
+                if ($col[0] == "tematicaDescripcion") $tematicaDescripcion = $col[1];
             }
 
-            // Intentar crear el proyecto
+            // Intentar crear la coleecion
             try {
-                $objeto = new Proyecto($nombre, $empresa, $fecha1, $fecha2, $tipo);
+                $objeto = new Coleccion($nombre,$fecha, $tematica, $tematicaDescripcion);
             } catch (Exception $e) {
-                echo "No todos los proyectos han podido ser cargados<br>";
+                echo "No todos las colecciones han podido ser cargadas<br>";
                 $objeto = null; // marcar como no válido
             }
 
             // Solo si el objeto se creó correctamente
             if (isset($objeto)) {
-                // Cargar propiedades adicionales si las hay
+                // Cargar coleciones adicionales si las hay
                 for ($i = 5; $i < count($linea); $i += 2) {
-                    $totalpropiedades = 0;
-                    $objeto->aniadeOtras($linea[$i], $linea[$i + 1], $totalpropiedades);
+                    $totalColleciones = 0;
+                    $objeto->aniadelirbo($linea[$i], $linea[$i + 1], $totalColleciones);
                 }
 
                 // Guardar el objeto en el array
@@ -262,21 +250,21 @@ function cargarProyectosDesdeFichero(string $nombreFichero, array &$datos): bool
 
 
 /**
-     * Método que carga un textarea con todos los proyectos sin las 
-     * propiedades adicionales
-     *
-     * @param array $PRO
-     * @return void
-     */
-    function mostrarProyectos(array $PRO)
+* Funcion para mostrar poryectos
+*
+* @param array $COL
+* @return void
+*/
+ function mostrarColeciones(array $COL)
     {
+
             ?>
 
         <br>
         <textarea name="" id="" cols="80" rows="15"><?php
 
-                 foreach ($PRO as $proyecto) {
-                    echo "- " . $proyecto . "\n";
+                 foreach ($COL as $coleccion) {
+                    echo "- " . $coleccion . "\n";
                 } ?>
             </textarea>
 
@@ -287,22 +275,22 @@ function cargarProyectosDesdeFichero(string $nombreFichero, array &$datos): bool
 
 
     /**
-     * Función para mostrar los proyectos con las propiedades
+     * 
      *
-     * @param array $pro
+     * @param array $coleciones
      * @return void
      * 
      */
-    function mostrarProyectosPropiedades(array $pro)
+    function mostrarColecionesPropiedades(array $col)
     {
     echo '<br><textarea name="" id="" cols="80" rows="15">';
     
-    foreach ($pro as $proyecto) {
-        echo "- " . $proyecto . "\n";
+    foreach ($col as $colecion) {
+        echo "- " . $colecion . "\n";
 
-        $otras = $proyecto->getDescripcionOtras();
-        if (is_object($otras)) {
-            foreach ($otras as $clave => $valor) {
+        $libros = $colecion->dameLibros();
+        if (is_object($libros)) {
+            foreach ($libros as $clave => $valor) {
                 echo "   $clave: $valor\n";
             }
         }
@@ -310,34 +298,34 @@ function cargarProyectosDesdeFichero(string $nombreFichero, array &$datos): bool
         echo '</textarea>';
     }
 
-
+    
     /**
      * Formulario para modificar o exportar
      *
-     * @param [type] $PRO
+     * @param [type] $COL
      * @return void
      * 
      */
-    function formularioAcciones(array $PRO)
-{
+    function formularioAcciones(array $COL)
+    {
     ?>
     <form action="" method="post">
         <legend>Acciones</legend>
-        <select name="proyectosDisponibles" id="proyectosDisponibles">
-            <optgroup label="Proyectos">
+        <select name="ColecionesDisponibles" id="ColecionesDisponibles">
+             <!-- <optgroup label="Coleciones">
                 <?php
-                // Mostrar todos los proyectos disponibles
-                foreach ($PRO as $key => $value) {
-                    echo "<option value='$key'>" . $value->getNombre() . "</option>";
-                }
-                ?>
-                <!-- Línea adicional con un proyecto que no exista -->
-                <option value="noExiste">Proyecto inexistente</option>
-            </optgroup>
+                // Mostrar todos las colecciones disponibles
+                //foreach ($COL as $key => $value) {
+                //    echo "<option value='$key'>" . $value->getNombre() . "</option>";
+                //}
+                ?> 
+                 Línea adicional con un coleccion que no exista
+                <option value="noExiste">Coleccion inexistente</option>
+            </optgroup>  -->
         </select>
         <br><br>
         <input type="submit" class="boton" name="modificar" value="Modificar">
         <input type="submit" class="boton" name="exportar" value="Exportar">
     </form>
     <?php
-}
+    }

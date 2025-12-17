@@ -30,33 +30,21 @@ class ACLArray extends ACLBase
 
 
 
-    function __construct()
+     function __construct()
     {
-        //añade los roles
-        $this->anadirRole("normales", [1 => true]);
-        $this->anadirRole("administradores", [1 => true, 2 => true]);
-        // $this->anadirRole("superadmin", [1 => true, 2 => true, 3=> true]);
+          $this->anadirRole("roleMultiplo", [1 => true]);
 
-        //añade los usuario
+
         $this->anadirUsuario(
-            "Es usuario alumno",
-            "alumno",
-            "alum",
-            $this->getCodRole("normales")
+            "MULTIPLO",
+            "MULTIPLO",
+            "MULTIPLO",
+            $this->getCodRole("roleMultiplo")
         );
-        $this->anadirUsuario(
-            "Natalia cabello",
-            "natalia",
-            "nat",
-            $this->getCodRole("administradores")
-        );
-        //   $this->anadirUsuario(
-        //     "Es usuario profesor",
-        //     "profesor",
-        //     "profe",
-        //     $this->getCodRole("superadmin")
-        // );
+
+        
     }
+
 
     /**
      * Añade un role a nuesta ACL

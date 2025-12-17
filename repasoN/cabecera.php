@@ -15,7 +15,7 @@ spl_autoload_register(function ($clase) {
     $rutaExamen = RUTABASE . "/scripts/examen/"; //para poder añadir lo de proyecto y demas
 
     $fichero = $ruta . "$clase.php";
-     $ficheroExamen = $rutaExamen . "$clase.php";
+    $ficheroExamen = $rutaExamen . "$clase.php";
 
     if (file_exists($fichero)) 
         {
