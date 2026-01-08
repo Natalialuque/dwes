@@ -14,10 +14,22 @@ class inicialControlador extends CControlador
 			]
 		];
 
-		
+		$direccion = Sistema::app()->generaURL(["usuarios","borrado"],["id"=>12,"nombre"=>"Natalia"]);
 
-		$this->dibujaVista("index",[],
-							"Pagina principal");
+		$cadena ="Mi nombre";
+		$entero = 12;
+
+		 $this->dibujaVista("index",["c"=>$cadena,"n"=>$entero],
+		 					"Pagina principal");
+
+		//dibuja sin la plantilla
+		// $contenido=$this->dibujaVistaParcial("index",["c"=>$cadena,"n"=>$entero]);
+		// echo $contenido;
+	}
+
+	/**Podemos tener tantas paginas como queramos creando diferentes funciones con el accion */
+	public function accionNuevo(){
+		echo"nueva pagina";
 	}
 
 	
