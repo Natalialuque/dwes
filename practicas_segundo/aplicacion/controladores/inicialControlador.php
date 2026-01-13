@@ -3,6 +3,8 @@
 class inicialControlador extends CControlador
 {
 	public array $menuizq=[];
+	public array $barraUbi=[];
+
 	public function accionIndex()
 	{
 		
@@ -13,10 +15,24 @@ class inicialControlador extends CControlador
 				"enlace" => ["inicial"]
 			],
 			[
+				"texto" => "practica1", 
+				"enlace" => ["practica1"]
+			],
+			[
+				"texto" => "practica2", 
+				"enlace" => ["practica2"]
+			],
+			[
 				"texto" => "usuario", 
 				"enlace" => ["usuario"]
 			]
+
 		];
+
+		$this->barraUbi = [
+			["texto"=>"Inicio", "enlace"=>""]
+		];
+
 
 		$direccion = Sistema::app()->generaURL(["usuarios","borrado"],["id"=>12,"nombre"=>"Natalia"]);
 

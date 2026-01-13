@@ -29,6 +29,27 @@
 			</div>
 
 		</header><!-- #header -->
+		<?php
+        if (isset($this->barraUbi)) {
+            echo CHTML::dibujaEtiqueta("nav", ["class" => "barraModdle"], null, false);
+
+            $total = count($this->barraUbi);
+            $i = 0;
+
+            foreach ($this->barraUbi as $valor) {
+                $i++;
+
+                if ($i < $total) {
+                    echo CHTML::link($valor["texto"], $valor["enlace"], []);
+                    echo CHTML::dibujaEtiqueta("label", [], "&raquo;", true);
+                } else {
+                    echo CHTML::dibujaEtiqueta("label", [], $valor["texto"], true);
+                }
+            }
+
+            echo CHTML::dibujaEtiquetaCierre("nav");
+        }
+        ?>
 
 		<div class="contenido">
 			<aside>
@@ -55,7 +76,7 @@
 					?>
 				</ul>
 			</aside>
-
+	
 			<article>
 				<?php echo $contenido; ?>
 			</article><!-- #content -->
