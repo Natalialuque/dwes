@@ -18,7 +18,7 @@ class practica2Controlador extends CControlador
 
 		$this->barraUbi = [
 
-			["texto"=>"Inicio", "enlace"=>"inicial"],
+			["texto"=>"Inicio", "enlace"=>"inicialñ"],
 			["texto"=>"Practica 2", "enlace"=>""]
 
 		];
