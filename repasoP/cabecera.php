@@ -39,8 +39,8 @@
     $benef1->aniadeBonos($bon, "dldlsfdslk", "100", "2", "50","254","25");
     $benef2->aniadeBonos($bon, "100", "70", "101", "50","nuevo");
 
-    //array global con los beneficiarios
-    if(!isset($_SESSION["BENEFI"])){
+//array global con los beneficiarios
+if(!isset($_SESSION["BENEFI"])){
         
         $BENEFI = [
             $benef1,

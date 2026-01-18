@@ -26,8 +26,6 @@ function cabecera(){
 
 
 
-
-
 //Aqui vamos añadir todo el codigo de las funciones matematicas
 //vista
 function cuerpo()

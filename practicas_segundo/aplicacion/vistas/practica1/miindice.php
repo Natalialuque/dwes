@@ -1,2 +1,2 @@
 <?php
-    echo"esto es la practica 1";
+    echo CHTML::dibujaEtiqueta("p",[],"Practica 1",true);

@@ -1,40 +1,67 @@
 
  <?php
 include_once(dirname(__FILE__) . "/cabecera.php");
-//controlador
 
-//barra de ubicacion 
- $ubicacion = [
- "pagina principal"=> "index.php",
+$ubicacion = [
+    "Inicio" => "/index.php",
+];
+$GLOBALS['ubicacion'] = $ubicacion;
 
- ];
+// cerrar sesión
+if(isset($_POST["cerrarSesion"])) $acceso->quitarRegistroUsuario();
 
- $GLOBALS["Ubicacion"]=$ubicacion;
 
+// obtener productos
+$sentencia = "SELECT * FROM productos";
+$consulta = $bd->query($sentencia);
 
-//dibuja la plantilla de la vista
+// añadir producto a la cesta
+if (isset($_POST["compra"])) {
+
+    if (!isset($_SESSION["cesta"])) {
+        $_SESSION["cesta"] = [];
+    }
+
+    $_SESSION["cesta"][] = $_POST["producto_id"];
+
+    header("Location: /aplicacion/productos/cesta.php");
+    exit;
+}
+
+/////////////////////////////////
 inicioCabecera("TIENDA");
 cabecera();
 finCabecera();
-inicioCuerpo("TIENDA MUEBLES");
-cuerpo();  //llamo a la vista
+
+inicioCuerpo("2DAW TIENDA");
+cuerpo($consulta, $acceso);
 finCuerpo();
-// **********************************************************
 
-//vista
-function cabecera() {
-    
-}
 
-//vista
-function cuerpo()
+///////////////////////////////////////////
+function cabecera() {}
+
+function cuerpo($consulta, $acceso)
 {
-?>
-    <h1>TIENDA MUEBLES</h1>
-    <ul>
-        <a href="/aplicacion/principal/index.php">TIENDA</a>
-    </ul>
-    
+    ?>
+    <div class="productosAll">
+        <?php while ($fila = $consulta->fetch_assoc()) { ?>
+            <div class="producto">
 
-<?php
-} 
+                <p><?= $fila["nombre"] ?></p>
+                <p><?= $fila["fabricante"] ?></p>
+                <p id="precio"><?= $fila["precio_venta"] ?></p>
+
+                <?php if ($acceso->puedePermiso(8)) { ?>
+                    <form method="POST">
+                        <input type="hidden" name="producto_id" value="<?= $fila["cod_producto"] ?>">
+                        <button name="compra" class="compra">Comprar</button>
+                    </form>
+                <?php } ?>
+
+            </div>
+        <?php } ?>
+    </div>
+    <?php
+}
+?>
