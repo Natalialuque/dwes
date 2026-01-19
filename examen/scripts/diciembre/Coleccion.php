@@ -34,25 +34,18 @@ class Coleccion {
      * @param integer $tematica
      */
     public function __construct(string $nombre,string $fechaAlta="1/10/2025", int $tematica=10){
-        //validar nombre
-        if ($this->setNombre($nombre) != 0) {
-            throw new Exception("Nombre es obligatorio y tiene que tener 40 caracteres maximo");
-        } else $this->_nombre;
-        
-        
-        //fecha 
-        if($fechaAlta==null){
-            $this-> _fecha_alta="1/10/2025";
-        }else $this -> _fecha_alta;
+        // VALIDAR NOMBRE
+        $resNombre=$this->setNombre($nombre);
+        if($resNombre==-10) throw new Exception("Fallo en el nombre");
 
-        //tematica 
-         if ($this->setTematica($tematica)!=0){
-            $this->_tematica = 10;
-        } else $this->_tematica = 10;
+        // VALIDAR FECHA
+        if ($this->setFechaAlta($fechaAlta) == -10) {
+            $this->_fecha_alta = "01/10/2025";
+        }
 
-        //tematica tematicaDescipcion
-        $this->_tematica_descripcion = self::TEMATICAS[$this->_tematica] ?? "Desconocido";
-
+        // VALIDAR TEMATICA
+        $resTematica=$this->setTematica($tematica);
+        if($resTematica==-10) $this->_tematica=10;
     }
 
 
@@ -119,7 +112,7 @@ class Coleccion {
      * @param string $nombre
      * @param mixed $value
      */
-      public function __set(string $nombre, mixed $value)
+    public function __set(string $nombre, mixed $value)
     {
         throw new Exception("No permite la coleccion" . $nombre);
     }
