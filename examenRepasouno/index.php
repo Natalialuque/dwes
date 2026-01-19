@@ -36,7 +36,7 @@ $COL = $_SESSION["COL"] ?? [];
   */
   if (isset($_POST["cargaFichero"])) {
      $objetosCargados = [];
-    cargarProyectosDesdeFichero("coleccion.txt", $objetosCargados); //cargamos los objetos nuevos
+    cargarColeccionDesdeFichero("coleccion.txt", $objetosCargados); //cargamos los objetos nuevos
 
     foreach ($objetosCargados as $objeto) { //los añadimos al array global
         array_push($COL, $objeto);
@@ -109,7 +109,7 @@ formularioLogin($acceso);
     
     if ($acceso->hayUsuario(1)) {
         //Aquí habría que mostrar las colleciones también 
-        mostrarColecionesPropiedades($COL);
+mostrarColecionesPropiedades( $COL,  $acceso);
     } else {
         echo "<h3>Sin permiso ver otros</h3>";
     }
@@ -199,65 +199,89 @@ function cargaDesdeFichero()
 
 function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
 {
-    $ruta = RUTABASE . "/ficheros/";
+    $ruta = RUTABASE . "/ficheros/" . $nombreFichero;
+
     if (!file_exists($ruta)) {
-        mkdir($ruta);
+        echo "El fichero no existe<br>";
+        return false;
     }
 
-    $ruta .= $nombreFichero;
     $fic = fopen($ruta, "r");
     if (!$fic) return false;
 
-    // Vaciar el array recibido
     $datos = [];
 
+    // 1) LEER PRIMERA LÍNEA → COLECCIÓN
+    $linea = fgets($fic);
+    if (!$linea) return false;
+
+    $linea = trim($linea);
+    $partes = explode("-:-", $linea);
+
+    if (count($partes) < 3) {
+        echo "Formato incorrecto en la colección<br>";
+        return false;
+    }
+
+    $nombre = trim($partes[0]);
+    $fecha = trim($partes[1]);
+    $tematica = intval(trim($partes[2]));
+
+    try {
+        $coleccion = new Coleccion($nombre, $fecha, $tematica);
+    } catch (Exception $e) {
+        echo "No se ha podido crear la colección<br>";
+        return false;
+    }
+
+    // 2) LEER LIBROS
     while ($linea = fgets($fic)) {
-        // Limpieza de saltos de línea
-        $linea = str_replace(["\r", "\n"], "", $linea);
 
-        if ($linea != "") {
-            // Separar datos del colecciones
-            $linea = mb_split("COLECCIONES=", $linea);
-            $linea = preg_split("/;/", $linea[1]);
+        $linea = trim($linea);
+        if ($linea === "") continue;
 
-            $nombre = ""; 
-            $fecha = ""; 
-            $tematica = 10;
-            $tematicaDescripcion="";
+        // separar propiedades del libro
+        $props = explode(";", $linea);
 
-            foreach ($linea as $value) {
-                $col = mb_split(":", $value);
-                if ($col[0] == "nombre") $nombre = $col[1];
-                if ($col[0] == "fecha") $fecha = $col[1];
-                if ($col[0] == "tematica") $tematica = $col[1];
-                if ($col[0] == "tematicaDescripcion") $tematicaDescripcion = $col[1];
-            }
+        $nombreLibro = "";
+        $autorLibro = "";
+        $dinamicas = [];
 
-            // Intentar crear la coleecion
-            try {
-                $objeto = new Coleccion($nombre,$fecha, $tematica, $tematicaDescripcion);
-            } catch (Exception $e) {
-                echo "No todos las colecciones han podido ser cargadas<br>";
-                $objeto = null; // marcar como no válido
-            }
+        foreach ($props as $p) {
+            $p = trim($p);
+            if ($p === "") continue;
 
-            // Solo si el objeto se creó correctamente
-            if (isset($objeto)) {
-                // Cargar coleciones adicionales si las hay
-                for ($i = 5; $i < count($linea); $i += 2) {
-                    $totalColleciones = 0;
-                    $objeto->aniadelirbo($linea[$i], $linea[$i + 1], $totalColleciones);
-                }
+            list($clave, $valor) = array_map("trim", explode(":", $p));
 
-                // Guardar el objeto en el array
-                $datos[] = $objeto;
+            if ($clave === "nombre") $nombreLibro = $valor;
+            elseif ($clave === "autor") $autorLibro = $valor;
+            else {
+                $dinamicas[] = $clave;
+                $dinamicas[] = $valor;
             }
         }
+
+        // comprobar que tiene nombre y autor
+        if ($nombreLibro === "" || $autorLibro === "") {
+            echo "Libro ignorado: falta nombre o autor<br>";
+            continue;
+        }
+
+        // crear libro
+        $libro = new Libro($nombreLibro, $autorLibro, ...$dinamicas);
+
+        // añadir libro a la colección
+        $coleccion->aniadirLibro($libro);
     }
 
     fclose($fic);
+
+    // añadir colección al array
+    $datos[] = $coleccion;
+
     return true;
 }
+
 
 
 /**
@@ -292,22 +316,40 @@ function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
      * @return void
      * 
      */
-    function mostrarColecionesPropiedades(array $col)
-    {
+   function mostrarColecionesPropiedades(array $col, Acceso $acceso)
+{
     echo '<br><textarea name="" id="" cols="80" rows="15">';
-    
-    foreach ($col as $colecion) {
-        echo "- " . $colecion . "\n";
 
-        $libros = $colecion->dameLibros();
-        if (is_object($libros)) {
-            foreach ($libros as $clave => $valor) {
-                echo "   $clave: $valor\n";
+    foreach ($col as $coleccion) {
+
+        echo "- " . $coleccion . "\n";
+
+        if ($acceso->hayUsuario() && $acceso->puedePermiso(1)) {
+
+            $libros = $coleccion->dameLibros();
+
+            foreach ($libros as $clave => $libro) {
+
+                echo "   $clave:\n";
+
+                // nombre y autor
+                echo "      nombre: " . $libro->nombre . "\n";
+                echo "      autor: " . $libro->autor . "\n";
+
+                // propiedades dinámicas usando tu ITERATOR
+                foreach ($libro as $prop => $valor) {
+                    echo "      $prop: $valor\n";
+                }
+
+                echo "---------------------------------\n";
             }
         }
     }
-        echo '</textarea>';
-    }
+
+    echo '</textarea>';
+}
+
+
 
     
     /**

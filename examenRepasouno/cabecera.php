@@ -38,18 +38,41 @@ mysqli_report(MYSQLI_REPORT_ERROR);
 
 session_start(); // activa o continúa la sesión
 
+//jjj
+$aclArray = new ACLArray();
+$acceso = new Acceso();
 
 //Aqui es donde creamos el array cargado, METER NOMBRE
-if (!isset($_SESSION[""])) {
+if (!isset($_SESSION["COL"])) {
+ //  colecciones
+    $coleccion1 = new Coleccion("natalia", "09/08/2025",10);
 
+    $libro1 = new Libro("DAWS", "yo");
+    $libro1->anio="2025";
+    $libro1->dia="hoy";
+
+    $libro2 = new Libro("DAWC", "otro");
+    $libro2->anio="2022";
+    $libro2->dia="mañana";
+
+    $coleccion1->aniadirLibro($libro1);
+    $coleccion1->aniadirLibro($libro2);
+
+    $coleccion2 = new Coleccion("Raul", "12/06/2025",30);
+
+    $libro3 = new Libro("DIW", "Raul");
+    $libro3->anio="2023";
+    $libro3->dia="ayer";
+
+    $coleccion2->aniadirLibro($libro3);
+    $coleccion2->aniadirLibro($libro1);
+
+    $colecciones = [$coleccion1,$coleccion2];
+
+    $_SESSION["COL"]=$colecciones;
 
 }
 
-
-
 // Recuperar siempre el array desde sesión CAMBIAR NOMBRES
-//$COL = &$_SESSION[""];
+$COL = &$_SESSION["COL"];
 
-//
-$aclArray = new ACLArray();
-$acceso = new Acceso();

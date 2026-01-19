@@ -1,7 +1,7 @@
 <?php
 include_once(dirname(__FILE__) . "/../../librerias/validacion.php");
 
-class coleccion{
+class Coleccion{
 
     //Tematicas--> constante publica 
     public const TEMATICAS = [
@@ -19,6 +19,9 @@ class coleccion{
 
         //propiedades calculadas 
         protected string $_tematica_descripcion;
+
+    //ARRAY     
+    private array $_libros = [];
 
     
     /**
@@ -142,6 +145,25 @@ class coleccion{
              return "Coleccion " . $this->_nombre .
                 " añadida el " . $this->_fecha_alta .
                 " de tematica " . $this->_tematica_descripcion;
+    }
+
+    /**
+     * FUNCIONES DE AÑADIR LIBRO Y DAMELIBROS
+     */
+     public function aniadirLibro(Libro $libro)
+    {
+        $this->_libros[] = $libro;
+    }
+
+    public function dameLibros(): array
+    {
+        $libros = [];
+
+        foreach ($this->_libros as $index => $libro) {
+            $libros["libro" . ($index + 1)] = $libro;
+        }
+
+        return $libros;
     }
 
 

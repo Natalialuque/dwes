@@ -1,0 +1,59 @@
+1-->Si te piden cambiar el orden del recorrido → modificas rewind()
+Ejemplos típicos:
+
+“Primero debe salir nombre, luego dinámicas, luego autor”
+
+“Las propiedades deben ordenarse alfabéticamente”
+
+“La primera propiedad debe ser X”
+
+ Siempre es rewind(), porque es el método que prepara el array y coloca el puntero al inicio.
+
+
+
+ 2-->Si te piden cambiar qué valor devuelve el foreach → modificas current()
+Ejemplos:
+
+“El foreach debe devolver objetos en vez de strings”
+
+“El valor debe devolverse en mayúsculas”
+
+“El valor debe incluir metadatos”
+
+current() controla el valor que devuelve el foreach en cada iteración.
+
+
+3-->Si te piden cambiar la clave que devuelve el foreach → modificas key()
+Ejemplos:
+
+“La clave debe devolverse en minúsculas”
+
+“La clave debe ser un número incremental”
+
+“La clave debe ser el nombre original sin transformar”
+
+ key() controla exactamente eso: la clave que ve el foreach.
+
+
+ 4-->Si te piden saltar elementos, filtrar o avanzar de forma especial → modificas next()
+Ejemplos:
+
+“No se deben recorrer propiedades vacías”
+
+“Debe saltarse las propiedades que empiecen por _”
+
+“Debe avanzar de dos en dos”
+
+ next() decide cómo avanza el puntero.
+
+
+5-->Si te piden detener el recorrido antes de tiempo → modificas valid()
+Ejemplos:
+
+“El foreach debe parar cuando encuentre la propiedad X”
+
+“No debe recorrer más de N elementos”
+
+“Debe detenerse si el valor es null”
+
+ valid() decide si el foreach continúa o se detiene.
