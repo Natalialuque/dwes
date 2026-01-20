@@ -77,6 +77,22 @@ if (isset($_POST["exportar"])) {
     exit;
 }
 
+/**
+ * nuevo
+ */
+
+if (isset($_POST["nuevo"])) {
+    $id = $_POST["ColecionesDisponibles"];
+    $_SESSION["COL"] = $COL;
+
+    if ($id === "noExiste" || !isset($COL[$id])) {
+        paginaError("La coleccion seleccionado no existe");
+        exit;
+    }
+    header("Location: aplicacion/colecciones/nuevo.php?id=" . $id);
+    exit;
+}
+
 
 //destruccion de sesion
 if (isset($_POST["salir"])) {
@@ -379,6 +395,8 @@ function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
         <br><br>
         <input type="submit" class="boton" name="modificar" value="Modificar">
         <input type="submit" class="boton" name="exportar" value="Exportar">
+        <input type="submit" class="boton" name="nuevo" value="Nuevo">
+
     </form>
     <?php
     }
