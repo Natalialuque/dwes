@@ -12,7 +12,7 @@ if (MODO_TRABAJO == "produccion")
 //este metodo es para añadir 
 spl_autoload_register(function ($clase) {
     $ruta = RUTABASE . "/scripts/clases/";
-    $rutaExamen = RUTABASE . "/scripts/diciembre/"; //para poder añadir lo de proyecto y demas
+    $rutaExamen = RUTABASE . "/scripts/enero/"; //para poder añadir lo de proyecto y demas
 
     $fichero = $ruta . "$clase.php";
     $ficheroExamen = $rutaExamen . "$clase.php";
@@ -38,42 +38,36 @@ mysqli_report(MYSQLI_REPORT_ERROR);
 
 session_start(); // activa o continúa la sesión
 
-//jjj
-$aclArray = new ACLArray();
-$acceso = new Acceso();
 
 //Aqui es donde creamos el array cargado, METER NOMBRE
-if (!isset($_SESSION["COL"])) {
- //  colecciones
-    $coleccion1 = new Coleccion("natalia", "09/08/2025",10);
+if (!isset($_SESSION["POB"])) {
+//  poblaciones
+    $poblacion1 = new Poblacion("azul",2500);
 
-    $libro1 = new Libro("DAWS", "yo");
-    $libro1->anio="2025";
-    $libro1->dia="hoy";
-    $libro1->dia ="ayer";
+    $elemento1 = new Elemento(0,"yop","espectacular");
 
-    $libro2 = new Libro("DAWC", "otro");
-    $libro2->anio="2022";
-    $libro2->dia="mañana";
+    $elemento2 = new Elemento(2,"tup","fantastico");   
 
-    $coleccion1->aniadirLibro($libro1);
-    $coleccion1->aniadirLibro($libro2);
+    $poblacion1->añadirElemento($elemento1);
+   $poblacion1->añadirElemento($elemento2);
 
-    $coleccion2 = new Coleccion("Raul", "12/06/2025",30);
+    $poblacion2 = new Poblacion("verde",78978);
 
-    $libro3 = new Libro("DIW", "Raul");
-    $libro3->anio="2023";
-    $libro3->dia="ayer";
+    $elemento3 = new Elemento(1,"el","hermoso");
 
-    $coleccion2->aniadirLibro($libro3);
-    $coleccion2->aniadirLibro($libro1);
+    $poblacion2->añadirElemento($elemento3);
 
-    $colecciones = [$coleccion1,$coleccion2];
 
-    $_SESSION["COL"]=$colecciones;
+    $poblacion = [$poblacion1,$poblacion2];
+
+    $_SESSION["POB"]=$poblacion;
 
 }
 
-// Recuperar siempre el array desde sesión CAMBIAR NOMBRES
-$COL = &$_SESSION["COL"];
 
+// Recuperar siempre el array desde sesión CAMBIAR NOMBRES
+$POB = &$_SESSION["POB"];
+
+//
+$aclArray = new ACLArray();
+$acceso = new Acceso();

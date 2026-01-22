@@ -1,0 +1,4 @@
+
+<br />
+<b>Warning</b>:  Array to string conversion in <b>C:\web\sitios\dwes\examenRecuperacion\aplicacion\poblaciones\enviar.php</b> on line <b>23</b><br />
+Nombre rojo con origen 1000 años de historia, de épocaedad antigua-media Otras poblaciones: Array

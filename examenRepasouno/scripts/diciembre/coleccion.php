@@ -52,7 +52,7 @@ class Coleccion{
     /**
      * Metodos Get
      */
-     public function getNombre():string{
+    public function getNombre():string{
         return $this->_nombre;
     }
 
