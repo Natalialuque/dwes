@@ -27,6 +27,41 @@
 					<h1>PROYECTO FRAMEWORK PEDROSA</h1>
 				</a>
 			</div>
+			<div class="sesion" style="background:#eee; padding:8px; margin-bottom:10px;">
+    <?php
+        // El framework ya inicia la sesión, no hace falta session_start()
+
+        // Si NO hay usuario conectado
+        if (!isset($_SESSION["usuario"])) {
+
+            echo "Usuario no conectado | ";
+
+            echo CHTML::link(
+                "Iniciar sesión",
+                Sistema::app()->generaURL(["registro", "login"])
+            );
+
+            echo " | ";
+
+            echo CHTML::link(
+                "Registrarse",
+                Sistema::app()->generaURL(["registro", "pedirDatosRegistro"])
+            );
+        }
+
+        // Si SÍ hay usuario conectado
+        else {
+
+            echo "Bienvenido " . $_SESSION["usuario"]["nick"] . " | ";
+
+            echo CHTML::link(
+                "Cerrar sesión",
+                Sistema::app()->generaURL(["registro", "logout"])
+            );
+        }
+    ?>
+</div>
+
 
 		</header><!-- #header -->
 		<?php
