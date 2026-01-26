@@ -26,42 +26,54 @@
 				<a href="/index.php">
 					<h1>PROYECTO FRAMEWORK PEDROSA</h1>
 				</a>
-			</div>
-			<div class="sesion" style="background:#eee; padding:8px; margin-bottom:10px;">
-    <?php
-        // El framework ya inicia la sesión, no hace falta session_start()
 
-        // Si NO hay usuario conectado
-        if (!isset($_SESSION["usuario"])) {
 
-            echo "Usuario no conectado | ";
+	<div class="sesion">
+<?php
+    // Asegurar que la sesión está iniciada
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
-            echo CHTML::link(
-                "Iniciar sesión",
-                Sistema::app()->generaURL(["registro", "login"])
-            );
+    // // DEBUG (puedes quitarlo cuando funcione)
+    // echo "<pre>";
+    // var_dump($_SESSION);
+    // echo "</pre>";
 
-            echo " | ";
+    // Si NO hay usuario conectado
+    if (!isset($_SESSION["usuario"])) {
 
-            echo CHTML::link(
-                "Registrarse",
-                Sistema::app()->generaURL(["registro", "pedirDatosRegistro"])
-            );
-        }
+        echo "Usuario no conectado | ";
 
-        // Si SÍ hay usuario conectado
-        else {
+        echo CHTML::link(
+            "Iniciar sesión",
+            Sistema::app()->generaURL(["registro", "login"])
+        );
 
-            echo "Bienvenido " . $_SESSION["usuario"]["nick"] . " | ";
+        echo " | ";
 
-            echo CHTML::link(
-                "Cerrar sesión",
-                Sistema::app()->generaURL(["registro", "logout"])
-            );
-        }
-    ?>
+        echo CHTML::link(
+            "Registrarse",
+            Sistema::app()->generaURL(["registro", "pedirDatosRegistro"])
+        );
+    }
+
+    // Si SÍ hay usuario conectado
+    else {
+
+        echo "Bienvenido " . $_SESSION["usuario"]["nick"] . " | ";
+
+        echo CHTML::link(
+            "Cerrar sesión",
+            Sistema::app()->generaURL(["registro", "logout"])
+        );
+    }
+?>
 </div>
 
+
+	</div>
+	
 
 		</header><!-- #header -->
 		<?php

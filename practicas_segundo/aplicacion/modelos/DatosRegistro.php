@@ -43,9 +43,6 @@ class DatosRegistro extends CActiveRecord {
      */
     protected function fijarRestricciones(): array {
 
-        $hoy = date("Y-m-d");
-        $hace18 = date("Y-m-d", strtotime("-18 years"));
-
         return array(
 
             // Obligatorios
@@ -70,11 +67,12 @@ class DatosRegistro extends CActiveRecord {
 
             // Fecha nacimiento
             array(
+                
                 "ATRI" => "fecha_nacimiento",
-                "TIPO" => "FECHA",
-                "MIN" => "1900-01-01",
-                "MAX" => $hoy,
-                "DEFECTO" => $hace18
+                "TIPO" => "FUNCION",
+                "FUNCION" => "validaFechaAlta"
+        
+                
             ),
 
             // Provincia
@@ -122,14 +120,15 @@ class DatosRegistro extends CActiveRecord {
         }
     }
 
-    /* 
-     *  VALORES POR DEFECTO AL CREAR
-     */
-    protected function valorDefecto(): void {
-        $this->provincia = "MALAGA";
-        $this->estado = 0;
-        $this->fecha_nacimiento = date("Y-m-d", strtotime("-18 years"));
-    }
+    // /* 
+    //  *  VALORES POR DEFECTO AL CREAR
+    //  */
+    protected function afterCreate(): void {
+    $this->provincia = "MALAGA";
+    $this->estado = 0;
+    $this->fecha_nacimiento = date("Y-m-d", strtotime("-18 years"));
+}
+
 
     /* 
      *   MÉTODO ESTÁTICO dameEstados()
@@ -149,5 +148,31 @@ class DatosRegistro extends CActiveRecord {
         }
 
         return $estados[$cod_estado] ?? false;
+    }
+// VALIDACIÓN DE FECHA CORRECTA 
+protected function validaFechaAlta() { 
+    // 1. Convertir dd/mm/yyyy → yyyy-mm-dd si hace falta 
+    if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $this->fecha_nacimiento)) {
+         list($d, $m, $y) = explode('/', $this->fecha_nacimiento);
+          $this->fecha_nacimiento = "$y-$m-$d"; 
+        } 
+        
+        // 2. Intentar crear fecha ISO
+         $fecha = DateTime::createFromFormat('Y-m-d', $this->fecha_nacimiento); 
+         if (!$fecha) { 
+            $this->setError("fecha_nacimiento", "Formato de fecha no válido");
+             return; 
+            } 
+            
+            $min = new DateTime("1900-01-01"); 
+            $max = new DateTime(); 
+            // hoy 
+            if ($fecha < $min) {
+                 $this->setError("fecha_nacimiento", "La fecha de nacimiento debe ser superior a 01/01/1900"); 
+                
+            } 
+            if ($fecha > $max) {
+                 $this->setError("fecha_nacimiento", "La fecha de nacimiento debe ser inferior a la del día de hoy"); 
+                } 
     }
 }

@@ -17,8 +17,11 @@ echo CHTML::dibujaEtiqueta("br");
 
 // FECHA NACIMIENTO
 echo CHTML::modeloLabel($modelo, "fecha_nacimiento");
-echo CHTML::modeloDate($modelo,"fecha_nacimiento");
+echo CHTML::modeloDate($modelo, "fecha_nacimiento", [
+    "value" => $modelo->fecha_nacimiento
+]);
 echo CHTML::modeloError($modelo, "fecha_nacimiento");
+
 
 echo CHTML::dibujaEtiqueta("br");
 
@@ -31,8 +34,13 @@ echo CHTML::dibujaEtiqueta("br");
 
 // ESTADO (input number)
 echo CHTML::modeloLabel($modelo, "estado");
-echo CHTML::modeloNumber($modelo,"estado");
+echo CHTML::modeloListaDropDown(
+    $modelo,
+    "estado",
+    DatosRegistro::dameEstados()
+);
 echo CHTML::modeloError($modelo, "estado");
+
 
 echo CHTML::dibujaEtiqueta("br");
 

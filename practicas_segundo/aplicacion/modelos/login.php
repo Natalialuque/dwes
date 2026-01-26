@@ -31,16 +31,29 @@ class Login extends CActiveRecord {
     protected function fijarRestricciones(): array {
         return [
             // Obligatorios
-            ["ATRI" => "nick,contrasenia", "TIPO" => "REQUERIDO"],
+            [   "ATRI" => "nick,contrasenia",
+             "TIPO" => "REQUERIDO"
+            ],
 
             // Nick
-            ["ATRI" => "nick", "TIPO" => "CADENA", "TAMANIO" => 20],
+            [   
+                "ATRI" => "nick",
+                 "TIPO" => "CADENA",
+                  "TAMANIO" => 20],
 
             // Contraseña
-            ["ATRI" => "contrasenia", "TIPO" => "CADENA", "TAMANIO" => 20],
+            [
+                "ATRI" => "contrasenia", 
+                "TIPO" => "CADENA", 
+                "TAMANIO" => 20
+            ],
 
             // Validación personalizada
-            ["ATRI" => "contrasenia", "TIPO" => "FUNCION", "FUNCION" => "validarContrasenia"]
+            [
+                "ATRI" => "contrasenia", 
+                "TIPO" => "FUNCION", 
+                "FUNCION" => "validarContrasenia"
+            ]
         ];
     }
 
