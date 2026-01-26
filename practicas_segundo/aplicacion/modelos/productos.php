@@ -8,14 +8,23 @@ class Productos extends CActiveRecord {
         return "productos";
     }
 
+    /**
+     * FIJAR TABLA
+     */
+      protected function fijarTabla(): string
+    {
+        return 'cons_productos';
+    }
+
     /* 
      *   ATRIBUTOS 
      */
     protected function fijarAtributos(): array {
         return [
             "cod_producto",
-            "nombre",
             "cod_categoria",
+            "descripcion_categoria",
+            "nombre",
             "fabricante",
             "fecha_alta",
             "unidades",
@@ -24,8 +33,7 @@ class Productos extends CActiveRecord {
             "precio_iva",
             "precio_venta",
             "foto",
-            "borrado",
-            "descripcion_categoria" // viene de la vista cons_productos
+            "borrado" // viene de la vista cons_productos
         ];
     }
 
@@ -35,8 +43,9 @@ class Productos extends CActiveRecord {
     protected function fijarDescripciones(): array {
         return [
             "cod_producto" => "Código",
-            "nombre" => "Nombre",
             "cod_categoria" => "Categoría",
+            "descripcion_categoria" => "Categoría",
+             "nombre" => "Nombre",
             "fabricante" => "Fabricante",
             "fecha_alta" => "Fecha de alta",
             "unidades" => "Unidades",
@@ -46,7 +55,7 @@ class Productos extends CActiveRecord {
             "precio_venta" => "Precio venta",
             "foto" => "Foto",
             "borrado" => "Borrado",
-            "descripcion_categoria" => "Categoría"
+            
         ];
     }
 
@@ -64,13 +73,7 @@ class Productos extends CActiveRecord {
                 "REQUERIDO" => true
             ],
 
-            // Nombre
-            [
-                "ATRI" => "nombre", 
-                "TIPO" => "CADENA", 
-                "TAMANIO" => 30, 
-                "REQUERIDO" => true
-            ],
+            
 
             // Categoría válida
             [
@@ -84,48 +87,78 @@ class Productos extends CActiveRecord {
                  "FUNCION" => "validarCategoria"
             ],
 
+            // Nombre
+            [
+                "ATRI" => "nombre", 
+                "TIPO" => "CADENA", 
+                "TAMANIO" => 30, 
+                "REQUERIDO" => true
+            ],
+
             // Fabricante
             [
                 "ATRI" => "fabricante", 
                 "TIPO" => "CADENA", 
-                "TAMANIO" => 30
+                "TAMANIO" => 30,
+                "DEFECTO" => ""
+
             ],
 
             // Fecha alta
             [
                 "ATRI" => "fecha_alta", 
-                "TIPO" => "FECHA"
+                "TIPO" => "FECHA",
+                 "DEFECTO" => date("Y-m-d")
+
             ],
 
             // Unidades (pueden ser negativas)
             [
                 "ATRI" => "unidades", 
-                "TIPO" => "ENTERO"
+                "TIPO" => "ENTERO",
+                "DEFECTO" => 0
+
             ],
 
             // Precio base
             [
                 "ATRI" => "precio_base", 
                 "TIPO" => "REAL", 
+                "DEFECTO" => 0,
                 "MIN" => 0
             ],
 
             // IVA
+             [
+                "ATRI" => "iva",
+                "TIPO" => "REAL",
+                "DEFECTO" => 21.0
+            ],
             [
-                "ATRI" => "iva", 
-                "TIPO" => "ENTERO"],
+                "ATRI" => "iva",
+                "TIPO" => "RANGO",
+                "RANGO" => [4,10,21]
+            ],
+               //Precio iva
             [
-                "ATRI" => "iva", 
-                "TIPO" => "FUNCION", 
-                "FUNCION" => "validarIVA"
+                "ATRI" => "precio_iva",
+                "TIPO" => "REAL"
+            ],
+            //Preicio venta
+            [
+                "ATRI" => "precio_venta",
+                "TIPO" => "REAL"
             ],
 
             // Foto
             [
                 "ATRI" => "foto",
                  "TIPO" => "CADENA", 
-                 "TAMANIO" => 40
+                 "TAMANIO" => 40,
+                "DEFECTO" => "base.png"
+
             ],
+            
 
             // Borrado (0 o 1)
             [
@@ -141,15 +174,11 @@ class Productos extends CActiveRecord {
      *   VALORES POR DEFECTO
      */
     protected function afterCreate(): void {
-        $this->fabricante = "";
-        $this->fecha_alta = date("Y-m-d");
-        $this->unidades = 0;
-        $this->precio_base = 0;
-        $this->iva = 21;
-        $this->precio_iva = 0;
-        $this->precio_venta = 0;
-        $this->foto = "base.png";
-        $this->borrado = 0;
+      $precio = ($this->precio_base === "" ? 0 : floatval($this->precio_base));
+        $iva    = ($this->iva === "" ? 0 : floatval($this->iva));
+
+        $this->precio_iva   = $precio * ($iva / 100);
+        $this->precio_venta = $precio + $this->precio_iva;
     }
 
     /* 
@@ -161,14 +190,5 @@ class Productos extends CActiveRecord {
         }
     }
 
-    /* 
-     *   VALIDAR IVA
-     */
-    protected function validarIVA() {
-        $validos = [4, 10, 21];
-        if (!in_array($this->iva, $validos)) {
-            $this->setError("iva", "El IVA debe ser 4, 10 o 21.");
-        }
-    }
 
 }

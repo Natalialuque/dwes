@@ -58,7 +58,7 @@
         );
     }
 
-    // Si SÍ hay usuario conectado
+    // Si hay usuario conectado
     else {
 
         echo "Bienvenido " . $_SESSION["usuario"]["nick"] . " | ";

@@ -7,10 +7,10 @@
 				  					"direccion"=>"C/ Carrera - Madre Carmen, 12",
 									"grupo"=>"2daw"
 								),
-				  "BD"=>array("hay"=>false,
+				  "BD"=>array("hay"=>true,
 								"servidor"=>"localhost",
-								"usuario"=>"natalia",
+								"usuario"=>"root",
 								"contra"=>"2daw",
-								"basedatos"=>"practica9") 			
-				  );
+								"basedatos"=>"practica10") 			
+			);
 
