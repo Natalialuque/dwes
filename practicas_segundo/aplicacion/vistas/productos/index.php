@@ -1,6 +1,8 @@
 <h2>Listado de productos</h2>
 
 <?php
+//$this->textoHead=CPager
+
 echo CHTML::iniciarForm(["productos", "index"]);
 
 echo "Nombre: ";
@@ -51,3 +53,7 @@ echo CHTML::campoBotonSubmit("Descargar productos filtrados");
 
 echo CHTML::finalizarForm();
 ?>
+
+
+<!-- $tabla = new CGrid($cab,$fill,[]);
+    echo $tabla->dibujate() -->

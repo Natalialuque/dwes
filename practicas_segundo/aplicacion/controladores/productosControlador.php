@@ -154,10 +154,10 @@ class productosControlador extends CControlador
     /* 
     *   CONSULTAR
     */
-public function accionConsultar()
-{
+    public function accionConsultar()
+    {
    
-}
+    }
 
 
     /* 
@@ -171,20 +171,71 @@ public function accionConsultar()
     /* 
     *   MODIFICAR
      */   
+  
     public function accionModificar()
     {
-        
+        //recojo el id del producto a modificar 
+        $id=-1;
+        if($_REQUEST["id"]){
+            $id=intval($_REQUEST["id"]);
+        }
+
+        $productos = new Productos();
+
+        Sistema::app()->BD()->crearConsulta();
+
+        //compruebo que hay un producto con el id
+        if(!$productos->buscarPorID($id)){
+            Sistema ::app()->paginaError(400,"no se ha encontrado el producto");
+            return;
+
+        }
+
+        //se ha encontrado el equipo 
+   
+
+        //se comprueba si se ha enviado el formulario
+
+        //nombre del modelo= nombre del array por post
+        $nombre = $productos->getNombre();
+        if (isset($_POST[$nombre])) {
+            //asigno los valores al articulo a partir de lo
+            //recogido del formulario
+            $productos->setValores($_POST[$nombre]);
+
+            //compruebo si son valido los datos del articulo
+            if ($productos->validar()) { //son validos los datos del articulo
+
+                //almaceno el articulo en la base de datos
+                if ($productos->guardar()) {
+                     Sistema::app()->irAPagina(array(
+                    "productos",
+                    "verTodos"
+                    ));
+                    return;
+                }
+                else{
+                    $productos -> setError("nombre","se ha producido un error al guardar los datos");
+                }
+
+        }
+
+        //se muestra el equipo para modificarlo
+        $this->dibujaVista("modificar", ["modelo" => $productos], "Modificar producto");
     }
+
+}
+
 
     /* 
      *  BORRADO LÓGICO
     */    
-    public function accionBorrar()
-    {
+    // public function accionBorrar()
+    // {
 
      
         
-    }
+    
 
     /* 
      *  DESCARGAR PRODUCTOS FILTRADOS
