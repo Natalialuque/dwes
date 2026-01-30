@@ -182,7 +182,7 @@ class productosControlador extends CControlador
 
         $productos = new Productos();
 
-        Sistema::app()->BD()->crearConsulta();
+       // Sistema::app()->BD()->crearConsulta();
 
         //compruebo que hay un producto con el id
         if(!$productos->buscarPorID($id)){
