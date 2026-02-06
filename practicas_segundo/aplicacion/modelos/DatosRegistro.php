@@ -10,7 +10,7 @@ class DatosRegistro extends CActiveRecord {
 
     /* 
     *    ATRIBUTOS 
-     */
+    */
     protected function fijarAtributos(): array {
         return array(
             "nick",
@@ -24,8 +24,8 @@ class DatosRegistro extends CActiveRecord {
     }
 
     /* 
-     *   DESCRIPCIONES (para formularios)
-     */
+    *   DESCRIPCIONES (para formularios)
+    */
     protected function fijarDescripciones(): array {
         return array(
             "nick" => "Nick",
@@ -71,8 +71,6 @@ class DatosRegistro extends CActiveRecord {
                 "ATRI" => "fecha_nacimiento",
                 "TIPO" => "FUNCION",
                 "FUNCION" => "validaFechaAlta"
-        
-                
             ),
 
             // Provincia
@@ -107,8 +105,8 @@ class DatosRegistro extends CActiveRecord {
     }
 
     /* 
-      *  VALIDACIÓN CONTRASEÑAS
-     */
+    *  VALIDACIÓN CONTRASEÑAS
+    */
     protected function validarContrasenias() {
         if ($this->contrasenia === "" || $this->confirmar_contrasenia === "") {
             $this->setError("confirmar_contrasenia", "Las contraseñas no pueden estar vacías");
@@ -120,9 +118,9 @@ class DatosRegistro extends CActiveRecord {
         }
     }
 
-    // /* 
-    //  *  VALORES POR DEFECTO AL CREAR
-    //  */
+    /* 
+    *  VALORES POR DEFECTO AL CREAR
+    */
     protected function afterCreate(): void {
     $this->provincia = "MALAGA";
     $this->estado = 0;
