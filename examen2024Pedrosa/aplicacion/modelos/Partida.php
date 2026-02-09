@@ -1,198 +1,312 @@
 <?php
 
-class Partida extends CActiveRecord {
+class Partida extends CActiveRecord
+{
 
-    /*
-     *  NOMBRE DEL MODELO
-     */
-    protected function fijarNombre(): string {
-        return "partida";
+    protected function fijarNombre(): string
+    {
+        return 'partida';
     }
 
-    /*
-     *  ATRIBUTOS
-     */
-    protected function fijarAtributos(): array {
+    protected function fijarAtributos(): array
+    {
+        return ["cod_partida", "mesa", "fecha", "cod_baraja", "nombre_baraja", "jugadores", "crupier"];
+    }
+
+    protected function fijarDescripciones(): array
+    {
         return [
-            "cod_partida",
-            "mesa",
-            "fecha",
-            "cod_baraja",
-            "nombre_baraja",
-            "jugadores",
-            "crupier"
+            "cod_partida" => "Parti-Código Partida",
+            "mesa" => "Parti-Número mesa",
+            "fecha" => "Parti-Fecha",
+            "cod_baraja" => "Parti-Código Baraja",
+            "nombre_baraja" => "Parti-Nombre Baraja",
+            "jugadores" => "Parti-Número jugadores",
+            "crupier" => "Parti-Nombre crupier"
         ];
     }
 
-  
-
-    /*
-     *  DESCRIPCIONES (todas empiezan por "Parti-")
-     */
-    protected function fijarDescripciones(): array {
+    protected function fijarRestricciones(): array
+    {
         return [
-            "cod_partida"   => "Parti-Código de partida",
-            "mesa"          => "Parti-Mesa",
-            "fecha"         => "Parti-Fecha",
-            "cod_baraja"    => "Parti-Código de baraja",
-            "nombre_baraja" => "Parti-Nombre de la baraja",
-            "jugadores"     => "Parti-Jugadores",
-            "crupier"       => "Parti-Crupier"
-        ];
-    }
-
-    /*
-     *  RESTRICCIONES
-     */
-    protected function fijarRestricciones(): array {
-
-        return [
-
-            // Obligatorios
             [
                 "ATRI" => "cod_partida,cod_baraja",
                 "TIPO" => "REQUERIDO"
             ],
-
-            // cod_partida entero y mayor de 20
             [
                 "ATRI" => "cod_partida",
                 "TIPO" => "ENTERO",
-                "MIN"  => 21
+                "MIN" => 21
             ],
-
-            // mesa entre 1 y 20
             [
                 "ATRI" => "mesa",
                 "TIPO" => "ENTERO",
-                "MIN"  => 1,
-                "MAX"  => 20
+                "MIN" => 1,
+                "MAX" => 20,
+                "DEFECTO" => 1
             ],
-
-            // fecha no anterior a hoy
             [
                 "ATRI" => "fecha",
                 "TIPO" => "FECHA",
-                "FECHA_MIN" => date("Y-m-d")
             ],
-
-            // cod_baraja debe ser válido según Listas
+            [
+                "ATRI" => "fecha",
+                "TIPO" => "FUNCION",
+                "FUNCION" => "validaFecha"
+            ],
+            [
+                "ATRI" => "cod_baraja",
+                "TIPO" => "ENTERO"
+            ],
             [
                 "ATRI" => "cod_baraja",
                 "TIPO" => "FUNCION",
-                "FUNCION" => "validarCodigoBaraja"
+                "FUNCION" => "validaBaraja"
             ],
-
-            // nombre_baraja cadena 30
             [
                 "ATRI" => "nombre_baraja",
                 "TIPO" => "CADENA",
-                "TAMANIO" => 30
+                "TAMANIO" => 30,
             ],
-
-            // jugadores depende del tipo de baraja
+            [
+                "ATRI" => "jugadores",
+                "TIPO" => "ENTERO",
+            ],
             [
                 "ATRI" => "jugadores",
                 "TIPO" => "FUNCION",
-                "FUNCION" => "validarJugadores"
+                "FUNCION" => "validaJugadores"
             ],
-
-            // crupier cadena 30
             [
                 "ATRI" => "crupier",
                 "TIPO" => "CADENA",
                 "TAMANIO" => 30
             ],
-
-            // crupier debe empezar por Cru-
             [
                 "ATRI" => "crupier",
-                "TIPO" => "PATRON",
-                "PATRON" => "/^Cru-.+/"
+                "TIPO" => "FUNCION",
+                "FUNCION" => "validaCrupier"
             ]
         ];
     }
 
-    /*
-     *  VALIDACIÓN cod_baraja
-     */
-    protected function validarCodigoBaraja() {
+    // Valida que la fehca sea valida 
+    public function validaFecha(): bool
+    {
+        $campo = "fecha";
 
-        $lista = Listas::listaTiposBarajas(true);
-
-        if (!isset($lista[$this->cod_baraja])) {
-            $this->setError("cod_baraja", "El código de baraja no es válido.");
-            return;
+        // Comprobar que viene algo
+        if (empty($this->$campo)) {
+            $this->setError($campo, "La fecha es obligatoria");
+            return false;
         }
 
-        // Actualizar nombre_baraja automáticamente
-        $this->nombre_baraja = $lista[$this->cod_baraja]["nombre"];
+        // Si viene en formato HTML5 (YYYY-MM-DD), convertirlo a dd/mm/YYYY
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->$campo)) {
+            $this->$campo = date("d/m/Y", strtotime($this->$campo));
+        }
+
+        // Intentar crear la fecha en formato dd/mm/YYYY
+        $fecha = DateTime::createFromFormat('d/m/Y', $this->$campo);
+
+        if ($fecha === false) {
+            $this->setError($campo, "La fecha no tiene un formato válido (dd/mm/yyyy)");
+            return false;
+        }
+
+        // Fecha mínima
+        $hoy = new DateTime("today");
+
+        if ($fecha < $hoy) {
+            $this->setError($campo, "La fecha no puede ser anterior a hoy");
+            return false;
+        }
+
+        return true;
     }
+
+
+    public function validaBaraja()
+    {
+        if (Listas::listaTiposBarajas(false, $this->cod_baraja) === false)
+            $this->setError("cod_baraja", "Código de baraja debe estar entre las barajas");
+    }
+
+    public function validaJugadores()
+    {
+        $array = Listas::listaTiposBarajas(true, $this->cod_baraja);
+        if ($this->jugadores < $array["min_juga"] || $this->jugadores > $array["max_juga"])
+            $this->setError("jugadores", "Número de jugadores no permitido");
+    }
+
+    public function validaCrupier()
+    {
+        $sub = mb_substr($this->crupier, 0, 4);
+        if ($sub !== "Cru-")
+            $this->setError("crupier", "El nombre de crupier debe empezar por Cru-");
+    }
+
+    public function afterCreate(): void
+    {
+        $this->cod_partida = 0;
+        $this->jugadores = 0;
+        $this->cod_baraja = array_keys(Listas::listaTiposBarajas(true))[floor(count(array_keys(Listas::listaTiposBarajas(true))) / 2)];
+        $this->nombre_baraja = Listas::listaTiposBarajas(false, $this->cod_baraja);
+        $this->fecha = date("Y/m/d", strtotime("+1 day"));
+    }
+
+
     /**
-     * VALIDAR FECHA
-     *
-     * @return void
+     * VALIDAR
      */
-    public function validaFecha() {
-        $hoy = date("Y-m-d");
-        if($this->fecha<$hoy)
-             $this->setError("fecha", "La fecha debe ser igual o mayor a hoy");
-    }
-    /*
-     *  VALIDACIÓN jugadores según min/max del tipo de baraja
-     */
-    protected function validarJugadores() {
 
-        $lista = Listas::listaTiposBarajas(true);
+    //Función que valida contraseña
+    public function validaPassword(): bool
+    {
+        $campo = "password";
 
-        if (!isset($lista[$this->cod_baraja])) {
-            return; // ya lo valida validarCodigoBaraja
+        if (empty($this->$campo)) {
+            $this->setError($campo, "La contraseña es obligatoria");
+            return false;
         }
 
-        $min = $lista[$this->cod_baraja]["min_juga"];
-        $max = $lista[$this->cod_baraja]["max_juga"];
+        $pass = $this->$campo;
 
-        if ($this->jugadores < $min || $this->jugadores > $max) {
-            $this->setError("jugadores", "El número de jugadores debe estar entre $min y $max.");
+        if (strlen($pass) < 8) {
+            $this->setError($campo, "Debe tener al menos 8 caracteres");
+            return false;
         }
+
+        if (!preg_match('/[A-Z]/', $pass)) {
+            $this->setError($campo, "Debe contener al menos una mayúscula");
+            return false;
+        }
+
+        if (!preg_match('/[a-z]/', $pass)) {
+            $this->setError($campo, "Debe contener al menos una minúscula");
+            return false;
+        }
+
+        if (!preg_match('/[0-9]/', $pass)) {
+            $this->setError($campo, "Debe contener al menos un número");
+            return false;
+        }
+
+        return true;
     }
 
-    /*
-     *  VALORES POR DEFECTO (afterCreate)
-     *  Deben asignarse inicialmente los valores por defecto cuando se cree un  objeto de este modelo.
-     */
-    protected function afterCreate(): void {
+    //Función que válida Email
+    public function validaEmail(): bool
+    {
+        $campo = "email";
 
-    $lista = Listas::listaTiposBarajas(true);
-    $codigos = array_keys($lista);
+        if (empty($this->$campo)) {
+            $this->setError($campo, "El email es obligatorio");
+            return false;
+        }
 
-    $cod_defecto = $codigos[floor(count($codigos) / 2)];
-    $nombre_defecto = $lista[$cod_defecto]["nombre"];
-    $jug_min = $lista[$cod_defecto]["min_juga"];
+        if (!filter_var($this->$campo, FILTER_VALIDATE_EMAIL)) {
+            $this->setError($campo, "El email no tiene un formato válido");
+            return false;
+        }
 
-    if ($this->mesa === null) {
-        $this->mesa = 1;
+        return true;
     }
 
-    if ($this->fecha === null) {
-        $this->fecha = date("Y-m-d", strtotime("+1 day"));
+    //Funciión que valida URL
+    public function validaURL(): bool
+    {
+        $campo = "url";
+
+        if (empty($this->$campo)) {
+            $this->setError($campo, "La URL es obligatoria");
+            return false;
+        }
+
+        if (!filter_var($this->$campo, FILTER_VALIDATE_URL)) {
+            $this->setError($campo, "La URL no es válida");
+            return false;
+        }
+
+        return true;
     }
 
-    if ($this->cod_baraja === null) {
-        $this->cod_baraja = $cod_defecto;
+    //Valida NSS
+    public function validaNSS(): bool
+    {
+        $campo = "nss";
+
+        if (empty($this->$campo)) {
+            $this->setError($campo, "El NSS es obligatorio");
+            return false;
+        }
+
+        if (!preg_match('/^\d{12}$/', $this->$campo)) {
+            $this->setError($campo, "El NSS debe tener 12 dígitos");
+            return false;
+        }
+
+        return true;
     }
 
-    if ($this->nombre_baraja === null) {
-        $this->nombre_baraja = $nombre_defecto;
+    //Válida DNI
+    public function validaDNI(): bool
+    {
+        $campo = "dni";
+
+        if (!preg_match('/^\d{8}[A-Za-z]$/', $this->$campo)) {
+            $this->setError($campo, "El DNI debe tener 8 números y una letra");
+            return false;
+        }
+
+        $numero = substr($this->$campo, 0, 8);
+        $letra  = strtoupper(substr($this->$campo, -1));
+        $letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+
+        if ($letras[$numero % 23] !== $letra) {
+            $this->setError($campo, "La letra del DNI no es correcta");
+            return false;
+        }
+
+        return true;
     }
 
-    if ($this->jugadores === null) {
-        $this->jugadores = $jug_min;
+    //Valida TLF
+    public function validaTelefono(): bool
+    {
+        $campo = "telefono";
+
+        if (!preg_match('/^[6-9]\d{8}$/', $this->$campo)) {
+            $this->setError($campo, "El teléfono debe tener 9 dígitos y empezar por 6, 7, 8 o 9");
+            return false;
+        }
+
+        return true;
     }
 
-    if ($this->crupier === null) {
-        $this->crupier = "Cru-Juan";
-    }
-}
+    //Valida IBAN
+    public function validaIBAN(): bool
+    {
+        $campo = "iban";
 
+        if (!preg_match('/^ES\d{22}$/', $this->$campo)) {
+            $this->setError($campo, "El IBAN debe empezar por ES y tener 24 caracteres");
+            return false;
+        }
+
+        return true;
+    }
+
+    //Valida Nombre
+    public function validaNombre(): bool
+    {
+        $campo = "nombre";
+
+        if (!preg_match('/^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/', $this->$campo)) {
+            $this->setError($campo, "El nombre solo puede contener letras y espacios");
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -11,20 +11,8 @@ echo CHTML::dibujaEtiqueta(
     CHTML::dibujaEtiqueta("p", [], "Baraja: " . ($p->nombre_baraja ?? "Desconocida")) .
     CHTML::dibujaEtiqueta("p", [], "Jugadores: " . $p->jugadores) .
     CHTML::dibujaEtiqueta("p", [], "Crupier: " . $p->crupier) .
-
-    // Enlace DESCARGAR
-    CHTML::dibujaEtiqueta(
-        "p",
-        [],
-        CHTML::dibujaEtiqueta(
-            "a",
-            [
-                "href" => Sistema::app()->generaURL(
-                    ["partida", "descargar"],
-                    ["id" => $p->cod_partida]
-                )
-            ],
-            "DESCARGAR"
-        )
+    CHTML::link(
+            "Descargar",
+            Sistema::app()->generaURL(["Partida", "descargar"], ["id" => $p->cod_partida])
     )
 );

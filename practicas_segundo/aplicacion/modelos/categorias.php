@@ -56,7 +56,7 @@ class Categorias extends CActiveRecord {
     }
 
     /* 
-     *   VALORES POR DEFECTO
+     *   
      */
     protected function afterCreate(): void {
         $this->cod_categoria = 0;
