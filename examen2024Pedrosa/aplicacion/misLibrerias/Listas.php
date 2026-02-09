@@ -1,7 +1,6 @@
 <?php 
 class Listas {
-
-    //? para el tema de los null
+    // ? para el tema de los null
     public static function listaTiposBarajas(bool $completo = false, ?int $cod_baraja = null) {
 
         //array interno 
@@ -36,8 +35,6 @@ class Listas {
              } 
              
              return $resultado; 
-        
-
     }
 
 }
