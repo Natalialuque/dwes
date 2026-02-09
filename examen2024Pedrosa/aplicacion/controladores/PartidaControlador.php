@@ -1,5 +1,5 @@
 <?php
-class PartidaControlador extends CControlador
+class partidaControlador extends CControlador
 {
     public array $menuizq = [];
     public array $partidas = [];
@@ -22,52 +22,104 @@ class PartidaControlador extends CControlador
         $this->calcularPartidasHoy();
     }
 
- public function accionIndex()
+    public function accionIndex()
 {
     $this->menuizq = [
-        ["texto" => "Inicio", "enlace" => ["partida"]]
+        ["texto" => "Inicio", "enlace" => ["partida"]],
     ];
 
     $this->dibujaVista(
         "index",
         [
-            "partidas" => $this->partidas,
             "N_Partidas" => $this->N_Partidas,
-            "N_PartidasHoy" => $this->N_PartidasHoy
+            "N_PartidasHoy" => $this->N_PartidasHoy,
+            "partidas" => $this->partidas
         ],
         "Listado de Partidas"
     );
 }
 
 
-   private function inicializarPartidas()
-{
-    $this->partidas = [];
+    // LOGIN
+    // public function accionLogin()
+    // {
+    //     // Debe haber 1 o más partidas HOY
+    //     if ($this->N_PartidasHoy < 1) {
+    //         Sistema::app()->paginaError(400, "No puedes hacer login: no hay partidas previstas para hoy.");
+    //         return;
+    //     }
 
-    $codigos = [5, 6, 7];
+    //     // Registrar usuario
+    //     $_SESSION["usuario"] = [
+    //         "nick" => "RaulPerez",
+    //         "permisos" => [2, 4, 6]
+    //     ];
 
-    for ($i = 1; $i <= 4; $i++) {
+    //     $this->dibujaVista("login", [], "Login correcto");
+    // }
 
-        $p = new Partida();
+    // // LOGOUT
+    // public function accionLogout()
+    // {
+    //     // Debe haber usuario registrado
+    //     if (!isset($_SESSION["usuario"])) {
+    //         Sistema::app()->paginaError(400, "No puedes hacer logout: no hay usuario registrado.");
+    //         return;
+    //     }
 
-        $p->cod_partida = $i;
-        $p->mesa = $i + 1;
-        $p->fecha = date("Y-m-d", strtotime("+$i day"));
-        $p->cod_baraja = $codigos[$i - 1];
-        $p->jugadores = 4;
-        $p->crupier = "Cru-Init$i";
-        $p->nombre_baraja = ""; // según enunciado
+    //     // Debe haber 2 o más partidas (da igual el día)
+    //     if ($this->N_Partidas < 2) {
+    //         Sistema::app()->paginaError(400, "No puedes hacer logout: no hay suficientes partidas.");
+    //         return;
+    //     }
 
-        $this->partidas[$i] = $p;
+    //     unset($_SESSION["usuario"]);
+
+    //     $this->dibujaVista("logout", [], "Logout correcto");
+    // }
+
+    // INICIALIZAR PARTIDAS
+    private function inicializarPartidas()
+    {
+        $this->partidas = [];
+
+        // Lista completa de barajas
+        $lista = listas::listaTiposBarajas();
+        $codigos = array_keys($lista);
+
+        for ($i = 1; $i <= 3; $i++) {
+
+            $p = new partida();
+
+            // Código de baraja válido
+            $codBaraja = $codigos[$i - 1];
+
+            // AQUÍ ESTÁ LA CLAVE: obtener datos completos
+            $datosBaraja = listas::listaTiposBarajas(true, $codBaraja);
+            $nombreBaraja = $datosBaraja["nombre"];
+
+            $p->setValores([
+                "cod_partida" => $i,
+                "mesa" => $i + 1,
+                "fecha" => date("d/m/Y", strtotime("+" . ($i - 1) . " day")),
+                "cod_baraja" => $codBaraja,
+                "nombre_baraja" => $nombreBaraja,
+                "jugadores" => 4,
+                "crupier" => "Cru-Init$i"
+            ]);
+
+            $p->guardar();
+
+            $this->partidas[$i] = $p;
+        }
+
+        $_SESSION["Partidas"] = $this->partidas;
     }
 
-    $_SESSION["Partidas"] = $this->partidas;
-    $this->N_Partidas = count($this->partidas);
-}
 
     private function calcularPartidasHoy()
     {
-        $hoy = date("Y-m-d");
+        $hoy = date("d/m/Y");
         $this->N_PartidasHoy = 0;
 
         foreach ($this->partidas as $p) {
