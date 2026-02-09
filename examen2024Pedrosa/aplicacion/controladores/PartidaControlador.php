@@ -1,5 +1,5 @@
 <?php
-class partidaControlador extends CControlador
+class PartidaControlador extends CControlador
 {
     public array $menuizq = [];
     public array $partidas = [];
@@ -28,17 +28,14 @@ class partidaControlador extends CControlador
         ["texto" => "Inicio", "enlace" => ["partida"]],
     ];
 
-    $this->dibujaVista(
-        "index",
-        [
-            "N_Partidas" => $this->N_Partidas,
-            "N_PartidasHoy" => $this->N_PartidasHoy,
-            "partidas" => $this->partidas
-        ],
-        "Listado de Partidas"
-    );
-}
+   // $this->dibujaVista("index", [], "Listado de Partidas");
 
+    $this->accionVer();
+    $this->accionNueva();
+    $this->accionDescarga();
+
+   
+}
 
     // LOGIN
      public function accionLogin()
@@ -55,7 +52,9 @@ class partidaControlador extends CControlador
             "permisos" => [2, 4, 6]
         ];
 
-         $this->dibujaVista("login", [], "Login correcto");
+         //$this->dibujaVista("login", [], "Login correcto");
+        Sistema::app()->irAPagina("index",[],"partida");
+
      }
 
     // // LOGOUT
@@ -75,8 +74,9 @@ class partidaControlador extends CControlador
 
          unset($_SESSION["usuario"]);
 
-        $this->dibujaVista("logout", [], "Logout correcto");
-     }
+       // $this->dibujaVista("logout", [], "Logout correcto");
+         Sistema::app()->irAPagina("index",[],"partida");
+    }
 
     // INICIALIZAR PARTIDAS
     private function inicializarPartidas()
@@ -132,5 +132,61 @@ class partidaControlador extends CControlador
                 $this->N_PartidasHoy++;
             }
         }
+    }
+
+    /**
+     * CREAR EL ACCIONVER
+     */
+   public function accionVer()
+{
+    // menú lateral
+    $this->menuizq = [
+        ["texto" => "Inicio",
+         "enlace" => ["partida"]]
+    ];
+
+    // obtener crupiers distintos
+    $crupiers = [];
+    foreach ($this->partidas as $p) {
+        $crupiers[$p->crupier] = $p->crupier;
+    }
+
+    // crupier seleccionado (si viene del formulario)
+    $crupierSel = "";
+    $partidasFiltradas = [];
+
+    if (isset($_POST["crupier"])) {
+        $crupierSel = $_POST["crupier"];
+
+        foreach ($this->partidas as $p) {
+            if ($p->crupier === $crupierSel) {
+                $partidasFiltradas[] = $p;
+            }
+        }
+    }
+
+    // mostrar vista
+    $this->dibujaVista(
+        "ver",
+        [
+            "crupiers" => $crupiers,
+            "crupierSel" => $crupierSel,
+            "partidasFiltradas" => $partidasFiltradas
+        ],
+        "Ver partidas"
+    );
+}
+
+/**
+ * accion nueva
+ */
+    public function accionNueva(){
+    }
+
+
+/**
+ * accion nueva
+ */
+    public function accionDescarga(){
     }
 }
