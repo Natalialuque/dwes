@@ -13,7 +13,7 @@ class Listas {
         // Si se indica un código concreto
          if ($cod_baraja !== null) {
              // Si no existe ese código = false 
-             if (!isset($tipos[$cod_baraja])) {
+             if (!isset($tiposBarajas[$cod_baraja])) {
                  return false; 
                 } 
             // Si existe y se pide completo = devolver todo 

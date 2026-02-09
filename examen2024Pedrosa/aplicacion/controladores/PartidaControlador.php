@@ -11,7 +11,7 @@ class partidaControlador extends CControlador
         parent::__construct();
 
         Sistema::app()->sesion()->crearSesion();
-
+        unset($_SESSION["Partidas"]);
         if (isset($_SESSION["Partidas"])) {
             $this->partidas = $_SESSION["Partidas"];
         } else {
@@ -41,42 +41,42 @@ class partidaControlador extends CControlador
 
 
     // LOGIN
-    // public function accionLogin()
-    // {
-    //     // Debe haber 1 o más partidas HOY
-    //     if ($this->N_PartidasHoy < 1) {
-    //         Sistema::app()->paginaError(400, "No puedes hacer login: no hay partidas previstas para hoy.");
-    //         return;
-    //     }
+     public function accionLogin()
+     {
+         // Debe haber 1 o más partidas HOY
+         if ($this->N_PartidasHoy < 1) {
+             Sistema::app()->paginaError(400, "No puedes hacer login: no hay partidas previstas para hoy.");
+             return;
+         }
 
-    //     // Registrar usuario
-    //     $_SESSION["usuario"] = [
-    //         "nick" => "RaulPerez",
-    //         "permisos" => [2, 4, 6]
-    //     ];
+         // Registrar usuario
+         $_SESSION["usuario"] = [
+             "nick" => "Natalia",
+            "permisos" => [2, 4, 6]
+        ];
 
-    //     $this->dibujaVista("login", [], "Login correcto");
-    // }
+         $this->dibujaVista("login", [], "Login correcto");
+     }
 
     // // LOGOUT
-    // public function accionLogout()
-    // {
-    //     // Debe haber usuario registrado
-    //     if (!isset($_SESSION["usuario"])) {
-    //         Sistema::app()->paginaError(400, "No puedes hacer logout: no hay usuario registrado.");
-    //         return;
-    //     }
+     public function accionLogout()
+     {
+         // Debe haber usuario registrado
+         if (!isset($_SESSION["usuario"])) {
+            Sistema::app()->paginaError(400, "No puedes hacer logout: no hay usuario registrado.");
+             return;
+         }
 
-    //     // Debe haber 2 o más partidas (da igual el día)
-    //     if ($this->N_Partidas < 2) {
-    //         Sistema::app()->paginaError(400, "No puedes hacer logout: no hay suficientes partidas.");
-    //         return;
-    //     }
+        // Debe haber 2 o más partidas (da igual el día)
+         if ($this->N_Partidas < 2) {
+             Sistema::app()->paginaError(400, "No puedes hacer logout: no hay suficientes partidas.");
+             return;
+         }
 
-    //     unset($_SESSION["usuario"]);
+         unset($_SESSION["usuario"]);
 
-    //     $this->dibujaVista("logout", [], "Logout correcto");
-    // }
+        $this->dibujaVista("logout", [], "Logout correcto");
+     }
 
     // INICIALIZAR PARTIDAS
     private function inicializarPartidas()
@@ -95,13 +95,18 @@ class partidaControlador extends CControlador
             $codBaraja = $codigos[$i - 1];
 
             // AQUÍ ESTÁ LA CLAVE: obtener datos completos
-            $datosBaraja = listas::listaTiposBarajas(true, $codBaraja);
-            $nombreBaraja = $datosBaraja["nombre"];
+         $datosBaraja = listas::listaTiposBarajas(false, $codBaraja);
+            
+        if ($datosBaraja === false) {
+            $nombreBaraja = "Desconocido";
+        } else {
+            $nombreBaraja = $datosBaraja;
+        }
 
             $p->setValores([
                 "cod_partida" => $i,
                 "mesa" => $i + 1,
-                "fecha" => date("d/m/Y", strtotime("+" . ($i - 1) . " day")),
+                "fecha" => date("Y-m-d", strtotime("+" . ($i - 1) . " day")),
                 "cod_baraja" => $codBaraja,
                 "nombre_baraja" => $nombreBaraja,
                 "jugadores" => 4,
@@ -119,7 +124,7 @@ class partidaControlador extends CControlador
 
     private function calcularPartidasHoy()
     {
-        $hoy = date("d/m/Y");
+        $hoy = date("Y-m-d");
         $this->N_PartidasHoy = 0;
 
         foreach ($this->partidas as $p) {

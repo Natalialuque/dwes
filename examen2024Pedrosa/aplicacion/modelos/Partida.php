@@ -24,14 +24,7 @@ class Partida extends CActiveRecord {
         ];
     }
 
-    /**
-     * FIJAR ID
-     *
-     */
-    //  protected function fijarId(): string
-    // {
-    //     return "cod_partida";
-    // }
+  
 
     /*
      *  DESCRIPCIONES (todas empiezan por "Parti-")
@@ -135,7 +128,16 @@ class Partida extends CActiveRecord {
         // Actualizar nombre_baraja automáticamente
         $this->nombre_baraja = $lista[$this->cod_baraja]["nombre"];
     }
-
+    /**
+     * VALIDAR FECHA
+     *
+     * @return void
+     */
+    public function validaFecha() {
+        $hoy = date("Y-m-d");
+        if($this->fecha<$hoy)
+             $this->setError("fecha", "La fecha debe ser igual o mayor a hoy");
+    }
     /*
      *  VALIDACIÓN jugadores según min/max del tipo de baraja
      */

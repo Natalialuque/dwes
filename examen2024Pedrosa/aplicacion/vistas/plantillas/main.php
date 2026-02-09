@@ -26,9 +26,76 @@
 				<a href="/index.php">
 					<h1>PROYECTO FRAMEWORK PEDROSA</h1>
 				</a>
-			</div>
+
+
+	<div class="sesion">
+<?php
+    // Usuario validado o no
+			$usuario = isset($_SESSION["usuario"])
+				? $_SESSION["usuario"]["nick"]
+				: "Usuario no validado";
+
+			// Enlaces Login / Logout
+			$enlaceLogin = CHTML::link("Login", ["partida", "login"]);
+			$enlaceLogout = CHTML::link("Logout", ["partida", "logout"]);
+
+			$enlaces = isset($_SESSION["usuario"]) ? $enlaceLogout : $enlaceLogin;
+
+			// Mensaje flash
+			$mensaje = "";
+			if (isset($_SESSION["mensaje"])) {
+				$mensaje = " | Mensaje: " . $_SESSION["mensaje"];
+				unset($_SESSION["mensaje"]);
+			}
+
+			echo CHTML::dibujaEtiqueta(
+				"div",
+				[
+					"style" =>
+					"background-color:green;
+                     color:yellow;
+                     padding:10px;
+                     font-weight:bold;
+                     text-align:center;
+                     margin-top:10px;"
+				],
+				"Partidas: " . $this->N_Partidas .
+					" | Partidas hoy: " . $this->N_PartidasHoy .
+					" | Usuario: " . $usuario .
+					" | " . $enlaces .
+					$mensaje
+			);
+
+			?>
+
+</div>
+
+
+	</div>
+	
 
 		</header><!-- #header -->
+		<?php
+        if (isset($this->barraUbi)) {
+            echo CHTML::dibujaEtiqueta("nav", ["class" => "barraModdle"], null, false);
+
+            $total = count($this->barraUbi);
+            $i = 0;
+
+            foreach ($this->barraUbi as $valor) {
+                $i++;
+
+                if ($i < $total) {
+                    echo CHTML::link($valor["texto"], $valor["enlace"], []);
+                    echo CHTML::dibujaEtiqueta("label", [], "&raquo;", true);
+                } else {
+                    echo CHTML::dibujaEtiqueta("label", [], $valor["texto"], true);
+                }
+            }
+
+            echo CHTML::dibujaEtiquetaCierre("nav");
+        }
+        ?>
 
 		<div class="contenido">
 			<aside>
@@ -55,7 +122,7 @@
 					?>
 				</ul>
 			</aside>
-
+	
 			<article>
 				<?php echo $contenido; ?>
 			</article><!-- #content -->
