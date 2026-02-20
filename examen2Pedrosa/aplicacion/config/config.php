@@ -1,7 +1,7 @@
 <?php
 
-	$config=array("CONTROLADOR"=> array("inicial"),
-				  "RUTAS_INCLUDE"=>array("aplicacion/modelos","aplicacion/auxiliares"),
+	$config=array("CONTROLADOR"=> array("pueblo"),
+				  "RUTAS_INCLUDE"=>array("aplicacion/modelos","aplicacion/auxiliares","aplicacion/otros_elementos"),
 				  "URL_AMIGABLES"=>true,
 				  "VARIABLES"=>array("autor"=>"Vicente Tejero",
 				  					"direccion"=>" C/ Carrera - 12",
