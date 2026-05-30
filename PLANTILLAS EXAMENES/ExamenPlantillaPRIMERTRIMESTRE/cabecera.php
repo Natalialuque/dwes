@@ -12,7 +12,7 @@ if (MODO_TRABAJO == "produccion")
 //este metodo es para añadir 
 spl_autoload_register(function ($clase) {
     $ruta = RUTABASE . "/scripts/clases/";
-    $rutaExamen = RUTABASE . "/scripts/diciembre/"; //para poder añadir lo de proyecto y demas
+    $rutaExamen = RUTABASE . "/scripts/.../"; //para poder añadir lo de proyecto y demas
 
     $fichero = $ruta . "$clase.php";
     $ficheroExamen = $rutaExamen . "$clase.php";
@@ -38,9 +38,13 @@ mysqli_report(MYSQLI_REPORT_ERROR);
 
 session_start(); // activa o continúa la sesión
 
+//para cargar el las clases
+$aclArray = new ACLArray();
+$acceso = new Acceso();
 
 //Aqui es donde creamos el array cargado, METER NOMBRE
 if (!isset($_SESSION[""])) {
+
 
 
 }
@@ -48,8 +52,5 @@ if (!isset($_SESSION[""])) {
 
 
 // Recuperar siempre el array desde sesión CAMBIAR NOMBRES
-//$COL = &$_SESSION[""];
+$COL = &$_SESSION[""];
 
-//
-$aclArray = new ACLArray();
-$acceso = new Acceso();

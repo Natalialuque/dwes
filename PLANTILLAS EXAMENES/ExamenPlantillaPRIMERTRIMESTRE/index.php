@@ -3,7 +3,7 @@
 <?php
 include_once(dirname(__FILE__) . "/cabecera.php");
 //controlador
-
+/**CAMBIAR POR LO QUE TOQUE */
 $COL = $_SESSION["COL"] ?? [];
 
 //barra de ubicacion 
@@ -13,70 +13,40 @@ $COL = $_SESSION["COL"] ?? [];
  ];
 
  /*
-  * login
+  * Para e boton de logeo, donde hacemos todas las cosas 
   */
  if (isset($_POST["usuario"])) { //intento de inicio de sesión
-    $vecesInicio = 0;
-    if (isset($_COOKIE["contador"])) {
-        $vecesInicio = $_COOKIE["contador"];
-    }
-
-    $vecesInicio += 2;
-    setcookie("contador", $vecesInicio, time() + 60 * 60);
-
-
-    if ($vecesInicio % 3 == 0) {
-        inicioSesion("MULTIPLO", "MULTIPLO", $acceso, $aclArray);
-    }
+    
  }
 
 
  /**
-  * para hacer la carga
+  * para hacer la carga de un fichero
   */
   if (isset($_POST["cargaFichero"])) {
-     $objetosCargados = [];
-    cargarProyectosDesdeFichero("coleccion.txt", $objetosCargados); //cargamos los objetos nuevos
-
-    foreach ($objetosCargados as $objeto) { //los añadimos al array global
-        array_push($COL, $objeto);
-    }
-     $_SESSION["COL"] = $COL;
+    
  }
 
 
 /**
- * modificar
+ * para modificar 
  */
  if (isset($_POST["modificar"])) {
-     $id = $_POST["ColecionesDisponibles"];
-     $_SESSION["COL"] = $COL; // asegurar que está en sesión
-
-     if ($id === "noExiste" || !isset($COL[$id])) {
-         paginaError("La coleccion seleccionada no existe");
-       exit;
-     }
-     // Redirigir a la clase modificar.php con el id de la coleciones
-     header("Location: aplicacion/colecciones/modificar.php?id=" . $id);
-     exit;
+     
  }
 
 
 /**
- * enviar 
+ * para enviar  
  */
 if (isset($_POST["exportar"])) {
-    $id = $_POST["ColecionesDisponibles"];
-    $_SESSION["COL"] = $COL;
-
-    if ($id === "noExiste" || !isset($COL[$id])) {
-        paginaError("La coleccion seleccionado no existe");
-        exit;
-    }
-    header("Location: aplicacion/colecciones/enviar.php?id=" . $id);
-    exit;
+    
 }
 
+
+/**
+ * para tener uno nuevo
+ */
 
 //destruccion de sesion
 if (isset($_POST["salir"])) {
@@ -90,7 +60,7 @@ inicioCabecera("APLICACION PRIMER TRIMESTRE");
 cabecera();
 finCabecera();
 inicioCuerpo("2DAW APLICACION");
-cuerpo($COL,$acceso);  //llamo a la vista
+cuerpo($COL,$acceso);  //llamo a la vista CAMBIAR VARIABLESSSS
 finCuerpo();
 // **********************************************************
 
@@ -98,7 +68,8 @@ finCuerpo();
 function cabecera() 
 {}
 
-//vista
+//vista donde metemos todas las funciones declaradas abajo para que funcionen 
+//CAMBIAR VARIABLES 
 function cuerpo(array $COL,object $acceso)
 {
 //inicio login 
@@ -194,75 +165,18 @@ function cargaDesdeFichero()
 }
 
 /**
- * funcion que carga los coleciones desde ficheros 
+ *Funcion para cargar la clase de ficheros 
  */
 
 function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
 {
-    $ruta = RUTABASE . "/ficheros/";
-    if (!file_exists($ruta)) {
-        mkdir($ruta);
-    }
-
-    $ruta .= $nombreFichero;
-    $fic = fopen($ruta, "r");
-    if (!$fic) return false;
-
-    // Vaciar el array recibido
-    $datos = [];
-
-    while ($linea = fgets($fic)) {
-        // Limpieza de saltos de línea
-        $linea = str_replace(["\r", "\n"], "", $linea);
-
-        if ($linea != "") {
-            // Separar datos del colecciones
-            $linea = mb_split("COLECCIONES=", $linea);
-            $linea = preg_split("/;/", $linea[1]);
-
-            $nombre = ""; 
-            $fecha = ""; 
-            $tematica = 10;
-            $tematicaDescripcion="";
-
-            foreach ($linea as $value) {
-                $col = mb_split(":", $value);
-                if ($col[0] == "nombre") $nombre = $col[1];
-                if ($col[0] == "fecha") $fecha = $col[1];
-                if ($col[0] == "tematica") $tematica = $col[1];
-                if ($col[0] == "tematicaDescripcion") $tematicaDescripcion = $col[1];
-            }
-
-            // Intentar crear la coleecion
-            try {
-                $objeto = new Coleccion($nombre,$fecha, $tematica, $tematicaDescripcion);
-            } catch (Exception $e) {
-                echo "No todos las colecciones han podido ser cargadas<br>";
-                $objeto = null; // marcar como no válido
-            }
-
-            // Solo si el objeto se creó correctamente
-            if (isset($objeto)) {
-                // Cargar coleciones adicionales si las hay
-                for ($i = 5; $i < count($linea); $i += 2) {
-                    $totalColleciones = 0;
-                    $objeto->aniadelirbo($linea[$i], $linea[$i + 1], $totalColleciones);
-                }
-
-                // Guardar el objeto en el array
-                $datos[] = $objeto;
-            }
-        }
-    }
-
-    fclose($fic);
-    return true;
+ return false;   
 }
 
 
 /**
-* rellena el text area directamente con la coleccion 
-*
+* Funcion para mostrar colecciones que se encarga de rellenar el text area directamente con la coleccion 
+*  CAMBIAR NOMBRE DE VARIABLES SUPER SUPER IMPORTANTE!!! 
 * @param array $COL
 * @return void
 */
@@ -285,35 +199,12 @@ function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
     }
 
 
-    /**
-     * FUNCION PARA MOSTRAR, rellena el segundo textArea para mostrar los valores con propieadades
-     *
-     * @param array $coleciones
-     * @return void
-     * 
-     */
-    function mostrarColecionesPropiedades(array $col)
-    {
-    echo '<br><textarea name="" id="" cols="80" rows="15">';
-    
-    foreach ($col as $colecion) {
-        echo "- " . $colecion . "\n";
-
-        $libros = $colecion->dameLibros();
-        if (is_object($libros)) {
-            foreach ($libros as $clave => $valor) {
-                echo "   $clave: $valor\n";
-            }
-        }
-    }
-        echo '</textarea>';
-    }
+   
 
     
     /**
-     * Formulario para modificar o exportar
+     * Formulario para modificar o exportar, es igual TENER EN CUENTA CAMBIAR VARIABLES !!!!!
      *
-     * @param [type] $COL
      * @return void
      * 
      */
