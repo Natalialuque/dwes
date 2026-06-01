@@ -30,6 +30,7 @@ spl_autoload_register(function ($clase) {
         }
 });
 include(RUTABASE . "/aplicacion/plantilla/plantilla.php");
+require_once (RUTABASE ."/librerias/validacion.php");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

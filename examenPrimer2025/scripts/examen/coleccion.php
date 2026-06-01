@@ -17,7 +17,8 @@ class coleccion {
     protected int $_tematica = 10;
     protected string $_tematicaDescripcion;
 
-    
+    //propiedad privada para dar soporte de libros 
+    private array $_libros = [];
 
     /**
      * Constructor 
@@ -42,6 +43,8 @@ class coleccion {
             $this->_tematica = 10;
         }
 
+        //!!!inicializar array libros 
+        $this->_libros=[];
 
     }
     
@@ -96,7 +99,7 @@ class coleccion {
         //si la fecha es mayor a hoy ni anterior a hoy menos 4 años 
         $fecha = new DateTime($fechaAlta);
         $hoy = new DateTime();
-        $min = new DateTime()->modify("-4 year");
+        $min = (new DateTime())->modify("-4 year");
         if($fecha>$hoy || $fecha<$min){ 
             return -10;
         }
@@ -146,6 +149,26 @@ class coleccion {
         return "coleccion".$this->_nombre.
                 "añadida el".$this->_fechaAlta. 
                 "de tematica".$this->_tematicaDescripcion;
+    }
+
+
+    /**
+     * Meto para añadir Libros 
+     */
+    public function aniadirLibro (libro $libro):void{
+        $this->_libros[] = $libro;
+
+    }
+
+    /**
+     * Metodo para dameLibros
+     */
+    public function dameLibros():array{
+        $res = [];
+        for($i=0;$i<count($this->_libros); $i++) {
+            $res["libro".$i]=$this->_libros[$i];
+        }
+        return $res;
     }
 
 }
