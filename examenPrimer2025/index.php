@@ -15,9 +15,30 @@ $COL = $_SESSION["COL"] ?? [];
  /*
   * Para e boton de logeo, donde hacemos todas las cosas 
   */
- if (isset($_POST["usuario"])) { //intento de inicio de sesión
+// Inicializar cookie si no existe
+if (!isset($_COOKIE["contador"])) {
+    setcookie("contador", 1, time() + 3600);
+    $_COOKIE["contador"] = 1; // para usarla en este mismo request
+}
+
+if (isset($_POST["usuario"])) { //intento de inicio de sesión
     
+    $vecesInicio = $_COOKIE["contador"]+2;
+    setcookie("contador", $vecesInicio, time() + 3600);
+    $_COOKIE["contrador"]=$vecesInicio;
+
+
+    if ($vecesInicio % 3 == 0) {
+        $acceso->registrarUsuario("MULTIPLO","MULTIPLO",[1]);
+    }
+
  }
+
+//destruccion de sesion
+if (isset($_POST["salir"])) {
+    $acceso->quitarRegistroUsuario();
+    session_destroy();
+}
 
 
  /**
@@ -47,12 +68,11 @@ if (isset($_POST["exportar"])) {
 /**
  * para tener uno nuevo
  */
+if(isset($_POST["nuevo"])){
 
-//destruccion de sesion
-if (isset($_POST["salir"])) {
-    $acceso->quitarRegistroUsuario();
-    session_destroy();
 }
+
+
 
 
 //dibuja la plantilla de la vista
@@ -132,21 +152,21 @@ function formularioLogin(object $acceso)
     * @param string $user
     * @param string $pass
     * @return void
-    */
-    function inicioSesion(string $user, string $pass, object $acceso, object $acl)
-    {
+    *
+    *function inicioSesion(string $user, string $pass, object $acceso, object $acl)
+    *{
 
-        if ($acl->esValido($user, $pass)) {
-            $users = $acl->dameUsuarios();
-            foreach ($users as $clave => $nick) {
-                if ($nick == strtolower($user)) {
-                    $permisos = $acl->getPermisos($clave);
-                    $nombre = $acl->getNombre($clave);
-                    $acceso->registrarUsuario($nick, $nombre, $permisos);
-                }
-            }
-        }
-    }
+    *    if ($acl->esValido($user, $pass)) {
+    *        $users = $acl->dameUsuarios();
+    *        foreach ($users as $clave => $nick) {
+    *            if ($nick == strtolower($user)) {
+    *                $permisos = $acl->getPermisos($clave);
+    *                $nombre = $acl->getNombre($clave);
+    *                $acceso->registrarUsuario($nick, $nombre, $permisos);
+    *            }
+    *        }
+    *    }
+   * }*/
 
 /**
  * Boton carga fichero

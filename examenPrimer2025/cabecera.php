@@ -76,7 +76,6 @@ $_SESSION["COL"]=$colecciones;
 
 }
 
-
 // Recuperar siempre el array desde sesión CAMBIAR NOMBRES
 $COL = $_SESSION["COL"];
 
