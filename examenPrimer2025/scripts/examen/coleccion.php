@@ -146,9 +146,9 @@ class coleccion {
      * Metodo toString
      */
     public function __toString(){
-        return "coleccion".$this->_nombre.
-                "añadida el".$this->_fechaAlta. 
-                "de tematica".$this->_tematicaDescripcion;
+        return "coleccion ".$this->_nombre.
+                " añadida el ".$this->_fechaAlta. 
+                " de tematica ".$this->_tematicaDescripcion;
     }
 
 

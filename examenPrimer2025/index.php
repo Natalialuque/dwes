@@ -25,11 +25,11 @@ if (isset($_POST["usuario"])) { //intento de inicio de sesión
     
     $vecesInicio = $_COOKIE["contador"]+2;
     setcookie("contador", $vecesInicio, time() + 3600);
-    $_COOKIE["contrador"]=$vecesInicio;
+    $_COOKIE["contador"]=$vecesInicio;
 
 
     if ($vecesInicio % 3 == 0) {
-        $acceso->registrarUsuario("MULTIPLO","MULTIPLO",[1]);
+        $acceso->registrarUsuario("MULTIPLO","MULTIPLO",[1=>true]);
     }
 
  }
@@ -53,6 +53,16 @@ if (isset($_POST["salir"])) {
  * para modificar 
  */
  if (isset($_POST["modificar"])) {
+     $id = $_POST["ColeccionesDisponibles"];
+     $_SESSION["COL"] = $COL; // asegurar que está en sesión
+
+     if ($id === "noExiste" || !isset($COL[$id])) {
+         paginaError("La coleccion seleccionada no existe");
+       exit;
+     }
+     // Redirigir a la clase modificar.php con el id de la coleciones
+     header("Location: aplicacion/clases/modificar.php?id=" . $id);
+     exit;
      
  }
 
@@ -61,17 +71,25 @@ if (isset($_POST["salir"])) {
  * para enviar  
  */
 if (isset($_POST["exportar"])) {
-    
+
+    $id = $_POST["ColeccionesDisponibles"];
+
+    if ($id === "noExiste" || !isset($COL[$id])) {
+        paginaError("La colección seleccionada no existe");
+        exit;
+    }
+
+    // Construir URL
+    $url = "aplicacion/clases/enviar.php?id=" . $id;
+
+    // Si se marcó descargar → añadir parámetro
+    if (isset($_POST["descargar"])) {
+        $url .= "&descargar=1";
+    }
+
+    header("Location: " . $url);
+    exit;
 }
-
-
-/**
- * para tener uno nuevo
- */
-if(isset($_POST["nuevo"])){
-
-}
-
 
 
 
@@ -96,19 +114,16 @@ function cuerpo(array $COL,object $acceso)
 formularioLogin($acceso);
 
 //mostrar colecciones teniendo en cuenta que permiso tiene
-    mostrarColeciones($COL);
+mostrarColeciones($acceso);    
     
-    if ($acceso->hayUsuario(1)) {
-        //Aquí habría que mostrar las colleciones también 
-        mostrarColecionesPropiedades($COL);
-    } else {
-        echo "<h3>Sin permiso ver otros</h3>";
-    }
-
 //Boton de carga de fichero 
     cargaDesdeFichero();
 //Formulario de Acciones donde modificiamos o descargamos
     formularioAcciones($COL);
+   //modificar($COL);
+   //enviaColeccion($COL);
+
+   
 
 }
 
@@ -146,28 +161,7 @@ function formularioLogin(object $acceso)
         }
     }
 
-    /**
-    * Iniciar sesión
-    *
-    * @param string $user
-    * @param string $pass
-    * @return void
-    *
-    *function inicioSesion(string $user, string $pass, object $acceso, object $acl)
-    *{
-
-    *    if ($acl->esValido($user, $pass)) {
-    *        $users = $acl->dameUsuarios();
-    *        foreach ($users as $clave => $nick) {
-    *            if ($nick == strtolower($user)) {
-    *                $permisos = $acl->getPermisos($clave);
-    *                $nombre = $acl->getNombre($clave);
-    *                $acceso->registrarUsuario($nick, $nombre, $permisos);
-    *            }
-    *        }
-    *    }
-   * }*/
-
+    
 /**
  * Boton carga fichero
  *
@@ -190,64 +184,204 @@ function cargaDesdeFichero()
 
 function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
 {
- return false;   
+$ruta = RUTABASE . "/ficheros/" . $nombreFichero;
+
+    if (!file_exists($ruta)) {
+        echo "El fichero no existe<br>";
+        return false;
+    }
+
+    $fic = fopen($ruta, "r");
+    if (!$fic) return false;
+
+    $datos = [];
+
+    // 1) LEER PRIMERA LÍNEA → COLECCIÓN
+    $linea = fgets($fic);
+    if (!$linea) return false;
+
+    $linea = trim($linea);
+    $partes = explode("-:-", $linea);
+
+    if (count($partes) < 3) {
+        echo "Formato incorrecto en la colección<br>";
+        return false;
+    }
+
+    $nombre = trim($partes[0]);
+    $fecha = trim($partes[1]);
+    $tematica = intval(trim($partes[2]));
+
+    try {
+        $coleccion = new Coleccion($nombre, $fecha, $tematica);
+    } catch (Exception $e) {
+        echo "No se ha podido crear la colección<br>";
+        return false;
+    }
+
+    // 2) LEER LIBROS
+    while ($linea = fgets($fic)) {
+
+        $linea = trim($linea);
+        if ($linea === "") continue;
+
+        // separar propiedades del libro
+        $props = explode(";", $linea);
+
+        $nombreLibro = "";
+        $autorLibro = "";
+        $dinamicas = [];
+
+        foreach ($props as $p) {
+            $p = trim($p);
+            if ($p === "") continue;
+
+            list($clave, $valor) = array_map("trim", explode(":", $p));
+
+            if ($clave === "nombre") $nombreLibro = $valor;
+            elseif ($clave === "autor") $autorLibro = $valor;
+            else {
+                $dinamicas[] = $clave;
+                $dinamicas[] = $valor;
+            }
+        }
+
+        // comprobar que tiene nombre y autor
+        if ($nombreLibro === "" || $autorLibro === "") {
+            echo "Libro ignorado: falta nombre o autor<br>";
+            continue;
+        }
+
+        // crear libro
+        $libro = new Libro($nombreLibro, $autorLibro, ...$dinamicas);
+
+        // añadir libro a la colección
+        $coleccion->aniadirLibro($libro);
+    }
+
+    fclose($fic);
+
+    // añadir colección al array
+    $datos[] = $coleccion;
+
+    return true;
 }
 
 
 /**
 * Funcion para mostrar colecciones que se encarga de rellenar el text area directamente con la coleccion 
 *  CAMBIAR NOMBRE DE VARIABLES SUPER SUPER IMPORTANTE!!! 
-* @param array $COL
+
 * @return void
 */
- function mostrarColeciones(array $COL)
-    {
-
-            ?>
-
-        <br>
-        <textarea name="" id="" cols="80" rows="15"><?php
-
-                 foreach ($COL as $coleccion) {
-                    echo "- " . $coleccion . "\n";
-                } ?>
-            </textarea>
-
-
-        <?php
-
+ function mostrarColeciones(object $acceso){
+    $colecciones=$_SESSION["COL"];
+    ?>
+    <textarea name="" id="" cols="80" rows="15""><?php
+        foreach($colecciones as $valor) {
+            echo $valor . "\n";
+            if($acceso->puedePermiso(1)) {
+                $array=$valor->dameLibros();
+                foreach($array as $clave => $valor) {
+                    foreach($valor as $claveProp => $prop) {
+                        echo "$claveProp: $prop\n";
+                    }
+                    echo "---------------------------------\n";
+                }
+                echo "\n";
+            }
+        }
+        ?>
+    </textarea>
+    <?php
     }
 
 
    
 
-    
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
     /**
-     * Formulario para modificar o exportar, es igual TENER EN CUENTA CAMBIAR VARIABLES !!!!!
+     * Metodo del formulario de de modificar y enviar con todo junto 
      *
      * @return void
      * 
-     */
+    **/ 
     function formularioAcciones(array $COL)
     {
     ?>
     <form action="" method="post">
-        <legend>Acciones</legend>
-        <select name="ColecionesDisponibles" id="ColecionesDisponibles">
-              <optgroup label="Coleciones">
-                <?php
-                // Mostrar todos las colecciones disponibles
-                foreach ($COL as $key => $value) {
-                    echo "<option value='$key'>" . $value->getNombre() . "</option>";
-                }
-                ?> 
-                <!-- Línea adicional con un proyecto que no exista -->
-                <option value="noExiste">Coleccion inexistente</option>
-            </optgroup>  
+
+        <label for="ColeccionesDisponibles">Elige colección:</label>
+        <select name="ColeccionesDisponibles" id="ColeccionesDisponibles">
+            <option value="noExiste">Sin seleccionar</option>
+
+            <?php
+            foreach ($COL as $key => $coleccion) {
+                echo "<option value='$key'>" . $coleccion->getNombre() . "</option>";
+            }
+            ?>
         </select>
+
         <br><br>
+
+        <!-- Checkbox de descarga (venía del método enviaColeccion) -->
+        <label for="descargar">Descargar:</label>
+        <input type="checkbox" name="descargar" id="descargar">
+
+        <br><br>
+
+        <!-- Botones de acción -->
         <input type="submit" class="boton" name="modificar" value="Modificar">
         <input type="submit" class="boton" name="exportar" value="Exportar">
     </form>
     <?php
-    }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * AQUI TENDRIAMOS LOS METODOS POR SEPARADO 
+     *
+     */
+
+    function modificar(array $COL) {
+    
+    $colecciones = $COL;
+    ?>
+    <form action="" method="post">
+        <label for="">Elige colección para modificar</label>
+        <select name="modificaColecc" id="">
+            <option value="noexiste">Sin seleccionar</option>
+            <?php
+                for($i=0;$i<count($colecciones);$i++) {
+                    echo "<option value=$i>".$colecciones[$i]->getNombre()."</option>";
+                }
+            ?>
+        </select>
+        <input type="submit" value="Modificar" name="modificar">
+    </form>
+    <?php
+}
+
+function enviaColeccion(array $COL) {
+   
+    $colecciones = $COL;
+    ?>
+    <form action="" method="post">
+        <label for="">Elige colección para enviar/descargar</label>
+        <select name="enviaColecc" id="">
+            <option value="noexiste">Sin seleccionar</option>
+            <?php
+                for($i=0;$i<count($colecciones);$i++) {
+                    echo "<option value=$i>".$colecciones[$i]->getNombre()."</option>";
+                }
+            ?>
+        </select>
+        <label for="">Descargar:</label>
+        <input type="checkbox" name="descargar" id="">
+        <input type="submit" value="Enviar" name="enviar">
+    </form>
+    <?php
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,61 +2,58 @@
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 
 // Recuperar colecciones desde sesión
-//CAMBIAR COL POR LO QUE TOQUE 
 $COL = $_SESSION["COL"] ?? [];
-
-$ubicacion = [
-    "Index Principal" => "/index.php",
-    "Modificar Colección" => "/aplicacion/clases/modificar.php"
-];
 
 // Validar índice recibido
 if (!isset($_GET["id"]) || $_GET["id"] === "") {
     throw new Exception("No se ha proporcionado un índice válido");
 }
+
 $indice = $_GET["id"];
 
-//CAMBIAR COL POR LO QUE TOQUE
+// Verificar que la colección existe
 if (!isset($COL[$indice])) {
     throw new Exception("No existe la colección indicada");
 }
 
-//CAMBIAR COL POR LO QUE TOQUE 
+// Objeto colección a modificar
 $objeto = $COL[$indice];
 
 $errores = [];
-$mensaje = "";
 
-// -----------------------------
-// PROCESAR FORMULARIO
-// -----------------------------
+/**
+ * CONTROL DEL BOTÓN MODIFICAR
+ */
 if (isset($_POST["modificar"])) {
 
-    //CAMBIAR ESTO POR LO QUE TOQUE EN MODIFICAR 
-
-    // VALIDAR NOMBRE
-    if ($objeto->setNombre($_POST["nombre"]) < 0)
+    // VALIDAR NOMBRE (NO modificar aún el objeto)
+    if ($objeto->setNombre($_POST["nombre"]) < 0) {
         $errores["nombre"][] = "Nombre no válido";
+    }
 
     // VALIDAR FECHA
-    if ($objeto->setFechaAlta($_POST["fechaAlta"]) < 0)
+    if ($objeto->setFechaAlta($_POST["fechaAlta"]) < 0) {
         $errores["fechaAlta"][] = "Fecha no válida";
+    }
 
-    // VALIDAR TEMÁTICA
-    if ($objeto->setTematica($_POST["tematica"]) < 0)
+    // VALIDAR TEMÁTICA (OJO: método correcto es setTematicas)
+    if ($objeto->setTematicas($_POST["tematica"]) < 0) {
         $errores["tematica"][] = "Temática no válida";
+    }
 
-    // SI TODO ES CORRECTO → ACTUALIZAR Y VOLVER A INDEX
+    // SI NO HAY ERRORES → MODIFICAR DEFINITIVAMENTE
     if (empty($errores)) {
 
-        $COL[$indice] = new Coleccion(
-            $_POST["nombre"],
-            $_POST["fechaAlta"],
-            $_POST["tematica"]
-        );
+        // Aplicar cambios al objeto real
+        $objeto->setNombre($_POST["nombre"]);
+        $objeto->setFechaAlta($_POST["fechaAlta"]);
+        $objeto->setTematicas($_POST["tematica"]);
 
+        // Guardar en sesión
+        $COL[$indice] = $objeto;
         $_SESSION["COL"] = $COL;
 
+        // Volver a index
         header("Location: ../../index.php");
         exit;
     }
@@ -69,7 +66,7 @@ inicioCabecera("Modificar Colección");
 cabecera();
 finCabecera();
 
-inicioCuerpo("Modificar Colección", $ubicacion);
+inicioCuerpo("Modificar Colección");
 cuerpo($objeto, $errores);
 finCuerpo();
 
@@ -78,6 +75,7 @@ finCuerpo();
 
 function formulario($objeto, $errores) {
 
+    // Mostrar errores si existen
     if ($errores) {
         echo "<div class='error'>";
         foreach ($errores as $campo => $lista) {
@@ -89,17 +87,17 @@ function formulario($objeto, $errores) {
     }
     ?>
 
-/**
- * LO MISMO CON LA PLANTILLA MODIFICAR DEPENDIENDO DE LO QUE TOQUE
- */
     <form action="" method="post">
 
+        <!-- Nombre -->
         <label>Nombre: </label>
         <input type="text" name="nombre" value="<?= $objeto->getNombre() ?>"><br>
 
+        <!-- Fecha -->
         <label>Fecha Alta: </label>
         <input type="text" name="fechaAlta" value="<?= $objeto->getFechaAlta() ?>"><br>
 
+        <!-- Temática -->
         <label>Temática: </label>
         <select name="tematica">
             <?php foreach (Coleccion::TEMATICAS as $desc => $valor): ?>
@@ -110,6 +108,7 @@ function formulario($objeto, $errores) {
             <?php endforeach; ?>
         </select><br>
 
+        <!-- Descripción temática -->
         <label>Descripción temática: </label>
         <input type="text" disabled value="<?= $objeto->getTematicaDescripcion() ?>"><br>
 
