@@ -45,7 +45,18 @@ if (isset($_POST["salir"])) {
   * para hacer la carga de un fichero
   */
   if (isset($_POST["cargaFichero"])) {
-    
+        $coleccion=$_SESSION["COL"];
+        $objetosCargados = [];
+      if(cargarColeccionDesdeFichero("FicherosAcargar.txt", $objetosCargados)){
+        foreach ($objetosCargados as $objeto) { 
+        array_push($coleccion, $objeto);
+         }
+        $_SESSION["COL"] = $coleccion;
+      }else{
+        echo"error";
+      }
+
+        
  }
 
 
@@ -117,7 +128,7 @@ formularioLogin($acceso);
 mostrarColeciones($acceso);    
     
 //Boton de carga de fichero 
-    cargaDesdeFichero();
+    cargaFichero();
 //Formulario de Acciones donde modificiamos o descargamos
     formularioAcciones($COL);
    //modificar($COL);
@@ -163,11 +174,11 @@ function formularioLogin(object $acceso)
 
     
 /**
- * Boton carga fichero
+ * Boton carga fichero que no baria y siempre igual
  *
  * @return void
  */
-function cargaDesdeFichero()
+function cargaFichero()
 {
     ?>
     <hr>
@@ -184,34 +195,46 @@ function cargaDesdeFichero()
 
 function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
 {
-$ruta = RUTABASE . "/ficheros/" . $nombreFichero;
+    // Construimos la ruta completa al fichero dentro de /ficheros/
+    $ruta = RUTABASE . "/ficheros/" . $nombreFichero;
 
+    // Si el fichero no existe → error
     if (!file_exists($ruta)) {
         echo "El fichero no existe<br>";
         return false;
     }
 
+    // Intentamos abrir el fichero en modo lectura
     $fic = fopen($ruta, "r");
     if (!$fic) return false;
 
-    $datos = [];
+    // ⚠️ IMPORTANTE: NO vaciamos $datos, solo añadimos al final
+    // $datos = [];  ← ESTO NO SE DEBE HACER
 
-    // 1) LEER PRIMERA LÍNEA → COLECCIÓN
-    $linea = fgets($fic);
-    if (!$linea) return false;
+    // ---------------------------------------------------------
+    // 1) LEER PRIMERA LÍNEA → DATOS DE LA COLECCIÓN
+    // ---------------------------------------------------------
 
-    $linea = trim($linea);
+    $linea = fgets($fic);          // Leemos la primera línea
+    if (!$linea) return false;     // Si está vacía → error
+
+    $linea = trim($linea);         // Quitamos espacios y saltos de línea
+
+    // Formato esperado: nombre -:- fecha -;- tematica
     $partes = explode("-:-", $linea);
 
+    // Deben existir al menos 3 partes
     if (count($partes) < 3) {
         echo "Formato incorrecto en la colección<br>";
         return false;
     }
 
-    $nombre = trim($partes[0]);
-    $fecha = trim($partes[1]);
+    // Extraemos los datos básicos
+    $nombre   = trim($partes[0]);
+    $fecha    = trim($partes[1]);
     $tematica = intval(trim($partes[2]));
 
+    // Intentamos crear la colección (puede lanzar excepción)
     try {
         $coleccion = new Coleccion($nombre, $fecha, $tematica);
     } catch (Exception $e) {
@@ -219,53 +242,79 @@ $ruta = RUTABASE . "/ficheros/" . $nombreFichero;
         return false;
     }
 
-    // 2) LEER LIBROS
+    // ---------------------------------------------------------
+    // 2) LEER LIBROS (cada línea representa un libro)
+    // ---------------------------------------------------------
+
     while ($linea = fgets($fic)) {
 
         $linea = trim($linea);
-        if ($linea === "") continue;
+        if ($linea === "") continue;   // Saltar líneas vacías
 
-        // separar propiedades del libro
+        // Cada propiedad está separada por ";"
         $props = explode(";", $linea);
 
+        // Variables obligatorias
         $nombreLibro = "";
-        $autorLibro = "";
+        $autorLibro  = "";
+
+        // Propiedades dinámicas (clave, valor, clave, valor...)
         $dinamicas = [];
 
+        // Procesamos cada propiedad del libro
         foreach ($props as $p) {
+
             $p = trim($p);
             if ($p === "") continue;
 
-            list($clave, $valor) = array_map("trim", explode(":", $p));
+            // Cada propiedad tiene formato clave:valor
+            $trozos = explode(":", $p);
 
-            if ($clave === "nombre") $nombreLibro = $valor;
-            elseif ($clave === "autor") $autorLibro = $valor;
+            // Si no hay clave y valor → línea mal formada
+            if (count($trozos) < 2) continue;
+
+            list($clave, $valor) = array_map("trim", $trozos);
+
+            // Guardamos nombre y autor obligatorios
+            if ($clave === "nombre") {
+                $nombreLibro = $valor;
+            }
+            elseif ($clave === "autor") {
+                $autorLibro = $valor;
+            }
             else {
+                // Guardamos propiedades dinámicas en pares
                 $dinamicas[] = $clave;
                 $dinamicas[] = $valor;
             }
         }
 
-        // comprobar que tiene nombre y autor
+        // ---------------------------------------------------------
+        // Validación mínima: un libro debe tener nombre y autor
+        // ---------------------------------------------------------
         if ($nombreLibro === "" || $autorLibro === "") {
             echo "Libro ignorado: falta nombre o autor<br>";
             continue;
         }
 
-        // crear libro
+        // Creamos el libro con las propiedades dinámicas
         $libro = new Libro($nombreLibro, $autorLibro, ...$dinamicas);
 
-        // añadir libro a la colección
+        // Añadimos el libro a la colección
         $coleccion->aniadirLibro($libro);
     }
 
+    // Cerramos el fichero
     fclose($fic);
 
-    // añadir colección al array
+    // ---------------------------------------------------------
+    // 3) Añadir la colección creada al array recibido por referencia
+    // ---------------------------------------------------------
     $datos[] = $coleccion;
 
     return true;
 }
+
 
 
 /**
