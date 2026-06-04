@@ -88,11 +88,11 @@ function formulario($coleccion, $errores) {
     }
     ?>
 
-/**
+<!-- /**
  * MODIFICAR ESTO POR LO QUE CORRESPONDA
  *
  * @return void
- */
+ **/ -->
     <form action="" method="post">
 
         <label>Colección seleccionada:</label>
