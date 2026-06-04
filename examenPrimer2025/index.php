@@ -208,7 +208,7 @@ function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
     $fic = fopen($ruta, "r");
     if (!$fic) return false;
 
-    // ⚠️ IMPORTANTE: NO vaciamos $datos, solo añadimos al final
+    // IMPORTANTE: NO vaciamos $datos, solo añadimos al final
     // $datos = [];  ← ESTO NO SE DEBE HACER
 
     // ---------------------------------------------------------
