@@ -153,62 +153,62 @@ class PuebloControlador extends CControlador
     /**
     * accion DESCARGA
     */
-    public function accionDescargar()
-    {
-        // Comprobar usuario
-        if (!isset($_SESSION["usuario"])) {
-            Sistema::app()->paginaError(400, "Debes iniciar sesión para descargar.");
-            return;
-        }
-
-        // Comprobar permiso 5
-        if (!in_array(5, $_SESSION["usuario"]["permisos"])) {
-            Sistema::app()->paginaError(403, "No tienes permiso para descargar pueblos.");
-            return;
-        }
-
-        // Comprobar que llega un código de pueblo
-        if (!isset($_GET["id"])) {
-            Sistema::app()->paginaError(400, "No se ha indicado ningun pueblo.");
-            return;
-        }
-
-        $id = intval($_GET["id"]);
-
-        // Obtener pueblo
-        $p = "";
-
-        foreach($_SESSION["Pueblos"] as $valor) {
-            if($valor->cod_tipo == $id) {
-                $p=$valor;
-            }
-        }
-
-        // Comprobar que el pueblo existe
-        if ($p==="") {
-            Sistema::app()->paginaError(404, "La pueblo indicada no existe.");
-            return;
-        }
-
-        // CABECERAS DE DESCARGA DIRECTA
-        header("Content-Type: application/xml");
-        header("Content-Disposition: attachment; filename=pueblo{$p->cod_tipo}.xml");
-        header("Content-Transfer-Encoding: binary");
-        header("Cache-Control: no-cache, must-revalidate");
-        header("Pragma: no-cache");
-
-        // GENERAR XML DIRECTAMENTE
-        echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        echo "<pueblo>\n";
-        echo "    <nombre>{$p->nombre}</nombre>\n";
-        echo "    <cod_tipo>{$p->cod_tipo}</cod_tipo>\n";
-        echo "    <descripcion_tipo>{$p->descripcion_tipo}</descripcion_tipo>\n";
-        echo "    <elemento>{$p->elemento}</elemento>\n";
-        echo "    <reconocido_unesco>{$p->reconocido_unesco}</reconocido_unesco>\n";
-        echo "    <fecha_reconocimiento>{$p->jugadores}</fecha_reconocimiento>\n";
-        echo "</pueblo>";
-
-        return; 
+  public function accionDescargar()
+{
+    // Validar usuario
+    if (!isset($_SESSION["usuario"])) {
+        Sistema::app()->paginaError(400, "Debes iniciar sesión para descargar.");
+        return;
     }
+
+    // Validar permiso (debe ser 2, 4 o 6)
+    $permiso = $_SESSION["usuario"]["permiso"];
+    if (!in_array($permiso, [2, 4, 6])) {
+        Sistema::app()->paginaError(403, "No tienes permiso para descargar pueblos.");
+        return;
+    }
+
+    // Verificar parámetro id
+    if (!isset($_GET["id"]) || empty($_GET["id"])) {
+        Sistema::app()->paginaError(400, "No se ha indicado ningún pueblo.");
+        return;
+    }
+
+    $nombre = $_GET["id"];
+    $p = null;
+
+    // Buscar pueblo en sesión
+    foreach ($_SESSION["pueblos"] as $valor) {
+        if ($valor->nombre === $nombre) {
+            $p = $valor;
+            break;
+        }
+    }
+
+    // Verificar que el pueblo existe
+    if ($p === null) {
+        Sistema::app()->paginaError(404, "El pueblo indicado no existe.");
+        return;
+    }
+
+    // CABECERAS DE DESCARGA DIRECTA
+    header("Content-Type: application/xml");
+    header("Content-Disposition: attachment; filename=pueblo_{$p->nombre}.xml");
+    header("Content-Transfer-Encoding: binary");
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Pragma: no-cache");
+
+    // GENERAR XML DIRECTAMENTE (sin htmlspecialchars)
+    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    echo "<pueblo>\n";
+    echo "  <nombre>{$p->nombre}</nombre>\n";
+    echo "  <cod_tipo_elemento>{$p->cod_tipo_elemento}</cod_tipo_elemento>\n";
+    echo "  <descripcion_tipo>{$p->descripcion_tipo}</descripcion_tipo>\n";
+    echo "  <elemento>{$p->elemento}</elemento>\n";
+    echo "  <reconocido_unesco>{$p->reconocido_unesco}</reconocido_unesco>\n";
+    echo "  <fecha_reconocimiento>{$p->fecha_reconocimiento}</fecha_reconocimiento>\n";
+    echo "</pueblo>";
+}
+
 
 }
