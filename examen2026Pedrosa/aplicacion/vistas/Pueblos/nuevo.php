@@ -24,6 +24,7 @@ echo CHTML::modeloError($modelo,"cod_tipo_elemento");
 echo "<br><br>";
 
 // Campo: elemento
+//buenos dias
 echo CHTML::modeloLabel($modelo,"elemento");
 echo CHTML::modeloText($modelo,"elemento",["maxlength"=>35]);
 echo CHTML::modeloError($modelo,"elemento");
