@@ -13,7 +13,6 @@ if (MODO_TRABAJO == "produccion")
 spl_autoload_register(function ($clase) {
     $ruta = RUTABASE . "/scripts/clases/";
     $rutaExamen = RUTABASE . "/scripts/examen/"; //para poder añadir lo de proyecto y demas
-
     $fichero = $ruta . "$clase.php";
     $ficheroExamen = $rutaExamen . "$clase.php";
 
