@@ -361,6 +361,39 @@ function cargarColeccionDesdeFichero(string $nombreFichero, array &$datos): bool
     <?php
     }
 
+    /**
+     * si quisiese mostrarlo todo independientemente de los permisos 
+     */
+    function mostrarColeciones2(object $acceso){
+    $colecciones = $_SESSION["COL"];
+    ?>
+    <textarea cols="80" rows="15"><?php
+
+        foreach($colecciones as $coleccion) {
+
+            // Mostrar la colección (usa __toString)
+            echo $coleccion . "\n";
+
+            // SIEMPRE mostrar los libros
+            $libros = $coleccion->dameLibros();
+
+            foreach($libros as $libro) {
+
+                // Recorrer propiedades dinámicas del libro
+                foreach($libro as $claveProp => $prop) {
+                    echo "$claveProp: $prop\n";
+                }
+
+                echo "---------------------------------\n";
+            }
+
+            echo "\n";
+        }
+
+    ?></textarea>
+    <?php
+}
+
 
    
 
