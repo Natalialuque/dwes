@@ -1,5 +1,6 @@
 <?php
 	 
+     //pueblos ==>es la sesion Pueblos ==> controlador  
 class PueblosControlador extends CControlador{
 
     //variables 
@@ -15,7 +16,7 @@ class PueblosControlador extends CControlador{
     parent::__construct();
     Sistema::app()->sesion()->crearSesion();
 
-    if (isset($_SESSION["pueblos"])) {
+    if (isset($_SESSION["pueblos"])) { //crear la sesion 
         $this->_MisPueblos = $_SESSION["pueblos"];
     } else {
         $this->iniciarPueblos();
@@ -25,6 +26,7 @@ class PueblosControlador extends CControlador{
     $this->N_Pueblos = count($this->_MisPueblos);
     // Variable de aplicación 
     Sistema::app()->N_Pueblos = $this->N_Pueblos;
+    
     $this->cuentaUnesco();
 
     //unset($_SESSION["pueblos"]);

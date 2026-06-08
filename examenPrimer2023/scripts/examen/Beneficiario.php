@@ -2,12 +2,14 @@
 
 class Beneficiario
 {
+    // Tipos de reduccion permitidos por el enunciado.
     private const TIPOSREDUCCION = [
         1 => "Sin reduccion",
         2 => "Discapacidad",
         3 => "Familia numerosa",
     ];
 
+    // Propiedades protegidas: no se acceden desde fuera, pero si desde clases hijas.
     protected string $_nombre;
     protected string $_nif;
     protected int $_reduccion;
@@ -19,9 +21,13 @@ class Beneficiario
 
     public function __construct(string $nombre, string $nif, int $reduccion = 1, string $fecha_nacimiento = "")
     {
+        // Contamos cuantos datos no cumplen restricciones para lanzar excepcion si son 2 o mas.
         $errores = 0;
+
+        // Cada beneficiario empieza teniendo su propio objeto Bonos.
         $this->_bonos = new Bonos();
 
+        // Si un dato no cumple, se deja un valor por defecto y se suma un error.
         if (!$this->setNombre($nombre)) {
             $this->_nombre = "Sin nombre";
             $errores++;
@@ -46,6 +52,7 @@ class Beneficiario
             $errores++;
         }
 
+        // El enunciado pide excepcion si fallan dos o mas propiedades.
         if ($errores >= 2) {
             throw new Exception("Dos o mas propiedades no cumplen las restricciones.");
         }
@@ -85,6 +92,7 @@ class Beneficiario
     {
         $nombre = trim($nombre);
 
+        // Nombre obligatorio y de 30 caracteres como maximo.
         if ($nombre === "" || !validaCadena($nombre, 30, "")) {
             return false;
         }
@@ -96,6 +104,8 @@ class Beneficiario
     public function setNif(string $nif): bool
     {
         $nif = mb_strtoupper(trim($nif));
+
+        // Formatos permitidos: 99999999A o A9999999A.
         $expresion = "/^([0-9]{8}[A-Z]|[A-Z][0-9]{7}[A-Z])$/";
 
         if (!validaExpresion($nif, $expresion, "")) {
@@ -108,10 +118,12 @@ class Beneficiario
 
     public function setReduccion(int $reduccion): bool
     {
+        // Solo se aceptan las claves existentes en TIPOSREDUCCION.
         if (!array_key_exists($reduccion, self::TIPOSREDUCCION)) {
             return false;
         }
 
+        // Se guarda el numero y tambien el texto asociado.
         $this->_reduccion = $reduccion;
         $this->_reduccion_texto = self::TIPOSREDUCCION[$reduccion];
         return true;
@@ -121,6 +133,7 @@ class Beneficiario
     {
         $fecha_nacimiento = trim($fecha_nacimiento);
 
+        // Si no se indica fecha, se pone por defecto hace 10 anos.
         if ($fecha_nacimiento === "") {
             $fecha = new DateTime();
             $fecha->modify("-10 years");
@@ -133,6 +146,7 @@ class Beneficiario
             return false;
         }
 
+        // La fecha no puede ser posterior a hoy.
         $fecha = DateTime::createFromFormat("d/m/Y", $fecha_nacimiento);
         $hoy = new DateTime();
         $hoy->setTime(23, 59, 59);
@@ -148,11 +162,13 @@ class Beneficiario
 
     public function __set(string $name, mixed $value): void
     {
+        // No se permite crear propiedades dinamicas en Beneficiario.
         throw new Exception("No se permite crear la propiedad $name.");
     }
 
     public function __get(string $name): mixed
     {
+        // Tampoco se permite leer propiedades no declaradas desde fuera.
         throw new Exception("No se permite acceder a la propiedad $name.");
     }
 
@@ -163,7 +179,10 @@ class Beneficiario
 
     public function aniadeBonos(int &$nbonos, string $bono, string $valor, mixed ...$resto): bool
     {
+        // Este parametro se devuelve por referencia con el numero de bonos insertados.
         $nbonos = 0;
+
+        // Unimos el primer par bono-valor con todos los demas pares recibidos.
         $datos = array_merge([$bono, $valor], $resto);
 
         for ($i = 0; $i < count($datos); $i += 2) {
@@ -172,6 +191,7 @@ class Beneficiario
             }
 
             try {
+                // No validamos manualmente el bono: lo intenta guardar Bonos y alli se controla.
                 $numero = (string)$datos[$i];
                 $importe = $datos[$i + 1];
                 if (is_string($importe) && ctype_digit($importe)) {
@@ -180,6 +200,7 @@ class Beneficiario
                 $this->_bonos->$numero = $importe;
                 $nbonos++;
             } catch (Exception $e) {
+                // Si un bono falla, se ignora y se sigue con los demas.
             }
         }
 
@@ -195,6 +216,7 @@ class Beneficiario
     {
         $lista = [];
 
+        // Recorremos Bonos con foreach, saltando la primera posicion "importe".
         foreach ($this->_bonos as $clave => $valor) {
             if ($clave !== "importe") {
                 $lista[$clave] = $valor;
@@ -211,6 +233,7 @@ class Beneficiario
 
     private function calcularMayorEdad(): void
     {
+        // Calculamos la edad con DateTime y guardamos 1 si tiene 18 o mas.
         $fecha = DateTime::createFromFormat("d/m/Y", $this->_fecha_nacimiento);
         $hoy = new DateTime();
         $this->_mayor_edad = ($fecha !== false && $fecha->diff($hoy)->y >= 18) ? 1 : 0;
@@ -218,6 +241,7 @@ class Beneficiario
 
     public function __toString(): string
     {
+        // Texto exacto que se muestra cuando se imprime el objeto como cadena.
         $mayor = $this->_mayor_edad ? "es Mayor de edad" : "no es Mayor de edad";
 
         return "Beneficiario " . $this->_nombre .

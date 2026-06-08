@@ -38,6 +38,7 @@ require_once (RUTABASE ."/librerias/validacion.php");
 //gestion base de datos 
 mysqli_report(MYSQLI_REPORT_ERROR);
 
+// Guardamos las sesiones dentro del proyecto para evitar problemas de permisos con C:\xampp\tmp.
 $rutaSesiones = RUTABASE . "/sesiones";
 if (!is_dir($rutaSesiones)) {
     mkdir($rutaSesiones, 0777, true);
@@ -49,21 +50,25 @@ session_start(); // activa o continúa la sesión
 $aclArray = new ACLArray();
 $acceso = new Acceso();
 
-//Aqui es donde creamos el array cargado, 
+//Aqui es donde creamos el array cargado,
+//solo se inicializa si todavia no existe en la sesion.
 if (!isset($_SESSION["BENEFI"])) {
     $_SESSION["BENEFI"] = [];
 
     try {
+        // Primer beneficiario inicial con dos bonos.
         $ben = new Beneficiario("Ana Lopez", "12345678Z", 1, "12/05/1990");
         $anadidos = 0;
         $ben->aniadeBonos($anadidos, "101", "25", "102", "30");
         $_SESSION["BENEFI"][] = $ben;
 
+        // Segundo beneficiario inicial con dos bonos.
         $ben = new Beneficiario("Luis Perez", "X1234567L", 2, "03/11/2010");
         $anadidos = 0;
         $ben->aniadeBonos($anadidos, "201", "15", "202", "20");
         $_SESSION["BENEFI"][] = $ben;
     } catch (Exception $e) {
+        // Si fallase algun dato inicial, dejamos el array vacio para no romper la pagina.
         $_SESSION["BENEFI"] = [];
     }
 

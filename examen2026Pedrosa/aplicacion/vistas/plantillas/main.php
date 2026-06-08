@@ -68,41 +68,81 @@
             </article>
         </div>
 
+        <!-- <?php
+        // -------------------------
+        // BARRA VERDE SOBRE EL PIE estatica 
+        // -------------------------
+        
+        // if (session_status() === PHP_SESSION_NONE) {
+        //     session_start();
+        // }
+
+        // $texto = "Pueblos: " . Sistema::app()->N_Pueblos .
+        //     " | Pueblos UNESCO: " . $this->N_PueblosUnesco . " | ";
+
+        // if (isset($_SESSION["usuario"])) {
+        //     $texto .= "Usuario: " . $_SESSION["usuario"]["nick"] . " | ";
+        // } else {
+        //     $texto .= "Sin usuario | ";
+        // }
+
+        // $texto .= CHTML::link("Conectar", ["Pueblos", "conectar"], ["style" => "color:white; margin:0 10px;"]);
+        // $texto .= CHTML::link("Desconectar", ["Pueblos", "desconectar"], ["style" => "color:white; margin:0 10px;"]);
+
+        // echo CHTML::dibujaEtiqueta(
+        //     "div",
+        //     [
+        //         "style" =>
+        //         "background-color:green;
+        //          color:white;
+        //          padding:10px;
+        //          font-weight:bold;
+        //          text-align:center;
+        //          margin-top:20px;"
+        //     ],
+        //     $texto
+        // );
+        //?>--> 
+
         <?php
-        // -------------------------
-        // BARRA VERDE SOBRE EL PIE
-        // -------------------------
+            // Asegurar que la sesión está iniciada
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
 
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+            // Texto base: pueblos
+            $texto  = "Pueblos: " . Sistema::app()->N_Pueblos;
+            $texto .= " | Pueblos UNESCO: " . $this->N_PueblosUnesco . " | ";
 
-        $texto = "Pueblos: " . Sistema::app()->N_Pueblos .
-            " | Pueblos UNESCO: " . $this->N_PueblosUnesco . " | ";
+            // Usuario validado o no
+            $usuario = isset($_SESSION["usuario"])
+                ? $_SESSION["usuario"]["nick"]
+                : "Sin usuario";
 
-        if (isset($_SESSION["usuario"])) {
-            $texto .= "Usuario: " . $_SESSION["usuario"]["nick"] . " | ";
-        } else {
-            $texto .= "Sin usuario | ";
-        }
+            $texto .= "Usuario: " . $usuario . " | ";
 
-        $texto .= CHTML::link("Conectar", ["Pueblos", "conectar"], ["style" => "color:white; margin:0 10px;"]);
-        $texto .= CHTML::link("Desconectar", ["Pueblos", "desconectar"], ["style" => "color:white; margin:0 10px;"]);
+            // Enlaces dinámicos
+            $enlaceConectar   = CHTML::link("Conectar",   ["Pueblos", "conectar"],   ["style" => "color:white; margin:0 10px;"]);
+            $enlaceDesconectar = CHTML::link("Desconectar", ["Pueblos", "desconectar"], ["style" => "color:white; margin:0 10px;"]);
 
-        echo CHTML::dibujaEtiqueta(
-            "div",
-            [
-                "style" =>
-                "background-color:green;
-                 color:white;
-                 padding:10px;
-                 font-weight:bold;
-                 text-align:center;
-                 margin-top:20px;"
-            ],
-            $texto
-        );
-        ?>
+            // Mostrar solo uno según sesión
+            $texto .= isset($_SESSION["usuario"]) ? $enlaceDesconectar : $enlaceConectar;
+
+            // Dibujar barra
+            echo CHTML::dibujaEtiqueta(
+                "div",
+                [
+                    "style" =>
+                    "background-color:green;
+                    color:white;
+                    padding:10px;
+                    font-weight:bold;
+                    text-align:center;
+                    margin-top:20px;"
+                ],
+                $texto
+            );
+            ?>
 
         <footer>
             <h2><span>Copyright:</span> 

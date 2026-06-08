@@ -1,0 +1,229 @@
+@charset "UTF8";
+
+
+body {
+    background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#titulo {
+    text-align: center;
+    font-size: 2em;
+    color: #0d47a1;
+    margin-top: 20px;
+    text-shadow: 1px 1px 2px #ccc;
+}
+
+#documento {
+    margin: 30px auto;
+    background-color: #fff8dc;
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+#cabecera {
+    background: linear-gradient(to right, #43e97b, #38f9d7);
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#cabecera #logo {
+    width: 80px;
+    height: auto;
+}
+
+#cabecera #titulo {
+    font-size: 1.5em;
+    font-style: italic;
+    color: #004d40;
+}
+
+.boton {
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.boton a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.boton:hover,
+.boton a:hover {
+    background-color: #64b5f6;
+    color: #0d47a1;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.tabla th {
+    background-color: #009688;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+.tabla tr.par {
+    background-color: #f5f5f5;
+}
+
+.tabla tr.impar {
+    background-color: #ffffff;
+}
+
+.tabla td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+#pie {
+    background-color: #c5e1a5;
+    color: #2e7d32;
+    font-size: 1.2em;
+    padding: 10px;
+    text-align: center;
+    border-radius: 0 0 8px 8px;
+}
+
+.for_texto {
+    border: 1px solid #1976d2;
+    background-color: #f0f8ff;
+    padding: 6px;
+    margin: 5px 0;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #c62828;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+/* Barra estilo Moodle Centros mejorada */
+#barraMenu {
+    background-color: #e3f2fd;
+    padding: 15px 25px;
+    font-size: 1em;
+    border-bottom: 2px solid #90caf9;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+#barraMenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+#barraMenu li {
+    position: relative;
+    margin-right: 10px;
+    color: #555;
+
+}
+
+#barraMenu li::after {
+    content: "";
+        content: "›";
+    margin-left: 10px;
+    color: #999;
+}
+
+#barraMenu li:last-child::after {
+    content: "";
+}
+
+#barraMenu li a {
+    text-decoration: none;
+    color: #1976d2;
+    font-weight: 600;
+    background-color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #bbdefb;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+#barraMenu li a:hover {
+    background-color: #1976d2;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/****************************/
+/* Menú superior personalizado */
+#menuPrincipal {
+    background-color: #e3f2fd;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+#menuPrincipal ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+#menuPrincipal li {
+    background-color: #ffffff;
+    border: 2px solid #64b5f6;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#menuPrincipal li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#menuPrincipal li a {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #1976d2;
+    font-weight: bold;
+    font-size: 1em;
+    text-align: center;
+    border-radius: 12px;
+}

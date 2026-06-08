@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title><?php echo $titulo; ?></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/estilos/principal.css" />
+
+    <link rel="icon" type="image/png" href="/imagenes/favicon.png" />
+    <?php
+    if (isset($this->textoHead))
+        echo $this->textoHead;
+    ?>
+</head>
+
+<body>
+    <div id="todo">
+        <header>
+            <div class="logo">
+                <a href="/index.php"><img src="/imagenes/logo.png" width="50px" height="50px" /></a>
+            </div>
+            <div class="titulo">
+                <a href="/index.php">
+                    <h1>PROYECTO FRAMEWORK PEDROSA</h1>
+                </a>
+            </div>
+        </header>
+
+        <?php
+        if (isset($this->barraUbi)) {
+            echo CHTML::dibujaEtiqueta("nav", ["class" => "barraModdle"], null, false);
+            $total = count($this->barraUbi);
+            $i = 0;
+
+            foreach ($this->barraUbi as $valor) {
+                $i++;
+
+                if ($i < $total) {
+                    echo CHTML::link($valor["texto"], $valor["enlace"], []);
+                    echo CHTML::dibujaEtiqueta("label", [], "&raquo;", true);
+                } else echo CHTML::dibujaEtiqueta("label", [], $valor["texto"], true);
+            }
+            echo CHTML::dibujaEtiquetaCierre("nav");
+        }
+        ?>
+
+        <div class="contenido">
+            <aside>
+                <ul>
+                    <?php
+                    if (isset($this->menuizq)) {
+                        foreach ($this->menuizq as $opcion) {
+                            echo CHTML::dibujaEtiqueta("li", [], "", false);
+                            echo CHTML::link($opcion["texto"], $opcion["enlace"]);
+                            echo CHTML::dibujaEtiquetaCierre("li");
+                            echo CHTML::dibujaEtiqueta("br") . "\r\n";
+                        }
+                    }
+                    ?>
+                </ul>
+            </aside>
+
+            <article>
+                <?php echo $contenido; ?>
+            </article>
+        </div>
+
+        <!-- <?php
+        // -------------------------
+        // BARRA VERDE SOBRE EL PIE estatica 
+        // -------------------------
+        
+        // if (session_status() === PHP_SESSION_NONE) {
+        //     session_start();
+        // }
+
+        // $texto = "Pueblos: " . Sistema::app()->N_Pueblos .
+        //     " | Pueblos UNESCO: " . $this->N_PueblosUnesco . " | ";
+
+        // if (isset($_SESSION["usuario"])) {
+        //     $texto .= "Usuario: " . $_SESSION["usuario"]["nick"] . " | ";
+        // } else {
+        //     $texto .= "Sin usuario | ";
+        // }
+
+        // $texto .= CHTML::link("Conectar", ["Pueblos", "conectar"], ["style" => "color:white; margin:0 10px;"]);
+        // $texto .= CHTML::link("Desconectar", ["Pueblos", "desconectar"], ["style" => "color:white; margin:0 10px;"]);
+
+        // echo CHTML::dibujaEtiqueta(
+        //     "div",
+        //     [
+        //         "style" =>
+        //         "background-color:green;
+        //          color:white;
+        //          padding:10px;
+        //          font-weight:bold;
+        //          text-align:center;
+        //          margin-top:20px;"
+        //     ],
+        //     $texto
+        // );
+        //?>--> 
+
+        <?php
+            // Asegurar que la sesión está iniciada
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $nParadas = Sistema::app()->N_Paradas ?? 0;
+            $nParadasOrigen = property_exists($this, "N_ParadasOrigen") ? $this->N_ParadasOrigen : 0;
+            $texto  = "Paradas: " . $nParadas;
+            $texto .= " | Paradas origen: " . $nParadasOrigen . " | ";
+
+            // Usuario validado o no
+            $usuario = isset($_SESSION["usuario"])
+                ? $_SESSION["usuario"]["nick"]
+                : "usuario no validado";
+
+            $texto .= "Usuario: " . $usuario . " | ";
+
+            // Enlaces dinámicos
+            $enlaceConectar   = CHTML::link("Conectar",   ["ParadasTray", "login"],   ["style" => "color:white; margin:0 10px;"]);
+            $enlaceDesconectar = CHTML::link("Desconectar", ["ParadasTray", "logout"], ["style" => "color:white; margin:0 10px;"]);
+
+            // Mostrar solo uno según sesión
+            $texto .= isset($_SESSION["usuario"]) ? $enlaceDesconectar : $enlaceConectar;
+
+            // Dibujar barra
+            echo CHTML::dibujaEtiqueta(
+                "div",
+                [
+                    "style" =>
+                    "background-color:orange;
+                    color:white;
+                    padding:10px;
+                    font-weight:bold;
+                    text-align:center;
+                    margin-top:20px;"
+                ],
+                $texto
+            );
+            ?>
+
+        <footer>
+            <h2><span>Copyright:</span> 
+                <?php echo Sistema::app()->autor ?>
+            </h2>
+        </footer>
+
+    </div>
+</body>
+
+</html>
+

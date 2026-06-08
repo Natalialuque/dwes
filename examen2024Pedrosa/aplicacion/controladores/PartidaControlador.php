@@ -123,7 +123,7 @@ class PartidaControlador extends CControlador
 
     private function calcularPartidasHoy()
     {
-        $hoy = date("Y-m-d");
+        $hoy = date("d/m/Y");        
         $this->N_PartidasHoy = 0;
 
         foreach ($this->partidas as $p) {
