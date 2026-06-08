@@ -31,7 +31,6 @@ public function __construct(string $nombre, string $empresa, string $fecha_inici
 
     //validar nombre
      if ($this->setNombre($nombre) != 0) {
-
             throw new Exception("Nombre es obligatorio y tiene que tener 40 caracteres maximo");
         } else $this->_nombre;
 
